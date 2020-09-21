@@ -62,6 +62,25 @@ class MkOsTipo extends Model implements Transformable
       if(Str::containsAll($value, ['Serv', 'COMPENSAÇÃO'])){
         $value = "COMPENSA";
       }
+      if(Str::containsAll($value, ['RECOLHIMENTO'])){
+        $value = "RECOLH";
+      }
+      if(Str::containsAll($value, ['Man', 'CONSERTO', 'CTO'])){
+        $value = "MAN.CTO";
+      }
+      if(Str::containsAll($value, ['Sup.', 'QUEDAS'])){
+        $value = "QUEDAS";
+      }
+      if(Str::containsAll($value, ['Sup.', 'LENTIDÃO'])){
+        $value = "LENTIDÃO";
+      }
+      if(Str::containsAll($value, ['Sup.', 'OUTROS'])){
+        $value = "OUTROS";
+      }
+      if(Str::containsAll($value, ['Man.', 'ATENUAÇÃO'])){
+        $value = "ATENUAÇÃO";
+      }
+
       return $value;
     }
 

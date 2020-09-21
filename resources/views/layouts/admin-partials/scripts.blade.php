@@ -11,6 +11,8 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('/vendor/adminlte/dist/js/adminlte.js') }}"></script>
 
+{{-- <script src="{{ asset('/vendor/plugins/chart.js/Chart.min.js') }}"></script> --}}
+
 
 
 

@@ -22,6 +22,4 @@ class MkComissao extends Model implements Transformable
      */
     protected $fillable = [];
 
-
-
 }

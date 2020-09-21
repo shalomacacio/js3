@@ -49,25 +49,31 @@ class MkCompromissosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function agenda()
+    public function agenda(Request $request)
     {
       $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
 
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-      $result = $this->repository
-                          ->findWhereBetween(
-                            'com_inicio', [$inicio, $fim],
-                            [
-                            'com_titulo','com_realizado','cliente','codcompromisso','cd_funcionario',
-                            'cd_integracao','com_cor_de_fundo','com_cor_da_borda','com_cor_do_texto',
-                            'cd_operador','dt_hr_abertura','prioridade','equipe_minima','cdagenda_grupo'
-                            ]
-                          );
+      if($request->dt_agenda){
+        $inicio = Carbon::parse($request->dt_agenda)->format('Y-m-d 00:00:00');
+        $fim = Carbon::parse($request->dt_agenda)->format('Y-m-d 23:59:59');
+      }
+
+      $result = $this->repository->scopeQuery(function($query) use ($inicio, $fim) {
+                  return $query
+                  ->whereBetween('com_inicio',[$inicio, $fim])
+                  ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
+                  ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
+                  ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
+                  ->select('cdpessoa','com_inicio','com_titulo', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
+                })->all();
+
+      // return dd($result);
+      $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
 
 
-      $mkCompromissos = $result->groupBy('cd_funcionario');
 
         if (request()->wantsJson()) {
 
@@ -76,16 +82,44 @@ class MkCompromissosController extends Controller
             ]);
         }
 
-        return view('mkCompromissos.agenda', compact('mkCompromissos'));
+        return view('mkCompromissos.agenda', compact('mkCompromissos', 'inicio'));
     }
 
-    public function agendaStatus( Request $request ){
+    public function agendaStatus(){
 
-        $status = ['teste'];
+      $inicio = Carbon::now()->format('Y-m-d 00:00:00');
+      $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-      return response()->json([
-        'data' => $status,
-      ]);
+      $result = $this->repository->scopeQuery(function($query) use ($inicio, $fim) {
+        return $query
+        ->whereBetween('com_inicio',[$inicio, $fim])
+        ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
+        ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
+        ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
+        ->select('cdpessoa');
+      })->all();
+
+      $arr = [];
+        foreach($result as $funcionario)
+        {
+          $arr[] = (array) $funcionario;
+        }
+
+        $data = [700,500,400];
+        $labels = ['teste', 'teste1', 'teste2'];
+        $backgroundColor = ['#f56954', '#00a65a', '#f39c12'];
+
+        $datasets = [
+          'data' => $data,
+          'backgroundColor' => $backgroundColor,
+        ];
+
+        $response = [
+          'labels' => [$labels],
+          'datasets' => [$datasets],
+        ];
+
+        return response()->json($response);
 
     }
 

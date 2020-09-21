@@ -33,7 +33,7 @@ class MkCompromisso extends Model implements Transformable
       $truncated = Str::limit($value, 15);
       return $truncated;
     }
-    public function getCdFuncionarioAttribute($value)
+    public function getCdPessoaAttribute($value)
     {
       $funcionario = MkPessoa::where('codpessoa', $value)->first();
       return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;

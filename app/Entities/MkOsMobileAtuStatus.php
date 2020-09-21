@@ -33,6 +33,7 @@ class MkOsMobileAtuStatus extends Model implements Transformable
       if(Str::containsAll($value, ['Visualização ', 'de O.S' ])){
         $value = "VIS O.S";
       }
+
       return $value;
     }
 

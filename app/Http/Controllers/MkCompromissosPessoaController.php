@@ -44,15 +44,10 @@ class MkCompromissosPessoaController extends Controller
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-      $result = $this->repository
-                          ->findWhereBetween(
-                            'com_inicio', [$inicio, $fim],
-                            [
-                            'com_titulo','com_realizado','cliente','codcompromisso','cd_funcionario',
-                            'cd_integracao','com_cor_de_fundo','com_cor_da_borda','com_cor_do_texto',
-                            'cd_operador','dt_hr_abertura','prioridade','equipe_minima','cdagenda_grupo'
-                            ]
-                          );
+      // $result = $this->repository->findWhereBetween('com_inicio', [$inicio, $fim]);
+      $result = $this->repository->all();
+
+      return dd($result);
 
 
       $mkCompromissos = $result->groupBy('cd_funcionario');

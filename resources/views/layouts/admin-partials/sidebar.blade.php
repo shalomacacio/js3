@@ -85,11 +85,11 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
-                  <p>DASHBOARD</p>
+                  <p>VENDAS DASH</p>
                 </a>
               </li>
               <li class="nav-item has-treeview">
-                <a href="#" class="nav-link"><i class="nav-icon fas fa-circle"></i>
+                <a href="#" class="nav-link"><i class="nav-icon fas fa-list-ul"></i>
                     <p>RELATÓRIOS<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -117,14 +117,14 @@
                 </a>
               </li> --}}
               <li class="nav-item has-treeview">
-                <a href="#" class="nav-link"><i class="nav-icon fas fa-circle"></i>
-                    <p>COMISSÃO<i class="right fas fa-angle-left"></i></p>
+                <a href="#" class="nav-link"><i class="nav-icon fas fa-hand-holding-usd"></i>
+                    <p>COMISSÕES<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('mkComissaos.comissoesAutorizar') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>AUTORIZAR COMISSÃO</p>
+                      <p>COMISSÕES AUTORIZAR </p>
                     </a>
                   </li>
                 </ul>

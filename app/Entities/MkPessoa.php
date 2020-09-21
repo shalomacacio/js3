@@ -25,8 +25,9 @@ class MkPessoa extends Model implements Transformable
     protected $primaryKey = 'codpessoa';
     protected $fillable = [];
 
-    public function compromissos()
-    {
-      return $this->hasMany('App\Entities\MkCompromisso', 'mk_compromisso_pessoa', 'codcompromisso', 'codcompromisso');
+
+    public function contratos(){
+      return $this->hasManyThrough('App\Entities\MkContrato', 'App\Entities\MkOs', 'country_id', 'user_id');
     }
+
 }

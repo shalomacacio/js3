@@ -1,4 +1,4 @@
-@extends('layouts.top-nav')
+@extends('layouts.agenda-layout')
 
 @section('content')
     <!-- Main content -->
@@ -23,6 +23,8 @@
         <!-- Main content -->
         <section class="content">
           <div class="container-fluid">
+          <section class="col-lg-12 connectedSortable">
+          </section>
             <!-- /.row -->
             <div class="row">
               @foreach ($mkCompromissos as $comps => $compromissos)
@@ -33,6 +35,7 @@
                   <div class="card-header">
                     <h3 class="card-title">{{ $comps }}</h3>
                     <div class="card-tools">
+                      <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">{{ $compromissos->count() }}</span>
                       <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
                       </button>
@@ -57,15 +60,15 @@
                       <tbody>
                         @foreach ($compromissos as $compromisso)
                         <tr id="{{ $compromisso->codcompromisso }}" >
-                          <td title="O.S:{{ $compromisso->os->codos}} Cli: {{ $compromisso->os->usuario->nome_razaosocial}}">
+                          <td title="O.S:{{ $compromisso->os->codos}} Cli: ">
                             <a href="#">{!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}</a>
                           </td>
                           <td title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}">
                             {{ $compromisso->os->logradouro->bairro->bairro }}
                           </td>
                           <td> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
-                          <td><span class="badge badge-success">@isset($compromisso->os->ultimo_status_app_mk_tx) {{ $compromisso->os->ultimo_status_app_mk_tx }}  @endisset</span></td>
-                          <td>{{ $compromisso->os->classificacao}}</td>
+                          <td> @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
+                          <td> @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                         </tr>
                         @endforeach
                       </tbody>
@@ -87,33 +90,4 @@
 @endsection
 @section('javascript')
 <script src="{{ asset('/vendor/adminlte/dist/js/pages/dashboard.js') }}"></script>
-
-<script type="text/javascript">
-
-  // setInterval(function(){ bgColor() }, 10000);
-
-  function bgColor(){
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    $.ajax({
-        url: "{{ route('mkCompromissos.agenda') }}",
-        type: "GET",
-        dataType: 'json',
-        success: function (data) {
-          // console.log('Ok:', data);
-          $("#thTest").css("background-color", "#51A351");
-        },
-        error: function (data) {
-            console.log('Error:', data);
-            $('#saveBtn').html('Save Changes');
-        }
-    });
-  }
-
-
-</script>
 @endsection

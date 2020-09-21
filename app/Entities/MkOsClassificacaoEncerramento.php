@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -25,4 +26,30 @@ class MkOsClassificacaoEncerramento extends Model implements Transformable
     protected $primaryKey = 'codclassifenc';
     protected $fillable = [];
 
+
+    public function getClassificacaoAttribute($value)
+    {
+      if(Str::containsAll($value, ['(CAN) RECOLHIDO', 'RECOLHIDO', 'TOTAL'])){
+        $value = "REC.TOTAL";
+      }
+      if(Str::containsAll($value, ['(CAN) RECOLHIDO', 'RECOLHIDO', 'PARCIAL'])){
+        $value = "REC.PARC";
+      }
+      if(Str::containsAll($value, ['(CAN) ', 'NÃO ', 'RECOLHIDO'])){
+        $value = "Ñ.RECOLHIDO";
+      }
+      if(Str::containsAll($value, ['CLIENTE', 'AUSENTE'])){
+        $value = "CL.AUSENT";
+      }
+      if(Str::containsAll($value, ['CONCLUÍDO'])){
+        $value = "CONC";
+      }
+      if(Str::containsAll($value, ['(SUP)', 'TROCA', 'CABO'])){
+        $value = "TROC.CABO";
+      }
+      if(Str::containsAll($value, ['(SUP)', 'TROCA', 'FIBRA'])){
+        $value = "TROC.FIBRA";
+      }
+      return $value;
+    }
 }

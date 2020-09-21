@@ -32,11 +32,19 @@ class MkOs extends Model implements Transformable
       return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
     }
 
+    public function consultor()
+    {
+      return $this->belongsTo('App\Entities\FrUsuario', 'tecnico_responsavel', 'usr_codigo');
+    }
+    public function tecnico()
+    {
+      return $this->belongsTo('App\Entities\FrUsuario', 'operador_fech_tecnico', 'usr_codigo');
+    }
     public function osTipo()
     {
       return $this->belongsTo('App\Entities\MkOsTipo', 'tipo_os', 'codostipo');
     }
-    public function classificacao()
+    public function classEncerramento()
     {
       return $this->belongsTo('App\Entities\MkOsClassificacaoEncerramento', 'classificacao_encerramento', 'codclassifenc');
     }
@@ -49,6 +57,7 @@ class MkOs extends Model implements Transformable
       return $this->belongsTo('App\Entities\MkOsMobileAtuStatus', 'ultimo_status_app_mk', 'codosatustatus');
     }
 
+
     // MUTATORS
     public function getUltimoStatusAppMkTxAttribute($value)
     {
@@ -58,26 +67,33 @@ class MkOs extends Model implements Transformable
       if(Str::containsAll($value, ['Iniciando'])){
         $value = "INI";
       }
+      if(Str::containsAll($value, ['Deslocamento', 'cancelado'])){
+        $value = "DESL.CANC";
+      }
+      if(Str::containsAll($value, ['Atividade ', 'encerrada', 'sem'])){
+        $value = "S.SOLUC";
+      }
       return $value;
     }
 
-
-    public function getStatusAttribute($value)
+    public function getUltimoStatusAppMkAttribute($value)
     {
-      switch ($value) {
-        case '1':
-          return "AGUARD";
-          break;
-        case '2':
-          return "AGEND";
-          break;
-        case '3':
-          return "ENCERR";
-          break;
-
-        default:
-          return " ";
-          break;
+      if(Str::contains($value, ['001'])){
+        $value = " badge-info";
       }
+      if(Str::contains($value, ['002'])){
+        $value = " badge-success";
+      }
+      if(Str::contains($value, ['010'])){
+        $value = " badge-warning";
+      }
+      if(Str::contains($value, ['011'])){
+        $value = " badge-danger";
+      }
+      if(Str::contains($value, ['009'])){
+        $value = " badge-secondary";
+      }
+      return $value;
     }
+
 }
