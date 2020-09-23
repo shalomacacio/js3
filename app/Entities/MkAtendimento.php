@@ -27,22 +27,17 @@ class MkAtendimento extends Model implements Transformable
     protected $primaryKey = 'codatendimento';
     protected $fillable = [];
 
-
     //MUTATOR
-
     public function getBairroAttribute($value){
       return MkBairro::find($value)->bairro;
     }
 
-    public function getCdSubprocessoAttribute($value){
-      return MkAtendimentoSubProcesso::find($value)->nomeSubprocesso;
+    public function getCdProcessoAttribute($value){
+      return $subproceso = MkAtendimentoProcesso::find($value)->nome_processo;
     }
 
     public function processo(){
       return $this->belongsTo('App\Entities\MkProcesso', 'cd_processo' , 'codprocesso' );
     }
-
-
-
 
 }

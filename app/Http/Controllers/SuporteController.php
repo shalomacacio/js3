@@ -33,11 +33,13 @@ class SuporteController extends Controller
     $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query
             ->whereIn('cd_subprocesso', $suporte)
-            ->where('finalizado','=' , 'N');
+            ->where('finalizado','=' , 'N')
+            ->select('cd_processo', 'finalizado', 'cd_subprocesso', 'bairro', 'logradouro');
     })->all();
 
     $bairros =  $result->countBy('bairro');
-    $tipos =    $result->countBy('cd_subprocesso');
+    $rua =    $result->countBy('logradouro');
+    $tipos =    $result->countBy('cd_processo');
     $tipoOs = [13,86,88,97,109,110,137];
 
     $resultCompromisso = $this->compromissoRepository->scopeQuery(function($query) use ($inicio, $fim, $tipoOs) {

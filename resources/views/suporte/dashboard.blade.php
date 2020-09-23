@@ -68,6 +68,23 @@
               </div>
 
             </div>
+
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title"> INCIDENTES POR TIPO </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+              </div>
+              <div class="card-body" id="cardTipoOs">
+              </div>
+            </div>
+
+          </section>
+          <section class="col-lg-6 connectedSortable">
+
           </section>
           <!-- /.Left col -->
         <!-- /.row (main row) -->
@@ -124,6 +141,19 @@
                 +"<span class='float-right'>"+value+"</span>"
                 +"<div class='progress progress-sm'>"
                 +"<div class='progress-bar bg-primary' style='width: 100%'></div>"
+                +"</div>"
+                +"</div>"
+            )
+          });
+
+          $('#cardTipoOs').empty();
+          $.each(data.tipos, function(index, value) {
+            $('#cardTipoOs').append(
+              "<div class='progress-group'>"
+                +index
+                +"<span class='float-right'>"+value+"</span>"
+                +"<div class='progress progress-sm'>"
+                +"<div class='progress-bar bg-danger' style='width: 100%'></div>"
                 +"</div>"
                 +"</div>"
             )
