@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Entities\MkOs;
 use App\Entities\MkPessoa;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,12 @@ class MkCompromisso extends Model implements Transformable
       $funcionario = MkPessoa::where('codpessoa', $value)->first();
       return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
     }
+
+    public function gettipoOsAttribute($value){
+      $result =  MkOs::find($value);
+      return $value;
+    }
+
     //RELATIONSHIPS
     public function os()
     {

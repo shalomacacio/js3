@@ -56,7 +56,8 @@ class MkCompromissosController extends Controller
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-      if($request->dt_agenda){
+      if($request->dt_agenda)
+      {
         $inicio = Carbon::parse($request->dt_agenda)->format('Y-m-d 00:00:00');
         $fim = Carbon::parse($request->dt_agenda)->format('Y-m-d 23:59:59');
       }
@@ -70,7 +71,6 @@ class MkCompromissosController extends Controller
                   ->select('cdpessoa','com_inicio','com_titulo', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
                 })->all();
 
-      // return dd($result);
       $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
 
 

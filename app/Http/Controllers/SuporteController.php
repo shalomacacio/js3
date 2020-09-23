@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\MkOsRepository;
+use Illuminate\Support\Carbon;
 use App\Repositories\MkCompromissoRepository;
 use App\Repositories\MkAtendimentoRepository;
 
 class SuporteController extends Controller
 {
+
   protected $atendimentoRepository;
+  protected $compromissoRepository;
 
 
-  public function __construct(MkAtendimentoRepository $atendimentoRepository)
+  public function __construct(MkAtendimentoRepository $atendimentoRepository, MkCompromissoRepository $compromissoRepository)
   {
       $this->atendimentoRepository = $atendimentoRepository;
+      $this->compromissoRepository = $compromissoRepository;
   }
 
   public function dashboard(){
@@ -22,32 +25,45 @@ class SuporteController extends Controller
   }
 
   public function ajaxDashSuporte(){
+    $inicio = Carbon::now()->format('Y-m-d 00:00:00');
+    $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-    $inicio = Carbon::now()->format('Y-m-d');
-    $fim = Carbon::now()->format('Y-m-d');
+    $suporte = [73,224,239,268, 437, 464, 467, 469 , 471, 473, 475, 477,480,482, 511, 513, 515];
 
-    $result = $this->atendimentoRepository->scopeQuery(function($query) use ($inicio, $fim) {
+    $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query
-      ->whereBetween('data_abertura',[$inicio, $fim]);
+            ->whereIn('cd_subprocesso', $suporte)
+            ->where('finalizado','=' , 'N');
     })->all();
 
-      $data = [700,500,400];
-      $labels = ['teste', 'teste1', 'teste2'];
-      $backgroundColor = ['#f56954', '#00a65a', '#f39c12'];
+    $bairros =  $result->countBy('bairro');
+    $tipos =    $result->countBy('cd_subprocesso');
+    $tipoOs = [13,86,88,97,109,110,137];
 
-      $datasets = [
-        'data' => $data,
-        'backgroundColor' => $backgroundColor,
-      ];
+    $resultCompromisso = $this->compromissoRepository->scopeQuery(function($query) use ($inicio, $fim, $tipoOs) {
+                return $query
+                ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
+                ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
+                ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
+                ->whereIn('mk_os.tipo_os', $tipoOs)
+                ->whereBetween('com_inicio',[$inicio, $fim])
+                ->select('cdpessoa','com_inicio','com_titulo', 'mk_os.tipo_os', 'mk_os.status as status', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
+              })->all();
 
-      $response = [
-        'labels' => [$labels],
-        'datasets' => [$datasets],
-      ];
+    $pendentes = $result->count();
+    $agendados = $resultCompromisso->count();
+    $tecnicos = $resultCompromisso->countBy('cdpessoa');
+    $concluidos = $resultCompromisso->where('status', 3)->count();
 
-      return response()->json([
-        'result' => $result
-        ]);
+    return response()->json([
+      'pendentes'   => $pendentes,
+      'agendados'   => $agendados,
+      'concluidos'  => $concluidos,
+      'bairros'     => $bairros,
+      'tecnicos'    => $tecnicos,
+      'tipos'       => $tipos,
+    ]);
+
   }
 
 }

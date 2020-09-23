@@ -3,8 +3,10 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Entities\MkAtendimentoSubProcesso;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use App\Entities\MkBairro;
 
 /**
  * Class MkAtendimento.
@@ -20,6 +22,27 @@ class MkAtendimento extends Model implements Transformable
      *
      * @var array
      */
+    protected $connection = 'pgsql';
+    protected $table = "public.mk_atendimento";
+    protected $primaryKey = 'codatendimento';
     protected $fillable = [];
+
+
+    //MUTATOR
+
+    public function getBairroAttribute($value){
+      return MkBairro::find($value)->bairro;
+    }
+
+    public function getCdSubprocessoAttribute($value){
+      return MkAtendimentoSubProcesso::find($value)->nomeSubprocesso;
+    }
+
+    public function processo(){
+      return $this->belongsTo('App\Entities\MkProcesso', 'cd_processo' , 'codprocesso' );
+    }
+
+
+
 
 }

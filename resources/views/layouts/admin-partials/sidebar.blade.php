@@ -39,12 +39,12 @@
                     <p>SUPORTE<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
-                  {{-- <li class="nav-item">
-                    <a href="#" class="nav-link">
+                  <li class="nav-item">
+                  <a href="{{ route('suporte.dashboard') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>AGENDA</p>
+                      <p> DASHBOARD </p>
                     </a>
-                  </li> --}}
+                  </li>
                 </ul>
               </li>
               <li class="nav-item has-treeview">

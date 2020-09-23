@@ -37,30 +37,4 @@ class MkCompromissosPessoaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function agenda()
-    {
-      $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-
-      $inicio = Carbon::now()->format('Y-m-d 00:00:00');
-      $fim = Carbon::now()->format('Y-m-d 23:59:59');
-
-      // $result = $this->repository->findWhereBetween('com_inicio', [$inicio, $fim]);
-      $result = $this->repository->all();
-
-      return dd($result);
-
-
-      $mkCompromissos = $result->groupBy('cd_funcionario');
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $mkCompromissos,
-            ]);
-        }
-
-        return view('mkCompromissos.agenda', compact('mkCompromissos'));
-    }
-
-
 }
