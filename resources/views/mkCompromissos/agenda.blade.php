@@ -24,6 +24,7 @@
         <section class="content">
           <div class="container-fluid">
           <section class="col-lg-12 connectedSortable">
+            
           </section>
             <!-- /.row -->
             <div class="row">

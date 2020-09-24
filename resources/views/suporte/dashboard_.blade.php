@@ -24,7 +24,21 @@
         <div class="row">
           <!-- Left col -->
           <section class="col-lg-6 connectedSortable">
-            <div class="card card-warning">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title"> INCIDENTES POR TIPO</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="donutChartRegion" style="height:160px; min-height:260px"></canvas>
+              </div>
+            </div>
+
+            <div class="card card-danger">
               <div class="card-header">
                 <h3 class="card-title"> ALERTA POR LOGRADOURO  </h3>
                 <div class="card-tools">
@@ -34,29 +48,16 @@
                 </div>
               </div>
               <div class="card-body">
-                <div class="card-body" id="ruas">
-                </div>
+                <ul class="contacts-list" id="ruas"></ul>
               </div>
             </div>
 
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title"> INCIDENTES POR REGIÃO</h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <canvas id="donutChartRegion" style="height:160px; min-height:360px"></canvas>
-              </div>
-            </div>
           </section>
           <!-- /.Left col -->
           <!-- Left col -->
           <section class="col-lg-6 connectedSortable">
             <div class="card card-info">
+
               <div class="card-header">
                 <h3 class="card-title"> INCIDENTES POR TÉCNICO </h3>
                 <div class="card-tools">
@@ -65,8 +66,11 @@
                   <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
                 </div>
               </div>
+
               <div class="card-body" id="cardProgress">
+
               </div>
+
             </div>
 
             <div class="card card-danger">
@@ -130,8 +134,8 @@
           $('#pendentes').text(data.pendentes);
           $('#agendados').text(data.agendados);
           $('#concluidos').text(data.concluidos);
-          bairros = Object.keys(data.bairros);
-          dados = Object.values(data.bairros);
+          bairros = Object.keys(data.tipos);
+          dados = Object.values(data.tipos);
 
           $('#cardProgress').empty();
           $.each(data.tecnicos, function(index, value) {
@@ -163,16 +167,9 @@
           $.each(data.ruas, function(index, value) {
             if(value > 2){
               $('#ruas').append(
-              "<div class='progress-group'>"
-                +index
-                +"<span class='float-right'>"+value+"</span>"
-                +"<div class='progress progress-sm'>"
-                +"<div class='progress-bar bg-danger' style='width: 100%'></div>"
-                +"</div>"
-                +"</div>"
-              )
-            }
-
+              "<li>"+ index +"<li>"
+            )
+          }
           });
           cores = ['#32B990','#f56954','#00a65a','#f39c12', '#3276B5','#373435','#A9ABAE','#96C35C','#33A7D8','#F9AC27',
           '#8869AD','#D94A59','#E966AC','#5da8ae','#e7c602','#e7b40d','#89a3dc','#da7c0a','#693f29','#ab9b46'];
@@ -204,54 +201,6 @@
         }
       });
     }
-
-
-
-
-    var ctxP = document.getElementById("labelChart").getContext('2d');
-    var myPieChart = new Chart(ctxP, {
-      plugins: [ChartDataLabels],
-      type: 'pie',
-      data: {
-        labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
-        datasets: [{
-          data: [210, 130, 120, 160, 120],
-          backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-          hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-        }]
-      },
-      options: {
-        responsive: true,
-        legend: {
-          position: 'right',
-          labels: {
-            padding: 20,
-            boxWidth: 10
-          }
-        },
-        plugins: {
-          datalabels: {
-            formatter: (value, ctx) => {
-              let sum = 0;
-              let dataArr = ctx.chart.data.datasets[0].data;
-              dataArr.map(data => {
-                sum += data;
-              });
-              let percentage = (value * 100 / sum).toFixed(2) + "%";
-              return percentage;
-            },
-            color: 'white',
-            labels: {
-              title: {
-                font: {
-                  size: '16'
-                }
-              }
-            }
-          }
-        }
-      }
-    });
   </script>
 @stop
 
