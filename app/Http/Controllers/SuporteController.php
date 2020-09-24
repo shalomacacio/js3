@@ -13,7 +13,6 @@ class SuporteController extends Controller
   protected $atendimentoRepository;
   protected $compromissoRepository;
 
-
   public function __construct(MkAtendimentoRepository $atendimentoRepository, MkCompromissoRepository $compromissoRepository)
   {
       $this->atendimentoRepository = $atendimentoRepository;
@@ -38,7 +37,7 @@ class SuporteController extends Controller
     })->all();
 
     $bairros =  $result->countBy('bairro');
-    $rua =    $result->countBy('logradouro');
+    $ruas =    $result->countBy('logradouro');
     $tipos =    $result->countBy('cd_processo');
     $tipoOs = [13,86,88,97,109,110,137];
 
@@ -64,8 +63,8 @@ class SuporteController extends Controller
       'bairros'     => $bairros,
       'tecnicos'    => $tecnicos,
       'tipos'       => $tipos,
+      'ruas'         => $ruas,
     ]);
-
   }
 
 }

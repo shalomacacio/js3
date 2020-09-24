@@ -8,15 +8,7 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">SUPORTE DASHBOARD</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href='#">Home'></a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div><!-- /.col -->
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -33,7 +25,6 @@
           <!-- Left col -->
           <section class="col-lg-6 connectedSortable">
             <div class="card card-danger">
-
               <div class="card-header">
                 <h3 class="card-title"> INCIDENTES POR REGIÃO</h3>
                 <div class="card-tools">
@@ -42,12 +33,25 @@
                   <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
                 </div>
               </div>
-
               <div class="card-body">
                 <canvas id="donutChartRegion" style="height:160px; min-height:360px"></canvas>
               </div>
-
             </div>
+
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title"> ATENÇÃO  </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <ul id="ruas"></ul>
+              </div>
+            </div>
+
           </section>
           <!-- /.Left col -->
           <!-- Left col -->
@@ -159,6 +163,14 @@
             )
           });
 
+          $('#ruas').empty();
+          $.each(data.ruas, function(index, value) {
+            if(value > 2){
+              $('#ruas').append(
+              "<li>"+ index +"<li>"
+            )
+          }
+          });
           cores = ['#32B990','#f56954','#00a65a','#f39c12', '#3276B5','#373435','#A9ABAE','#96C35C','#33A7D8','#F9AC27',
           '#8869AD','#D94A59','#E966AC','#5da8ae','#e7c602','#e7b40d','#89a3dc','#da7c0a','#693f29','#ab9b46'];
 
