@@ -69,7 +69,7 @@
 
             </div>
 
-            <div class="card card-success">
+            <div class="card card-danger">
               <div class="card-header">
                 <h3 class="card-title"> INCIDENTES POR TIPO </h3>
                 <div class="card-tools">
