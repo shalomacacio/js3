@@ -170,6 +170,7 @@
           $('#pendentes').text(data.pendentes);
           $('#agendados').text(data.agendados);
           $('#concluidos').text(data.concluidos);
+          $('#concN1').text(data.concN1);
           bairros = Object.keys(data.bairros);
           dados = Object.values(data.bairros);
           areaChartData.labels = Object.keys(data.tipos);

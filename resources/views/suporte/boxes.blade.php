@@ -35,7 +35,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3> - -</h3>
+                <h3 id="concN1"></h3>
 
                 <p>Solução Remota</p>
               </div>
@@ -51,7 +51,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3 id="pendentes"></h3>
-                <p>Pendentes</p>
+                <p>Atendimentos</p>
               </div>
               <div class="icon">
                 <i class="fas fa-minus-circle"></i>

@@ -33,12 +33,20 @@ class SuporteController extends Controller
       return $query
             ->whereIn('cd_subprocesso', $suporte)
             ->where('finalizado','=' , 'N')
-            ->select('cd_processo', 'finalizado', 'cd_subprocesso', 'bairro', 'logradouro');
+            ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'bairro', 'logradouro');
+    })->all();
+
+    $concN1 = $this->atendimentoRepository->scopeQuery( function($query) use($inicio, $fim) {
+      return $query
+            ->whereBetween('dt_finaliza', [$inicio, $fim])
+            ->where('classificacao_encerramento', 190);
     })->all();
 
     $bairros =  $result->countBy('bairro');
-    $ruas =    $result->countBy('logradouro');
+    $ruas =     $result->countBy('logradouro');
     $tipos =    $result->countBy('cd_processo');
+    
+
     $tipoOs = [13,86,88,97,109,110,137];
 
     $resultCompromisso = $this->compromissoRepository->scopeQuery(function($query) use ($inicio, $fim, $tipoOs) {
@@ -57,7 +65,6 @@ class SuporteController extends Controller
     $concluidos = $resultCompromisso->where('status', 3)->count();
 
     $testes = $resultCompromisso->groupBy('cdpessoa');
-
 
     $tecs = $resultCompromisso->pipe(function ($collection) {
 
@@ -82,6 +89,7 @@ class SuporteController extends Controller
       'tipos'       => $tipos,
       'ruas'        => $ruas,
       'tecs'        => $tecs,
+      'concN1'      => $concN1->count(),
     ]);
   }
 
