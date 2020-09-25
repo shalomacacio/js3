@@ -1,5 +1,21 @@
 @extends('layouts.agenda-layout')
 
+@section('css')
+<style>
+    td {
+      font-size: 9px;
+    }
+    th {
+      font-size: 11px;
+    }   
+    .card-header {
+      padding: .4rem 1.25rem;
+    }
+  </style>
+
+
+@endsection
+
 @section('content')
     <!-- Main content -->
 
@@ -51,9 +67,9 @@
                     <table class="table table-sm  table-head-fixed  ">
                       <thead>
                         <tr>
-                          <th  style="width: 200px">CLIENTE</th>
-                          <th style="width: 100px">BAIRRO</th>
-                          <th >SERVIÇO</th>
+                          <th>CLIENTE</th>
+                          <th>BAIRRO</th>
+                          <th>SERVIÇO</th>
                           <th>APP</th>
                           <th>STATUS</th>
                         </tr>
@@ -61,15 +77,15 @@
                       <tbody>
                         @foreach ($compromissos as $compromisso)
                         <tr id="{{ $compromisso->codcompromisso }}" >
-                          <td title="O.S:{{ $compromisso->os->codos}} Cli: ">
+                          <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli: ">
                             <a href="#">{!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}</a>
                           </td>
-                          <td title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}">
+                          <td style="font-size: 9px" title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}">
                             {{ $compromisso->os->logradouro->bairro->bairro }}
                           </td>
-                          <td> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
-                          <td> @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
-                          <td> @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
+                          <td style="font-size: 9px" > {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
+                          <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
+                          <td style="font-size: 9px" > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                         </tr>
                         @endforeach
                       </tbody>

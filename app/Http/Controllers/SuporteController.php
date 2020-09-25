@@ -31,9 +31,10 @@ class SuporteController extends Controller
 
     $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query
-            ->whereIn('cd_subprocesso', $suporte)
-            ->where('finalizado','=' , 'N')
-            ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'bairro', 'logradouro');
+            ->join('mk_conexoes as con', 'mk_atendimento.conexao', 'con.codconexao')
+            ->whereIn('mk_atendimento.cd_subprocesso', $suporte)
+            ->where('mk_atendimento.finalizado','=' , 'N')
+            ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'mk_atendimento.bairro', 'mk_atendimento.logradouro','con.nasportidname', 'con.nasipaddress');
     })->all();
 
     $concN1 = $this->atendimentoRepository->scopeQuery( function($query) use($inicio, $fim) {
@@ -90,6 +91,7 @@ class SuporteController extends Controller
       'ruas'        => $ruas,
       'tecs'        => $tecs,
       'concN1'      => $concN1->count(),
+      // 'result'         =>$result,
     ]);
   }
 

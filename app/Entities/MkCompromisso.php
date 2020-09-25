@@ -29,11 +29,11 @@ class MkCompromisso extends Model implements Transformable
     protected $fillable = [];
 
     // MUTATORS
-    public function getComTituloAttribute($value)
-    {
-      $truncated = Str::limit($value, 15);
-      return $truncated;
-    }
+    // public function getComTituloAttribute($value)
+    // {
+    //   $truncated = Str::limit($value, 20);
+    //   return $truncated;
+    // }
     public function getCdPessoaAttribute($value)
     {
       $funcionario = MkPessoa::where('codpessoa', $value)->first();
