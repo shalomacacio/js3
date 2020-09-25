@@ -56,6 +56,23 @@ class SuporteController extends Controller
     $tecnicos = $resultCompromisso->countBy('cdpessoa');
     $concluidos = $resultCompromisso->where('status', 3)->count();
 
+    $testes = $resultCompromisso->groupBy('cdpessoa');
+
+
+    $tecs = $resultCompromisso->pipe(function ($collection) {
+
+      $porTec = $collection->map( function($t){
+        return $t->only(['cdpessoa', 'status']);
+      });
+
+      return collect([
+        'tecnico' => $porTec,
+        // 'total' => $collection->count(),
+        // 'concluidos' => $collection->where('status',3)->count('cdpessoa'),
+      ]);
+    });
+
+
     return response()->json([
       'pendentes'   => $pendentes,
       'agendados'   => $agendados,
@@ -63,7 +80,8 @@ class SuporteController extends Controller
       'bairros'     => $bairros,
       'tecnicos'    => $tecnicos,
       'tipos'       => $tipos,
-      'ruas'         => $ruas,
+      'ruas'        => $ruas,
+      'tecs'        => $tecs,
     ]);
   }
 

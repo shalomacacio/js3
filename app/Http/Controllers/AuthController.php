@@ -45,7 +45,7 @@ class AuthController extends Controller
               }
 
               Auth::login($user);
-              return view('welcome');
+              return redirect()->route('welcome');
 
           }
       } catch (Exception $e) {

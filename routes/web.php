@@ -11,15 +11,15 @@
 |
 */
 
-
-Route::get('/', function() {
-  return view('welcome');
-})->name('welcome');
-
-Route::get('/login', 'AuthController@login')->name('login');
+Route::get('/', 'AuthController@login')->name('login');
 Route::post('/auth', 'AuthController@auth')->name('auth');
 
 Route::group(['middleware' => ['auth']], function () {
+
+  Route::get('/welcome', function(){
+    return view('welcome');
+  })->name('welcome');
+
   Route::get('/logout',       'AuthController@logout')->name('logout');
   Route::get('/mkOs',         'MkOsController@index')->name('mkOs.index');
 
@@ -29,7 +29,6 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/comissao-autorizar', 'MkComissaosController@comissoesAutorizar')->name('mkComissaos.comissoesAutorizar');
 
   Route::group(['prefix' => 'suporte'], function () {
-
     Route::get('/dashboard',       'SuporteController@dashboard')->name('suporte.dashboard');
     Route::get('/ajaxDashSuporte',       'SuporteController@ajaxDashSuporte')->name('suporte.ajaxDashSuporte');
 
