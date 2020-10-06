@@ -73,10 +73,7 @@ class MkCompromissosController extends Controller
 
       $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
 
-
-
         if (request()->wantsJson()) {
-
             return response()->json([
                 'data' => $mkCompromissos,
             ]);

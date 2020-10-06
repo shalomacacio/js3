@@ -7,13 +7,11 @@
     }
     th {
       font-size: 11px;
-    }   
+    }
     .card-header {
       padding: .4rem 1.25rem;
     }
   </style>
-
-
 @endsection
 
 @section('content')
@@ -40,7 +38,7 @@
         <section class="content">
           <div class="container-fluid">
           <section class="col-lg-12 connectedSortable">
-            
+
           </section>
             <!-- /.row -->
             <div class="row">
@@ -77,7 +75,7 @@
                       <tbody>
                         @foreach ($compromissos as $compromisso)
                         <tr id="{{ $compromisso->codcompromisso }}" >
-                          <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli: ">
+                          <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
                             <a href="#">{!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}</a>
                           </td>
                           <td style="font-size: 9px" title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}">

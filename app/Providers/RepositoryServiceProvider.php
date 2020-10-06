@@ -39,6 +39,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkAtendimentoRepository::class, \App\Repositories\MkAtendimentoRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkAtendimentoProcessoRepository::class, \App\Repositories\MkAtendimentoProcessoRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkAtendimentoSubProcessoRepository::class, \App\Repositories\MkAtendimentoSubProcessoRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FinanceiroRelatorioRepository::class, \App\Repositories\FinanceiroRelatorioRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\VendasControllerRepository::class, \App\Repositories\VendasControllerRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\GrupoPessoasRepository::class, \App\Repositories\GrupoPessoasRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\GrupoServicosRepository::class, \App\Repositories\GrupoServicosRepositoryEloquent::class);
         //:end-bindings:
     }
 }

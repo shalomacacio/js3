@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateMkAtendimentoProcessosTable.
+ * Class CreateVendasControllersTable.
  */
-class CreateMkAtendimentoProcessosTable extends Migration
+class CreateVendasControllersTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,7 +15,7 @@ class CreateMkAtendimentoProcessosTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('mk_atendimento_processos', function(Blueprint $table) {
+		Schema::create('vendas_controllers', function(Blueprint $table) {
             $table->increments('id');
 
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateMkAtendimentoProcessosTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('mk_atendimento_processos');
+		Schema::drop('vendas_controllers');
 	}
 }

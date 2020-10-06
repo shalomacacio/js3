@@ -23,7 +23,7 @@
       <!-- Right navbar links -->
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
         <!-- SEARCH FORM -->
-        <form class="form-inline ml-0 ml-md-3" action="{{ route('mkComissaos.comissoesAutorizar') }}" method="GET">
+        <form class="form-inline ml-0 ml-md-3"  method="GET">
           @csrf
           <div class="input-group input-group-sm">
             <div class="col-5">

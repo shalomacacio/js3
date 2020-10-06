@@ -57,10 +57,10 @@
                                     <tr>
                                       <td>{{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d/m') }}</td>
                                       <td>{{ $servico->codos }}</td>
-                                      <td>@isset($servico->usuario->nome_razaosocial) {{ $servico->usuario->nome_razaosocial }} @endisset</td>
-                                      <td>{{ $servico->osTipo->descricao }}</td>
-                                      <td>{{ $servico->tecnico->usr_nome }}</td>
-                                      <td> @isset($servico->consultor) {{ $servico->consultor->usr_nome }} @endisset </td>
+                                      <td>@isset($servico->nome_razaosocial) {{ $servico->nome_razaosocial }} @endisset</td>
+                                      <td>{{ $servico->descricao }}</td>
+                                      <td>{{ $servico->tecnico }}</td>
+                                      <td> @isset($servico->consultor) {{ $servico->consultor }} @endisset </td>
                                       <td>
                                         {{-- @isset($servico->usuario->contratos)
                                           @foreach ($servico->usuario->contratos as $contrato)
@@ -69,7 +69,7 @@
                                         @endisset --}}
                                       </td>
                                       <td>{{ $servico->indicacoes }}</td>
-                                      <td>{{ $servico->classEncerramento->classificacao }} </td>
+                                      <td>{{ $servico->classificacao }} </td>
                                     </tr>
                                 @endforeach
                             </tbody>

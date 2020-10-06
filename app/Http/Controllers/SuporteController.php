@@ -15,8 +15,8 @@ class SuporteController extends Controller
 
   public function __construct(MkAtendimentoRepository $atendimentoRepository, MkCompromissoRepository $compromissoRepository)
   {
-      $this->atendimentoRepository = $atendimentoRepository;
-      $this->compromissoRepository = $compromissoRepository;
+    $this->atendimentoRepository = $atendimentoRepository;
+    $this->compromissoRepository = $compromissoRepository;
   }
 
   public function dashboard(){
@@ -34,7 +34,8 @@ class SuporteController extends Controller
             ->join('mk_conexoes as con', 'mk_atendimento.conexao', 'con.codconexao')
             ->whereIn('mk_atendimento.cd_subprocesso', $suporte)
             ->where('mk_atendimento.finalizado','=' , 'N')
-            ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'mk_atendimento.bairro', 'mk_atendimento.logradouro','con.nasportidname', 'con.nasipaddress');
+            ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'mk_atendimento.bairro',
+            'mk_atendimento.logradouro','con.nasportidname', 'con.nasipaddress');
     })->all();
 
     $concN1 = $this->atendimentoRepository->scopeQuery( function($query) use($inicio, $fim) {
@@ -46,7 +47,6 @@ class SuporteController extends Controller
     $bairros =  $result->countBy('bairro');
     $ruas =     $result->countBy('logradouro');
     $tipos =    $result->countBy('cd_processo');
-    
 
     $tipoOs = [13,86,88,97,109,110,137];
 
@@ -63,23 +63,26 @@ class SuporteController extends Controller
     $pendentes = $result->count();
     $agendados = $resultCompromisso->count();
     $tecnicos = $resultCompromisso->countBy('cdpessoa');
-    $concluidos = $resultCompromisso->where('status', 3)->count();
 
+    $concluidos = $resultCompromisso->where('status', 3)->count();
     $testes = $resultCompromisso->groupBy('cdpessoa');
 
-    $tecs = $resultCompromisso->pipe(function ($collection) {
-
-      $porTec = $collection->map( function($t){
-        return $t->only(['cdpessoa', 'status']);
-      });
-
-      return collect([
-        'tecnico' => $porTec,
-        // 'total' => $collection->count(),
-        // 'concluidos' => $collection->where('status',3)->count('cdpessoa'),
-      ]);
+    $porTec = $resultCompromisso->map( function($t){
+      return $t->only(['cdpessoa', 'status']);
     });
 
+    // $tecs = $resultCompromisso->pipe(function ($collection) {
+
+    //   $porTec = $collection->map( function($t){
+    //     return $t->only(['cdpessoa', 'status']);
+    //   });
+
+    //   return collect([
+    //     'tecnico' => $porTec,
+    //     // 'total' => $collection->count(),
+    //     // 'concluidos' => $collection->where('status',3)->count('cdpessoa'),
+    //   ]);
+    // });
 
     return response()->json([
       'pendentes'   => $pendentes,
@@ -89,9 +92,8 @@ class SuporteController extends Controller
       'tecnicos'    => $tecnicos,
       'tipos'       => $tipos,
       'ruas'        => $ruas,
-      'tecs'        => $tecs,
       'concN1'      => $concN1->count(),
-      // 'result'         =>$result,
+      'result'         =>$result,
     ]);
   }
 

@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateMkAtendimentosTable.
+ * Class CreateGrupoPessoasTable.
  */
-class CreateMkAtendimentosTable extends Migration
+class CreateGrupoPessoasTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,7 +15,7 @@ class CreateMkAtendimentosTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('mk_atendimentos', function(Blueprint $table) {
+		Schema::create('grupo_pessoas', function(Blueprint $table) {
             $table->increments('id');
 
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateMkAtendimentosTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('mk_atendimentos');
+		Schema::drop('grupo_pessoas');
 	}
 }

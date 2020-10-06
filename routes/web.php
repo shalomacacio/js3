@@ -25,13 +25,19 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('/agenda',       'MkCompromissosController@agenda')->name('mkCompromissos.agenda');
   Route::get('/agendaStatus', 'MkCompromissosController@agendaStatus')->name('mkCompromissos.agendaStatus');
-  // comissoesAutorizar
-  Route::get('/comissao-autorizar', 'MkComissaosController@comissoesAutorizar')->name('mkComissaos.comissoesAutorizar');
 
   Route::group(['prefix' => 'suporte'], function () {
     Route::get('/dashboard',       'SuporteController@dashboard')->name('suporte.dashboard');
     Route::get('/ajaxDashSuporte',       'SuporteController@ajaxDashSuporte')->name('suporte.ajaxDashSuporte');
+  });
 
+  Route::group(['prefix' => 'relatorios'], function () {
+    Route::get('/servicos', 'ServicosController@servicos')->name('relatorio.servicos');
+
+  });
+
+  Route::group(['prefix' => 'financeiro'], function () {
+    Route::get('/cancelamentos',       'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
   });
 
 });
