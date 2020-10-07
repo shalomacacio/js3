@@ -29,9 +29,10 @@ class ServicosController extends Controller
       $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
     }
 
-    $result = DB::table('mk_os as os')
+    $result = DB::connection('pgsql')->table('mk_os as os')
                 ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
                 ->join('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
+                ->join('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
                 ->join('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
                 ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
                 ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
@@ -40,6 +41,7 @@ class ServicosController extends Controller
                 'cliente.nome_razaosocial as cliente',
                 'tecnico.usr_nome as tecnico',
                 'consultor.usr_nome as consultor',
+                'contrato.vlr_renovacao as plano',
                 'classificacao.classificacao'
                 )
               ->get();

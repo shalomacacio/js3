@@ -82,14 +82,14 @@
                 <tbody>
                 @foreach($servicos as $servico)
                 <tr>
-                <td>{{ $servico->data_fechamento }}</td>
-                <td>{{ $servico->cliente }}</td>
-                <td>{{ $servico->servico }}</td>
-                <td>{{ $servico->tecnico }}</td>
-                <td>{{ $servico->consultor }}</td>
-                <td>#</td>
-                <td>{{ $servico->taxa }}</td>
-                <td>{{ $servico->classificacao }}</td>
+                  <td>{{ $servico->data_fechamento }}</td>
+                  <td>{{ $servico->cliente }}</td>
+                  <td>{{ $servico->servico }}</td>
+                  <td>{{ $servico->tecnico }}</td>
+                  <td>{{ $servico->consultor }}</td>
+                  <td>{{ $servico->plano }}</td>
+                  <td>{{ $servico->taxa }}</td>
+                  <td>{{ $servico->classificacao }}</td>
                 </tr>
                 @endforeach
                 </tbody>

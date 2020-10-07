@@ -88,19 +88,6 @@
                   <p>VENDAS DASH</p>
                 </a>
               </li>
-              <li class="nav-item has-treeview">
-                <a href="#" class="nav-link"><i class="nav-icon fas fa-list-ul"></i>
-                    <p>RELATÓRIOS<i class="right fas fa-angle-left"></i></p>
-                </a>
-                <ul class="nav nav-treeview">
-                  {{-- <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>AGENDA</p>
-                    </a>
-                  </li> --}}
-                </ul>
-              </li>
               {{-- fim banner-prinicipal  --}}
             </ul>
           </li>
@@ -130,6 +117,54 @@
                 </ul>
               </li>
               {{-- fim banner-prinicipal  --}}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list-ul"></i>
+              <p>RELATORIOS <i class="fa fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+              <a href="{{ route('relatorio.servicos')}}" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Serviços</p>
+                </a>
+              </li>
+              {{-- <li class="nav-item has-treeview">
+                <a href="#" class="nav-link"><i class="nav-icon fas fa-hand-holding-usd"></i>
+                    <p>COMISSÕES<i class="right fas fa-angle-left"></i></p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>COMISSÕES AUTORIZAR </p>
+                    </a>
+                  </li>
+                </ul>
+              </li> --}}
+              {{-- fim banner-prinicipal  --}}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>CONFIGURAÇOES <i class="fa fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+              <a href="#" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Grupo Pessoas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Grupo Serviços</p>
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
