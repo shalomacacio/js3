@@ -61,7 +61,7 @@
 
 
         <div class="col-12">
-        <p class="lead"><b>Serviços: </b></p>
+        <p class="lead"><b>Serviços: {{ $servicos->count() }} </b></p>
         </div>
 
           <div class="row">
