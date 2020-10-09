@@ -1,6 +1,9 @@
 @extends('layouts.relat-layout')
 
 @section('css')
+<link rel="stylesheet" href="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.css') }}">
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+
 <style>
     td {
       font-size: 9px;
@@ -15,16 +18,13 @@
 @endsection
 
 @section('content')
+
+@include('relatorios.filtros')
+
 <section class="content">
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        {{-- <div class="callout callout-info">
-          <h5><i class="fas fa-info"></i> Note:</h5>
-          This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-        </div> --}}
-
-
         <!-- Main content -->
         <div class="invoice p-3 mb-3">
           <!-- title row -->
@@ -119,57 +119,50 @@
 
 @section('javascript')
 <!-- DataTables -->
+<script src="{{ asset('/vendor/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('/vendor/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
-
+<script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <script>
-  $(function () {
 
-
-    // $('#ajaxTable').DataTable( {
-    // ajax: {
-    //     url: "{{ route('relatorio.servicos') }}",
-    //     dataSrc: ''
-    // },
-    //     columns: [ ... ]
-    // });
-
-
-    // url: "{{ route('suporte.ajaxDashSuporte') }}",
-    //     type: "GET",
-    //     dataType: 'json',
-    //     success: function (data) {
-
-
-    $(document).ready(function(){
-        $('#ajaxTable').DataTable({
-            "ajax": '../ajax/data/arrays.txt'
-        });
-    } );
-
-    // $("#ajaxTable").DataTable({
-    //   "paging": false,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": true,
-    //   "language": {
-    //     search: "Pesquisar" ,
-    //     show: "Mostrar",
-    //     info: "Mostrando pag _PAGE_ de _PAGES_",
-    //     lengthMenu:    "Mostrar _MENU_ ",
-    //     paginate: {
-    //         first:      "Primeiro",
-    //         previous:   "Anterior",
-    //         next:       "Próximo",
-    //         last:       "Último",
-    //     },
-    //   }
-    // });
-
+  $(function() {
+  moment.locale('pt-br');
+  $('#reservation').daterangepicker({
+    opens: 'right',
+    locale: {
+      "applyLabel": "Aplicar",
+      "daysOfWeek": [
+        "Dom",
+        "Seg",
+        "Ter",
+        "Qua",
+        "Jue",
+        "Vie",
+        "Sáb"
+    ],
+    "monthNames": [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Decembro"
+    ],
+    },
+  },
+   function(start, end, label) {
+    // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+    $('#dt_fim').val( end.format('YYYY-MM-DD'));
   });
-
+});
 </script>
 
 @stop

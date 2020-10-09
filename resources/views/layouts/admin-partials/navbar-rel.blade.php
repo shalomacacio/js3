@@ -23,25 +23,7 @@
       <!-- Right navbar links -->
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
         <!-- SEARCH FORM -->
-        <form class="form-inline ml-0 ml-md-3"  method="GET">
-          @csrf
-          <div class="input-group input-group-sm">
-            <div class="col-5">
-              <input class="form-control form-control-navbar" type="date" name="dt_inicio" value="{{\Carbon\Carbon::parse($inicio)->format('Y-m-d')}}">
-            </div>
-            <div class="col-5">
-              <input class="form-control form-control-navbar" type="date" name="dt_fim" value="{{\Carbon\Carbon::parse($fim)->format('Y-m-d')}}">
-            </div>
-            <div class="col-2">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
 
-          </div>
-        </form>
       </ul>
 
     </div>

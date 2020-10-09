@@ -19,7 +19,7 @@ class ServicosController extends Controller
   }
 
   public function servicos(Request $request){
-
+    // return dd( $request);
     $inicio = $this->inicio;
     $fim = $this->fim;
 
@@ -30,10 +30,10 @@ class ServicosController extends Controller
     }
 
     $result = DB::connection('pgsql')->table('mk_os as os')
-                ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
-                ->join('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
-                ->join('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
-                ->join('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
+                ->leftJoin('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
+                ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
+                ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
+                ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
                 ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
                 ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
                 ->whereBetween('os.data_fechamento', [$inicio, $fim])
