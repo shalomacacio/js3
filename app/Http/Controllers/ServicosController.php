@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\MkOsTipo;
 use App\Entities\FrUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -31,6 +32,14 @@ class ServicosController extends Controller
     ->select('usr_codigo', 'usr_nome')
     ->get();
 
+    $consultores = FrUsuario::select('usr_codigo')
+    ->where('setor_associado', 'ATE')
+    // ->whereNull('usr_inicio_expiracao')
+    ->select('usr_codigo', 'usr_nome')
+    ->get();
+
+    $tipos = MkOsTipo::all();
+
     if($request->has('dt_inicio'))
     {
       $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
@@ -45,7 +54,7 @@ class ServicosController extends Controller
                 ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
                 ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
                 ->whereBetween('os.data_fechamento', [$inicio, $fim])
-                ->select('os.data_fechamento', 'os.codos', 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
+                ->select('os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
                 'cliente.nome_razaosocial as cliente',
                 'tecnico.usr_nome as tecnico',
                 'consultor.usr_nome as consultor',
@@ -55,11 +64,20 @@ class ServicosController extends Controller
 
     if ($request->has('tecnicos'))
       {
-        $tecFiltro[] = $request->tecnicos;
-
+        $tecFiltro = $request->tecnicos;
         $servicos = $result
           ->whereIn('operador_fech_tecnico', $tecFiltro )
-          ->sortBy('data_fechamento');
+          ->sortBy('operador_fech_tecnico');
+      } elseif ( $request->has('consultores')) {
+        $consultFiltro = $request->consultores;
+        $servicos = $result
+          ->whereIn('tecnico_responsavel', $consultFiltro )
+          ->sortBy('tecnico_responsavel');
+      } elseif( $request->has('tipos')) {
+        $tipoFiltro = $request->tipos;
+        $servicos = $result
+          ->whereIn('tipo_os', $tipoFiltro )
+          ->sortBy('tipo_os');
       }else{
         $servicos = $result->sortBy('data_fechamento');
       }
@@ -69,6 +87,6 @@ class ServicosController extends Controller
         'servicos'   => $servicos
       ]);
     }
-    return view('relatorios.servicos', compact('servicos','tecnicos','inicio', 'fim'));
+    return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'inicio', 'fim'));
   }
 }
