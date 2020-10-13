@@ -34,7 +34,7 @@ class SuporteController extends Controller
 
     $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query
-            ->join('mk_conexoes as con', 'mk_atendimento.conexao', 'con.codconexao')
+            ->leftJoin('mk_conexoes as con', 'mk_atendimento.conexao', 'con.codconexao')
             ->whereIn('mk_atendimento.cd_subprocesso', $suporte)
             ->where('mk_atendimento.finalizado','=' , 'N')
             ->select('cd_processo', 'finalizado', 'classificacao_encerramento', 'cd_subprocesso', 'mk_atendimento.bairro',
