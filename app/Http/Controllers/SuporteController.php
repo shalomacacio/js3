@@ -9,7 +9,6 @@ use App\Repositories\MkAtendimentoRepository;
 
 class SuporteController extends Controller
 {
-
   protected $atendimentoRepository;
   protected $compromissoRepository;
 
@@ -27,9 +26,11 @@ class SuporteController extends Controller
     $inicio = Carbon::now()->format('Y-m-d 00:00:00');
     $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-    $suporte = [73,224,239,268, 295, 437, 464, 467, 469 , 471, 473, 475, 477,480,482,
-    511, 513, 515,531,533,534,535,536,537,538,539,540,541,542,543,544,545,546,547,548,550,551,552,553,554,555,556,557,558,559,560,561];
-
+    $suporte =
+    [
+      239,531,533,535,537,539,541,543,545,547,550,552,554,556,558,560,
+      295,532,534,536,538,540,542,544,546,548,551,553,555,557,559,561
+    ];
 
     $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query

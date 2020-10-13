@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\FrUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,14 @@ class ServicosController extends Controller
     $inicio = $this->inicio;
     $fim = $this->fim;
 
-    if($request->dt_inicio)
+    $tecnicos = DB::connection('pgsql')->table('fr_usuario')
+    ->where('setor_associado', 'TEC')
+    ->where('cd_perfil_acesso', 6)
+    ->whereNull('usr_inicio_expiracao')
+    ->select('usr_codigo', 'usr_nome')
+    ->get();
+
+    if($request->has('dt_inicio'))
     {
       $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
       $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
@@ -43,16 +51,24 @@ class ServicosController extends Controller
                 'consultor.usr_nome as consultor',
                 'contrato.vlr_renovacao as plano',
                 'classificacao.classificacao'
-                )
-              ->get();
+                )->get();
 
-    $servicos = $result->sortBy('data_fechamento');
+    if ($request->has('tecnicos'))
+      {
+        $tecFiltro[] = $request->tecnicos;
+
+        $servicos = $result
+          ->whereIn('operador_fech_tecnico', $tecFiltro )
+          ->sortBy('data_fechamento');
+      }else{
+        $servicos = $result->sortBy('data_fechamento');
+      }
 
     if (request()->wantsJson()) {
       return response()->json([
         'servicos'   => $servicos
       ]);
     }
-    return view('relatorios.servicos', compact('servicos','inicio', 'fim'));
+    return view('relatorios.servicos', compact('servicos','tecnicos','inicio', 'fim'));
   }
 }

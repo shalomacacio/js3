@@ -2,7 +2,8 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.css') }}">
-<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+<link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
 <style>
     td {
@@ -126,6 +127,9 @@
 <script src="{{ asset('/vendor/plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<script src="{{ asset('/vendor/plugins/select2/js/select2.full.min.js') }}"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+
 <script>
 
   $(function() {
@@ -165,6 +169,16 @@
     $('#dt_fim').val( end.format('YYYY-MM-DD'));
   });
 });
+
+
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
 </script>
 
 @stop

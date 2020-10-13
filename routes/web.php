@@ -16,9 +16,7 @@ Route::post('/auth', 'AuthController@auth')->name('auth');
 
 Route::group(['middleware' => ['auth']], function () {
 
-  Route::get('/welcome', function(){
-    return view('welcome');
-  })->name('welcome');
+  Route::get('/welcome', function(){ return view('welcome'); })->name('welcome');
 
   Route::get('/logout',       'AuthController@logout')->name('logout');
   Route::get('/mkOs',         'MkOsController@index')->name('mkOs.index');
