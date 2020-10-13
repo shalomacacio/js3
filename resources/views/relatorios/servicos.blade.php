@@ -69,6 +69,7 @@
               <table class="table table-striped table-sm" >
                 <thead>
                 <tr>
+                  <th>O.S</th>
                   <th>Data</th>
                   <th>Cliente</th>
                   <th>Serviço</th>
@@ -82,6 +83,7 @@
                 <tbody>
                 @foreach($servicos as $servico)
                 <tr>
+                  <td>{{ $servico->codos}}</td>
                   <td>{{ $servico->data_fechamento }}</td>
                   <td>{{ $servico->cliente }}</td>
                   <td>{{ $servico->servico }}</td>
