@@ -67,7 +67,7 @@
 
           <div class="row">
             <div class="col-12 table-responsive">
-              <table class="table table-striped table-sm" >
+              <table class="table table-striped table-sm " id="tblData" >
                 <thead>
                 <tr>
                   <th>Abertura</th>
@@ -105,13 +105,13 @@
           <!-- this row will not appear when printing -->
           <div class="row no-print">
             <div class="col-12">
-              <a href="javascript:void(0)" onClick="window.print()" class="btn btn-default float-right"><i class="fas fa-print"></i> Imprimir</a>
+              <a href="javascript:void(0)" onClick="window.print()" class="btn btn-sm btn-default float-right"><i class="fas fa-print"></i> Imprimir</a>
               {{-- <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card" disabled></i> Submit
                 Payment
+              </button>--}}
+              <button type="button" class="btn btn-sm btn-success float-right" style="margin-right: 5px;" onclick = "exportTableToExcel('tblData')">
+                <i class="fas fa-download"></i> Exportar XLS
               </button>
-              <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                <i class="fas fa-download"></i> Generate PDF
-              </button> --}}
             </div>
           </div>
         </div>
@@ -165,12 +165,13 @@
     ],
     },
   },
-   function(start, end, label) {
-    // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    $('#dt_inicio').val( start.format('YYYY-MM-DD'));
-    $('#dt_fim').val( end.format('YYYY-MM-DD'));
+
+  function(start, end, label) {
+      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+      $('#dt_fim').val( end.format('YYYY-MM-DD'));
+    });
   });
-});
 
 
     //Initialize Select2 Elements
@@ -180,6 +181,37 @@
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
+
+    function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        //triggering the function
+        downloadLink.click();
+    }
+}
 
 </script>
 
