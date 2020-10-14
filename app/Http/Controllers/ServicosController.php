@@ -43,6 +43,14 @@ class ServicosController extends Controller
 
     $classificacoes = MkOsClassificacaoEncerramento::all();
 
+    if ($request->has('classificacoes')){
+      $classiFiltro = $request->classificacoes;
+    } else {
+      foreach ($classificacoes as $r) {
+        $classiFiltro[] = $r->codclassifenc;
+      }
+    }
+
     if($request->has('dt_inicio'))
     {
       $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
@@ -56,6 +64,7 @@ class ServicosController extends Controller
                 ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
                 ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
                 ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
+                ->whereIn('os.classificacao_encerramento', $classiFiltro)
                 ->whereBetween('os.data_fechamento', [$inicio, $fim])
                 ->select('os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
                 'cliente.nome_razaosocial as cliente',
@@ -65,6 +74,8 @@ class ServicosController extends Controller
                 'classificacao.classificacao'
                 )->get();
 
+
+    //FILTROS
     if ($request->has('tecnicos'))
       {
         $tecFiltro = $request->tecnicos;
@@ -81,14 +92,8 @@ class ServicosController extends Controller
         $servicos = $result
           ->whereIn('tipo_os', $tipoFiltro )
           ->sortBy('tipo_os')->sortBy('data_fechamento');
-      }elseif ( $request->has('classificacoes')) {
-        $classiFiltro = $request->classificacoes;
-        $servicos = $result
-          ->whereIn('classificacao_encerramento', $classiFiltro )
-          ->sortBy('classificacao_encerramento')->sortBy('data_fechamento');
-      }
-      else{
-        $servicos = $result->sortBy('data_fechamento');
+      }else{
+        $servicos = $result->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
       }
 
     if (request()->wantsJson()) {
