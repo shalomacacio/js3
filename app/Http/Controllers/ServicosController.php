@@ -34,7 +34,7 @@ class ServicosController extends Controller
     ->get();
 
     $consultores = FrUsuario::select('usr_codigo')
-    ->where('setor_associado', 'ATE')
+    // ->where('setor_associado', 'ATE')
     // ->whereNull('usr_inicio_expiracao')
     ->select('usr_codigo', 'usr_nome')
     ->get();

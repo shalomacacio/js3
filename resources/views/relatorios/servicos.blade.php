@@ -85,7 +85,7 @@
                 @foreach($servicos as $servico)
                 <tr>
                   <td>{{ $servico->codos}}</td>
-                  <td>{{ $servico->data_fechamento }}</td>
+                  <td>{{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}</td>
                   <td>{{ $servico->cliente }}</td>
                   <td>{{ $servico->servico }}</td>
                   <td>{{ $servico->tecnico }}</td>
