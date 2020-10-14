@@ -7,6 +7,7 @@ use App\Entities\FrUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Entities\MkOsClassificacaoEncerramento;
 
 class ServicosController extends Controller
 {
@@ -40,6 +41,8 @@ class ServicosController extends Controller
 
     $tipos = MkOsTipo::all();
 
+    $classificacoes = MkOsClassificacaoEncerramento::all();
+
     if($request->has('dt_inicio'))
     {
       $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
@@ -67,18 +70,24 @@ class ServicosController extends Controller
         $tecFiltro = $request->tecnicos;
         $servicos = $result
           ->whereIn('operador_fech_tecnico', $tecFiltro )
-          ->sortBy('operador_fech_tecnico');
+          ->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
       } elseif ( $request->has('consultores')) {
         $consultFiltro = $request->consultores;
         $servicos = $result
           ->whereIn('tecnico_responsavel', $consultFiltro )
-          ->sortBy('tecnico_responsavel');
+          ->sortBy('tecnico_responsavel')->sortBy('data_fechamento');
       } elseif( $request->has('tipos')) {
         $tipoFiltro = $request->tipos;
         $servicos = $result
           ->whereIn('tipo_os', $tipoFiltro )
-          ->sortBy('tipo_os');
-      }else{
+          ->sortBy('tipo_os')->sortBy('data_fechamento');
+      }elseif ( $request->has('classificacoes')) {
+        $classiFiltro = $request->classificacoes;
+        $servicos = $result
+          ->whereIn('classificacao_encerramento', $classiFiltro )
+          ->sortBy('classificacao_encerramento')->sortBy('data_fechamento');
+      }
+      else{
         $servicos = $result->sortBy('data_fechamento');
       }
 
@@ -87,6 +96,6 @@ class ServicosController extends Controller
         'servicos'   => $servicos
       ]);
     }
-    return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'inicio', 'fim'));
+    return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
   }
 }

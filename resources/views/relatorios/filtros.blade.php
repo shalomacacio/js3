@@ -13,7 +13,7 @@
           @csrf
 
 
-          <div class="col-12 col-sm-12 col-md-3" >
+          <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
@@ -24,7 +24,7 @@
             </div>
           </div>
 
-            <div class="col-12 col-sm-12 col-md-3" >
+            <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
@@ -35,12 +35,23 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-3" >
+            <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="consultores[]" multiple="multiple" data-placeholder="-- CONSULTORES --" style="width: 100%;">
                   @foreach($consultores as $consultor)
                     <option value="{{ $consultor->usr_codigo }}"> {{ $consultor->usr_nome }} </option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-2" >
+              <!-- select -->
+              <div class="form-group">
+                <select class="select2bs4"  name="classificacoes[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
+                  @foreach($classificacoes as $classificacao)
+                    <option value="{{ $classificacao->codclassifenc }}"> {{ $classificacao->classificacao }} </option>
                   @endforeach
                 </select>
               </div>
