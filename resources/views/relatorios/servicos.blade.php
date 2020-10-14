@@ -70,8 +70,9 @@
               <table class="table table-striped table-sm" >
                 <thead>
                 <tr>
+                  <th>Abertura</th>
+                  <th>Fechamento</th>
                   <th>O.S</th>
-                  <th>Data</th>
                   <th>Cliente</th>
                   <th>Serviço</th>
                   <th>Técnico</th>
@@ -84,8 +85,9 @@
                 <tbody>
                 @foreach($servicos as $servico)
                 <tr>
-                  <td>{{ $servico->codos}}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_abertura)->format('d-m-Y') }}</td>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}</td>
+                  <td>{{ $servico->codos}}</td>
                   <td>{{ $servico->cliente }}</td>
                   <td>{{ $servico->servico }}</td>
                   <td>{{ $servico->tecnico }}</td>

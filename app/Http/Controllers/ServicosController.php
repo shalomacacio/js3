@@ -66,7 +66,7 @@ class ServicosController extends Controller
                 ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
                 ->whereIn('os.classificacao_encerramento', $classiFiltro)
                 ->whereBetween('os.data_fechamento', [$inicio, $fim])
-                ->select('os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
+                ->select('os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
                 'cliente.nome_razaosocial as cliente',
                 'tecnico.usr_nome as tecnico',
                 'consultor.usr_nome as consultor',
