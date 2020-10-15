@@ -78,8 +78,9 @@
                           <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
                             <a href="#">{!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}</a>
                           </td>
-                          <td style="font-size: 9px" title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}">
-                            {{ $compromisso->os->logradouro->bairro->bairro }}
+                          <td style="font-size: 9px"
+                            @isset( $compromisso->os->logradouro)  title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}" @endisset >
+                            @isset( $compromisso->os->logradouro) {{ $compromisso->os->logradouro->bairro->bairro }} @endisset
                           </td>
                           <td style="font-size: 9px" > {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
                           <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>

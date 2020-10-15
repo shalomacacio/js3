@@ -96,7 +96,8 @@ class SuporteController extends Controller
       'tipos'       => $tipos,
       'ruas'        => $ruas,
       'concN1'      => $concN1->count(),
-      'result'         =>$result,
+      'result'      =>$result,
+      'teste'       => $testes,
     ]);
   }
 

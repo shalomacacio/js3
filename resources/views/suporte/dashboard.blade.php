@@ -66,6 +66,43 @@
                 </div>
               </div>
               <div class="card-body" id="cardProgress">
+                {{-- <div class="class-body">
+                  <table class="table" id="table">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Cliente</th>
+                        <th>Bairro</th>
+                        <th>Serviço</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-node="treetable-1">
+                          <td>Fulano</td>
+                          <td>1</td>
+                      </tr>
+                      <tr data-node="treetable-2" data-pnode="treetable-parent-1">
+                          <td>Ciclano</td>
+                          <td>1-1</td>
+                          <td>c</td>
+                          <td>info</td>
+                      </tr>
+                      <tr data-node="treetable-3" data-pnode="treetable-parent-1">
+                          <td>Beltrano</td>
+                          <td>1-2</td>
+                          <td>c</td>
+                          <td>info</td>
+                      </tr>
+                      <tr data-node="treetable-4">
+                          <td>Node</td>
+                          <td>2</td>
+                          <td>c</td>
+                          <td>info</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> --}}
               </div>
             </div>
 
@@ -118,6 +155,7 @@
   <script src="{{ asset('/vendor/adminlte/dist/js/pages/dashboard.js') }}"></script>
   <script src="{{ asset('/vendor/plugins/chart.js/Chart.min.js') }}"></script>
   <script src="{{ asset('/vendor/plugins/chart.js/DadosChart.js') }}"></script>
+  <script src="{{ asset('/vendor/plugins/treefy/js/bootstrap-treefy.js') }}"></script>
   <script type="text/javascript">
 
     bgColor();
@@ -165,7 +203,7 @@
         type: "GET",
         dataType: 'json',
         success: function (data) {
-          // console.log('Ok:', data);
+          console.log('Ok:', data);
           // console.log(Object.keys(data.bairros));
           $('#pendentes').text(data.pendentes);
           $('#agendados').text(data.agendados);
@@ -272,6 +310,19 @@
         }
       });
     }
+
+
+    $(function() {
+        $("#table").treeFy({
+            treeColumn: 1,
+            collapseAnimateCallback: function(row) {
+                row.fadeOut();
+            },
+            expandAnimateCallback: function(row) {
+                row.fadeIn();
+            }
+        });
+    });
   </script>
 @stop
 
