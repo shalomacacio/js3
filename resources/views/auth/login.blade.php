@@ -30,6 +30,13 @@
       <div class="card-body login-card-body">
         <p class="login-box-msg">Entre com suas Credencias</p>
 
+        @if(Session::has('message'))
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          {{Session::get('message')}}
+        </div>
+        @endif
+
         <form action="{{route('auth')}}" method="post">
           @csrf
           <div class="input-group mb-3">

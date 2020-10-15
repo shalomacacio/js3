@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Entities\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -39,6 +41,8 @@ class AuthController extends Controller
               $user = User::where('email', $request->email)->first();
               if(!$user){
                   throw new Exception("Email inválido");
+
+                  return redirect()->back()->with(['message'=> "Email inválido"]);
               }
               if($user->password != $request->get('password')){
                   throw new Exception("Senha inválida");
