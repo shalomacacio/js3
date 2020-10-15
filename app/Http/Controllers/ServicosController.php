@@ -58,7 +58,7 @@ class ServicosController extends Controller
     }
 
     $result = DB::connection('pgsql')->table('mk_os as os')
-                ->leftJoin('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
+                ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
                 ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
                 ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
                 ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
@@ -73,7 +73,6 @@ class ServicosController extends Controller
                 'contrato.vlr_renovacao as plano',
                 'classificacao.classificacao'
                 )->get();
-
 
     //FILTROS
     if ($request->has('tecnicos'))
