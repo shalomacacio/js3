@@ -47,9 +47,9 @@ class SuporteController extends Controller
             ->where('classificacao_encerramento', 190);
     })->all();
 
-    $bairros =  $result->countBy('bairro');
-    $ruas =     $result->countBy('logradouro');
-    $tipos =    $result->countBy('cd_processo');
+    $bairros  =  $result->countBy('bairro');
+    $ruas     =  $result->countBy('logradouro');
+    $tipos    =  $result->countBy('cd_processo');
 
     $tipoOs = [13,86,88,97,109,110,137];
 
@@ -68,7 +68,7 @@ class SuporteController extends Controller
     $tecnicos = $resultCompromisso->countBy('cdpessoa');
 
     $concluidos = $resultCompromisso->where('status', 3)->count();
-    $testes = $resultCompromisso->groupBy('cdpessoa');
+    // $testes = $resultCompromisso->groupBy('cdpessoa');
 
     $porTec = $resultCompromisso->map( function($t){
       return $t->only(['cdpessoa', 'status']);
@@ -97,7 +97,6 @@ class SuporteController extends Controller
       'ruas'        => $ruas,
       'concN1'      => $concN1->count(),
       'result'      =>$result,
-      'teste'       => $testes,
     ]);
   }
 

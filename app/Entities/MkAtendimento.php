@@ -31,13 +31,13 @@ class MkAtendimento extends Model implements Transformable
     protected $fillable = [];
 
     //MUTATOR
-    public function getBairroAttribute($value){
-      return MkBairro::find($value)->bairro;
-    }
+    // public function getBairroAttribute($value){
+    //   return MkBairro::find($value)->bairro;
+    // }
 
-    public function getLogradouroAttribute($value){
-      return MkLogradouro::find($value)->logradouro;
-    }
+    // public function getLogradouroAttribute($value){
+    //   return MkLogradouro::find($value)->logradouro;
+    // }
 
     public function getCdProcessoAttribute($value){
       $subproceso = MkAtendimentoProcesso::find($value)->nome_processo;

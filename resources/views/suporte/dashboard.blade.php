@@ -312,17 +312,17 @@
     }
 
 
-    $(function() {
-        $("#table").treeFy({
-            treeColumn: 1,
-            collapseAnimateCallback: function(row) {
-                row.fadeOut();
-            },
-            expandAnimateCallback: function(row) {
-                row.fadeIn();
-            }
-        });
-    });
+    // $(function() {
+    //     $("#table").treeFy({
+    //         treeColumn: 1,
+    //         collapseAnimateCallback: function(row) {
+    //             row.fadeOut();
+    //         },
+    //         expandAnimateCallback: function(row) {
+    //             row.fadeIn();
+    //         }
+    //     });
+    // });
   </script>
 @stop
 
