@@ -30,22 +30,22 @@
         <h1>Filtros</h1>
       </div>
 
-      {{-- <div class="col-sm-10">
+      <div class="col-sm-10">
         <form class="form-inline"  action="{{ route('relatorio.atendimentos') }}"   method="GET">
           @csrf
 
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
-            <div class="form-group">
+            {{-- <div class="form-group">
               <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
                 @foreach($tipos as $tipo)
                   <option value="{{ $tipo->codostipo }}"> {{ $tipo->descricao }} </option>
                 @endforeach
               </select>
             </div>
-          </div>
+          </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-2" >
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
@@ -54,9 +54,9 @@
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-2" >
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="consultores[]" multiple="multiple" data-placeholder="-- CONSULTORES --" style="width: 100%;">
@@ -65,8 +65,8 @@
                   @endforeach
                 </select>
               </div>
-            </div>
-
+            </div> --}}
+{{-- 
             <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
@@ -76,7 +76,7 @@
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
 
             <div class="col-12 col-sm-12 col-md-3" >
               <div class="form-group">
@@ -98,7 +98,7 @@
             <input type="hidden" name="dt_fim" id="dt_fim">
 
         </form>
-      </div> --}}
+      </div>
 
     </div>
   </div><!-- /.container-fluid -->
@@ -139,7 +139,7 @@
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>RELATÓRIO DE SERVIÇOS </h4></center>
+          <center><h4>RELATÓRIO DE ATENDIMENTOS </h4></center>
           <br/>
           <!-- Table row -->
 
@@ -153,12 +153,12 @@
               <table class="table table-striped table-sm " id="tblData" >
                 <thead>
                 <tr>
+                  <th>Código</th>
                   <th>Abertura</th>
-                  <th>Fechamento</th>
-                  <th>O.S</th>
                   <th>Cliente</th>
-                  <th>Serviço</th>
-                  <th>Técnico</th>
+                  <th>Subprocesso</th>
+                  <th>Op Abertura</th>
+                  <th>O.S</th>
                   <th>Consultor</th>
                   <th>Plano</th>
                   <th>Taxa</th>
@@ -168,9 +168,12 @@
                 <tbody>
                 @foreach($atendimentos as $atendimento)
                 <tr>
-                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($atendimento->dt_abertura)->format('d-m-Y') }}</td>
-                  {{--<td>{{ $servico->codos}}</td> --}}
-
+                  <td>{{ $atendimento->codatendimento }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($atendimento->dt_abertura)->format('d-m-Y') }}</td>
+                  <td>{{ $atendimento->cliente }}</td>
+                  <td>{{ $atendimento->nome_subprocesso }}</td>
+                  <td>{{ $atendimento->operador_abertura }}</td>
+                  <td>{{ $atendimento->cd_os}}</td>
                 </tr>
                 @endforeach
                 </tbody>

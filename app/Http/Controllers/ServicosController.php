@@ -72,7 +72,6 @@ class ServicosController extends Controller
                 'contrato.vlr_renovacao as plano',
                 'classificacao.classificacao'
                 )->get();
-
     //FILTROS
     if ($request->has('tecnicos'))
       {
@@ -112,11 +111,14 @@ class ServicosController extends Controller
       $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
     }
 
-    $result = DB::connection('pgsql')->table('mk_atendimentos as atendimento')
+    $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
+                ->leftjoin('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
+                ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
+                ->leftJoin('mk_ate_os as ate_os','atendimento.codatendimento', 'ate_os.cd_atendimento' )
                 ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
-                ->select('atendimento.dt_abertura')
+                ->select('atendimento.codatendimento','atendimento.dt_abertura', 'ate_os.cd_os', 
+                'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'subprocesso.nome_subprocesso')
                 ->get();
-
     $atendimentos = $result;
 
     return view('relatorios.atendimentos', compact('atendimentos','inicio', 'fim'));
