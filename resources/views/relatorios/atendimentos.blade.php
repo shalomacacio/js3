@@ -6,16 +6,16 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
 <style>
-    td {
-      font-size: 9px;
-    }
+  td {
+    font-size: 9px;
+  }
     th {
-      font-size: 11px;
-    }
+    font-size: 11px;
+  }
     .card-header {
-      padding: .4rem 1.25rem;
-    }
-  </style>
+    padding: .4rem 1.25rem;
+  }
+</style>
 @endsection
 
 @section('content')
@@ -30,10 +30,9 @@
         <h1>Filtros</h1>
       </div>
 
-      <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.servicos') }}"   method="GET">
+      {{-- <div class="col-sm-10">
+        <form class="form-inline"  action="{{ route('relatorio.atendimentos') }}"   method="GET">
           @csrf
-
 
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
@@ -99,7 +98,7 @@
             <input type="hidden" name="dt_fim" id="dt_fim">
 
         </form>
-      </div>
+      </div> --}}
 
     </div>
   </div><!-- /.container-fluid -->
@@ -146,7 +145,7 @@
 
 
         <div class="col-12">
-        <p class="lead"><b>Serviços: {{ $servicos->count() }} </b></p>
+        <p class="lead"><b>Serviços: {{ $atendimentos->count() }} </b></p>
         </div>
 
           <div class="row">
@@ -167,18 +166,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($servicos as $servico)
+                @foreach($atendimentos as $atendimento)
                 <tr>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_abertura)->format('d-m-Y') }}</td>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}</td>
-                  <td>{{ $servico->codos}}</td>
-                  <td>{{ $servico->cliente }}</td>
-                  <td>{{ $servico->servico }}</td>
-                  <td>{{ $servico->tecnico }}</td>
-                  <td>{{ $servico->consultor }}</td>
-                  <td>{{ $servico->plano }}</td>
-                  <td>{{ $servico->taxa }}</td>
-                  <td>{{ $servico->classificacao }}</td>
+                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($atendimento->dt_abertura)->format('d-m-Y') }}</td>
+                  {{--<td>{{ $servico->codos}}</td> --}}
+
                 </tr>
                 @endforeach
                 </tbody>

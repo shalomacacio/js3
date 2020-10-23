@@ -11,7 +11,6 @@ use App\Entities\MkOsClassificacaoEncerramento;
 
 class ServicosController extends Controller
 {
-
   protected $inicio;
   protected $fim;
 
@@ -102,4 +101,25 @@ class ServicosController extends Controller
     }
     return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
   }
+
+  public function atendimentos(Request $request){
+    $inicio = $this->inicio;
+    $fim = $this->fim;
+
+    if($request->has('dt_inicio'))
+    {
+      $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
+      $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
+    }
+
+    $result = DB::connection('pgsql')->table('mk_atendimentos as atendimento')
+                ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
+                ->select('atendimento.dt_abertura')
+                ->get();
+
+    $atendimentos = $result;
+
+    return view('relatorios.atendimentos', compact('atendimentos','inicio', 'fim'));
+  }
+
 }
