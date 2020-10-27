@@ -7,6 +7,7 @@ use App\Entities\FrUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Entities\MkAtendimentoSubProcesso;
 use App\Entities\MkOsClassificacaoEncerramento;
 
 class ServicosController extends Controller
@@ -27,7 +28,7 @@ class ServicosController extends Controller
 
     $tecnicos = DB::connection('pgsql')->table('fr_usuario')
     ->where('setor_associado', 'TEC')
-    ->where('cd_perfil_acesso', 6)
+    // ->where('cd_perfil_acesso', 6)
     ->whereNull('usr_inicio_expiracao')
     ->select('usr_codigo', 'usr_nome')
     ->get();
@@ -120,8 +121,9 @@ class ServicosController extends Controller
                 'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'subprocesso.nome_subprocesso')
                 ->get();
     $atendimentos = $result;
+    $subprocessos = MkAtendimentoSubProcesso::all();
 
-    return view('relatorios.atendimentos', compact('atendimentos','inicio', 'fim'));
+    return view('relatorios.atendimentos', compact('atendimentos','subprocessos', 'inicio', 'fim'));
   }
 
 }

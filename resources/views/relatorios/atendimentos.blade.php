@@ -36,14 +36,14 @@
 
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
-            {{-- <div class="form-group">
-              <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
-                @foreach($tipos as $tipo)
-                  <option value="{{ $tipo->codostipo }}"> {{ $tipo->descricao }} </option>
+            <div class="form-group">
+              <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
+                @foreach($subprocessos as $subprocesso)
+                  <option value="{{ $subprocesso->codsubprocesso }}"> {{ $tipo->nome_subprocesso }} </option>
                 @endforeach
               </select>
             </div>
-          </div> --}}
+          </div>
 
             {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
