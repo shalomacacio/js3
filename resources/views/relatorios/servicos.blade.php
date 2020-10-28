@@ -164,6 +164,7 @@
                   <th>Plano</th>
                   <th>Taxa</th>
                   <th>Status</th>
+                  <th>Inativo</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -179,6 +180,7 @@
                   <td>{{ $servico->plano }}</td>
                   <td>{{ $servico->taxa }}</td>
                   <td>{{ $servico->classificacao }}</td>
+                  <td>{{ $servico->inativo }}</td>
                 </tr>
                 @endforeach
                 </tbody>

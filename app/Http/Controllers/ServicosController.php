@@ -67,7 +67,7 @@ class ServicosController extends Controller
                 ->whereIn('os.classificacao_encerramento', $classiFiltro)
                 ->whereBetween('os.data_fechamento', [$inicio, $fim])
                 ->select('os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
-                'cliente.nome_razaosocial as cliente',
+                'cliente.nome_razaosocial as cliente', 'cliente.inativo',
                 'tecnico.usr_nome as tecnico',
                 'consultor.usr_nome as consultor',
                 'contrato.vlr_renovacao as plano',
