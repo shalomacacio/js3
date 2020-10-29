@@ -4,41 +4,49 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
+use App\Validators\MkContratoValidator;
+use App\Repositories\MkContratoRepository;
+use App\Http\Requests\MkContratoCreateRequest;
+use App\Http\Requests\MkContratoUpdateRequest;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\MkPessoaCreateRequest;
-use App\Http\Requests\MkPessoaUpdateRequest;
-use App\Repositories\MkPessoaRepository;
-use App\Validators\MkPessoaValidator;
 
 /**
- * Class MkPessoasController.
+ * Class MkContratosController.
  *
  * @package namespace App\Http\Controllers;
  */
-class MkPessoasController extends Controller
+class MkContratosController extends Controller
 {
     /**
-     * @var MkPessoaRepository
+     * @var MkContratoRepository
      */
     protected $repository;
 
     /**
-     * @var MkPessoaValidator
+     * @var MkContratoValidator
      */
     protected $validator;
 
+    protected $inicio;
+
+    protected $fim;
+
     /**
-     * MkPessoasController constructor.
+     * MkContratosController constructor.
      *
-     * @param MkPessoaRepository $repository
-     * @param MkPessoaValidator $validator
+     * @param MkContratoRepository $repository
+     * @param MkContratoValidator $validator
      */
-    public function __construct(MkPessoaRepository $repository, MkPessoaValidator $validator)
+    public function __construct(MkContratoRepository $repository, MkContratoValidator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
+        $this->inicio = Carbon::now()->format('d-m-Y 00:00:00');
+        $this->fim = Carbon::now()->format('d-m-Y 23:59:59');
     }
 
     /**
@@ -49,38 +57,38 @@ class MkPessoasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $mkPessoas = $this->repository->all();
+        $mkContratos = $this->repository->all();
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $mkPessoas,
+                'data' => $mkContratos,
             ]);
         }
 
-        return view('mkPessoas.index', compact('mkPessoas'));
+        return view('mkContratos.index', compact('mkContratos'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  MkPessoaCreateRequest $request
+     * @param  MkContratoCreateRequest $request
      *
      * @return \Illuminate\Http\Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(MkPessoaCreateRequest $request)
+    public function store(MkContratoCreateRequest $request)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $mkPessoa = $this->repository->create($request->all());
+            $mkContrato = $this->repository->create($request->all());
 
             $response = [
-                'message' => 'MkPessoa created.',
-                'data'    => $mkPessoa->toArray(),
+                'message' => 'MkContrato created.',
+                'data'    => $mkContrato->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -110,16 +118,16 @@ class MkPessoasController extends Controller
      */
     public function show($id)
     {
-        $mkPessoa = $this->repository->find($id);
+        $mkContrato = $this->repository->find($id);
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $mkPessoa,
+                'data' => $mkContrato,
             ]);
         }
 
-        return view('mkPessoas.show', compact('mkPessoa'));
+        return view('mkContratos.show', compact('mkContrato'));
     }
 
     /**
@@ -131,32 +139,32 @@ class MkPessoasController extends Controller
      */
     public function edit($id)
     {
-        $mkPessoa = $this->repository->find($id);
+        $mkContrato = $this->repository->find($id);
 
-        return view('mkPessoas.edit', compact('mkPessoa'));
+        return view('mkContratos.edit', compact('mkContrato'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  MkPessoaUpdateRequest $request
+     * @param  MkContratoUpdateRequest $request
      * @param  string            $id
      *
      * @return Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function update(MkPessoaUpdateRequest $request, $id)
+    public function update(MkContratoUpdateRequest $request, $id)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $mkPessoa = $this->repository->update($request->all(), $id);
+            $mkContrato = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => 'MkPessoa updated.',
-                'data'    => $mkPessoa->toArray(),
+                'message' => 'MkContrato updated.',
+                'data'    => $mkContrato->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -194,12 +202,41 @@ class MkPessoasController extends Controller
         if (request()->wantsJson()) {
 
             return response()->json([
-                'message' => 'MkPessoa deleted.',
+                'message' => 'MkContrato deleted.',
                 'deleted' => $deleted,
             ]);
         }
 
-        return redirect()->back()->with('message', 'MkPessoa deleted.');
+        return redirect()->back()->with('message', 'MkContrato deleted.');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function contratos(Request $request)
+    {
+        $inicio = $this->inicio;
+        $fim = $this->fim;
+
+        if($request->has('dt_inicio')){
+            $inicio = $request->dt_inicio;
+            $fim = $request->dt_fim;
+        }
+
+        $result = DB::connection('pgsql')->table('mk_contratos as contrato')
+        ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
+        ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+        ->whereBetween('contrato.adesao', [$inicio, $fim])
+        ->select(
+            'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao',
+            'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo',
+            'plano.descricao'
+        )->get();
+
+        $contratos = $result->sortBy('adesao');
+
+        return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
+    }
 }

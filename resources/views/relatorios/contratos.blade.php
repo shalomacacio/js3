@@ -31,9 +31,9 @@
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.atendimentos') }}"   method="GET">
+        <form class="form-inline"  action="{{ route('relatorio.contratos') }}"   method="GET">
           @csrf
-
+{{-- 
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
@@ -43,9 +43,9 @@
                 @endforeach
               </select>
             </div>
-          </div>
+          </div> --}}
 
-          <div class="col-12 col-sm-12 col-md-2" >
+          {{-- <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
@@ -54,7 +54,7 @@
                 @endforeach
               </select>
             </div>
-          </div>
+          </div> --}}
 
             {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
@@ -150,13 +150,13 @@
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>RELATÓRIO DE ATENDIMENTOS </h4></center>
+          <center><h4>RELATÓRIO DE CONTRATOS </h4></center>
           <br/>
           <!-- Table row -->
 
 
         <div class="col-12">
-        <p class="lead"><b>Serviços: {{ $atendimentos->count() }} </b></p>
+        <p class="lead"><b>Serviços: {{ $contratos->count() }} </b></p>
         </div>
 
           <div class="row">
@@ -165,78 +165,22 @@
                 <thead>
                 <tr>
                   <th>Código</th>
-                  <th>Abertura</th>
+                  <th>Adesão</th>
                   <th>Cliente</th>
-                  <th>Origem</th>
-                  <th>Subprocesso</th>
-                  <th>Op Abertura</th>
-                  <th>O.S</th>
-                  <th>Consultor</th>
                   <th>Plano</th>
-                  <th>Taxa</th>
-                  <th>Status</th>
+                  <th>Vlr Plano</th>
+                  <th>Inativo</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($atendimentos as $atendimento)
+                @foreach($contratos as $contrato)
                 <tr>
-                  <td>{{ $atendimento->codatendimento }}</td>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($atendimento->dt_abertura)->format('d-m-Y') }}</td>
-                  <td>{{ $atendimento->cliente }}</td>
-                  <td>
-                    @switch($atendimento->como_foi_contato )
-                        @case(1)
-                            Email                            
-                            @break
-                        @case(2)
-                            Outros
-                            @break
-                        @case(3)
-                            Presencial                            
-                            @break
-                        @case(4)
-                            SAC
-                            @break
-                        @case(5)
-                            Site
-                            @break
-                        @case(6)
-                            Telefônico                            
-                            @break
-                        @case(7)
-                            Técnico
-                            @break
-                        @case(8)
-                            CRM                            
-                            @break
-                        @case(9)
-                            WhatsApp
-                            @break
-                        @case(10)
-                            Facebook
-                        @break
-                            @case(11)
-                            Instagram                            
-                            @break
-                        @case(12)
-                            Messenger
-                            @break
-                        @case(13)
-                            MkBot                            
-                            @break
-                        @case(14)
-                            Monitoramento
-                            @break
-                        @case(15)
-                            Reclame Aqui
-                            @break
-                        @default
-                    @endswitch
-
-                  </td>
-                  <td>{{ $atendimento->nome_subprocesso }}</td>
-                  <td>{{ Str::upper($atendimento->operador_abertura) }}</td>
-                  <td>{{ $atendimento->cd_os}}</td>
+                  <td>{{ $contrato->codcontrato }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
+                  <td>{{ $contrato->nome_razaosocial }}</td>
+                  <td>{{ $contrato->descricao }}</td>
+                  <td>{{ $contrato->vlr_renovacao }}</td>
+                  <td>{{ $contrato->inativo }}</td>
                 </tr>
                 @endforeach
                 </tbody>
@@ -314,7 +258,6 @@
       $('#dt_fim').val( end.format('YYYY-MM-DD'));
     });
   });
-
 
     //Initialize Select2 Elements
     $('.select2').select2()

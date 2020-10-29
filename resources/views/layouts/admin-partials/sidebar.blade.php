@@ -126,7 +126,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-              <a href="{{ route('relatorio.servicos')}}" class="nav-link">
+                <a href="{{ route('relatorio.contratos')}}" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Contratos</p>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('relatorio.servicos')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Serviços</p>
                 </a>

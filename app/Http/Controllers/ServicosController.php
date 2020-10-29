@@ -7,6 +7,7 @@ use App\Entities\FrUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Entities\MkAtendimentoProcesso;
 use App\Entities\MkAtendimentoSubProcesso;
 use App\Entities\MkOsClassificacaoEncerramento;
 
@@ -22,7 +23,6 @@ class ServicosController extends Controller
   }
 
   public function servicos(Request $request){
-    // return dd( $request);
     $inicio = $this->inicio;
     $fim = $this->fim;
 
@@ -113,17 +113,19 @@ class ServicosController extends Controller
     }
 
     $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
-                ->leftjoin('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
+                ->join('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
                 ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
                 ->leftJoin('mk_ate_os as ate_os','atendimento.codatendimento', 'ate_os.cd_atendimento' )
                 ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
                 ->select('atendimento.codatendimento','atendimento.dt_abertura', 'ate_os.cd_os', 
-                'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'subprocesso.nome_subprocesso')
+                'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'atendimento.como_foi_contato', 'subprocesso.nome_subprocesso')
                 ->get();
+    
     $atendimentos = $result;
+    $processos = MkAtendimentoProcesso::all();
     $subprocessos = MkAtendimentoSubProcesso::all();
 
-    return view('relatorios.atendimentos', compact('atendimentos','subprocessos', 'inicio', 'fim'));
+    return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'inicio', 'fim'));
   }
 
 }
