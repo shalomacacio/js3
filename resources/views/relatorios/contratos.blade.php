@@ -33,6 +33,17 @@
       <div class="col-sm-10">
         <form class="form-inline"  action="{{ route('relatorio.contratos') }}"   method="GET">
           @csrf
+
+          <div class="col-12 col-sm-12 col-md-2" >
+            <!-- select -->
+            <div class="form-group">
+              <select class="select2bs4"  name="situacao" data-placeholder="-- SITUACAO --" style="width: 100%;">               
+                <option disabled selected value=""> -- Situacao -- </option>
+                <option value="N"> Ativo </option>
+                <option value="S"> Inativo </option>
+              </select>
+            </div>
+          </div> 
 {{-- 
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
@@ -169,6 +180,7 @@
                   <th>Cliente</th>
                   <th>Plano</th>
                   <th>Vlr Plano</th>
+                  {{-- <th>Operação</th> --}}
                   <th>Inativo</th>
                 </tr>
                 </thead>
@@ -180,6 +192,7 @@
                   <td>{{ $contrato->nome_razaosocial }}</td>
                   <td>{{ $contrato->descricao }}</td>
                   <td>{{ $contrato->vlr_renovacao }}</td>
+                  {{-- <td>{{ $contrato->cd_operacao }}</td> --}}
                   <td>{{ $contrato->inativo }}</td>
                 </tr>
                 @endforeach

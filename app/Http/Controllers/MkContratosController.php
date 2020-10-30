@@ -228,14 +228,23 @@ class MkContratosController extends Controller
         $result = DB::connection('pgsql')->table('mk_contratos as contrato')
         ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
         ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+        // ->leftJoin('mk_contratos_historicos as historico','contrato.codcontrato', 'historico.cd_contrato')
+        // ->leftJoin('mk_contratos_operacoes as operacao','historico.cd_operacao', 'operacao.codcontratooperacao')
         ->whereBetween('contrato.adesao', [$inicio, $fim])
+        // ->whereIn('historico.cd_operacao', [4,5])
         ->select(
-            'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao',
-            'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo',
-            'plano.descricao'
+            'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao'
+            ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo'
+            ,'plano.descricao'
+            // ,'historico.cd_operacao'
+            // ,'operacao.descricao_operacao'
         )->get();
-
+           
         $contratos = $result->sortBy('adesao');
+
+        if($request->has('situacao')){
+            $contratos = $result->where('inativo', $request->situacao)->sortBy('adesao');
+        }
 
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
     }

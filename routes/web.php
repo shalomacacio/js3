@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'financeiro'], function () {
-    Route::get('/cancelamentos',       'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
+    Route::get('/cancelamentos', 'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
   });
 
 });

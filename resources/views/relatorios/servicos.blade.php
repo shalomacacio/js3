@@ -34,7 +34,6 @@
         <form class="form-inline"  action="{{ route('relatorio.servicos') }}"   method="GET">
           @csrf
 
-
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
