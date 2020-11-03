@@ -215,7 +215,7 @@ class MkContratosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function contratos(Request $request)
+    public function contratos_old(Request $request)
     {
         $inicio = $this->inicio;
         $fim = $this->fim;
@@ -248,4 +248,37 @@ class MkContratosController extends Controller
 
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
     }
+
+
+      /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function contratos(Request $request)
+    {
+        $inicio = $this->inicio;
+        $fim = $this->fim;
+
+        if($request->has('dt_inicio')){
+            $inicio = $request->dt_inicio;
+            $fim = $request->dt_fim;
+        }
+
+        $cont = DB::connection('pgsql')->table('mk_contratos as contrato')
+            ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
+            ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+            ->whereBetween('contrato.adesao', [$inicio, $fim]);
+        
+        $contratos = DB::connection('pgsql')->table('mk_contratos_historicos as historico')
+            ->get();
+
+
+        // if($request->has('situacao')){
+        //     $contratos = $result->where('inativo', $request->situacao)->sortBy('adesao');
+        // }
+
+        return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
+    }
+
 }
