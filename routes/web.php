@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::group(['prefix' => 'relatorios'], function () {
     Route::get('/servicos', 'ServicosController@servicos')->name('relatorio.servicos');
     Route::get('/contratos', 'MkContratosController@contratos')->name('relatorio.contratos');
-    Route::get('/atendimentos', 'ServicosController@atendimentos')->name('relatorio.atendimentos');
+    Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
 
   Route::group(['prefix' => 'financeiro'], function () {

@@ -56,16 +56,16 @@
             </div>
           </div>
 
-            {{-- <div class="col-12 col-sm-12 col-md-2" >
+            <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
-                <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
-                  @foreach($tecnicos as $tecnico)
-                    <option value="{{ $tecnico->usr_codigo }}"> {{ $tecnico->usr_nome }} </option>
+                <select class="select2bs4"  name="classificacaos[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
+                  @foreach($classificacaos as $classificacao)
+                    <option value="{{ $classificacao->codatclass }}"> {{ $classificacao->descricao }} </option>
                   @endforeach
                 </select>
               </div>
-            </div> --}}
+            </div>
 
             {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
@@ -168,9 +168,10 @@
                   <th>Abertura</th>
                   <th>Cliente</th>
                   <th>Origem</th>
+                  <th>Processo</th>
                   <th>Subprocesso</th>
+                  <th>Classificacao</th>
                   <th>Op Abertura</th>
-                  <th>O.S</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -228,11 +229,11 @@
                             @break
                         @default
                     @endswitch
-
                   </td>
                   <td>{{ $atendimento->nome_subprocesso }}</td>
+                  <td>{{ $atendimento->nome_processo }}</td>
+                  <td>{{ $atendimento->classificacao }}</td>
                   <td>{{ Str::upper($atendimento->operador_abertura) }}</td>
-                  <td>{{ $atendimento->cd_os}}</td>
                 </tr>
                 @endforeach
                 </tbody>

@@ -102,30 +102,30 @@ class ServicosController extends Controller
     return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
   }
 
-  public function atendimentos(Request $request){
-    $inicio = $this->inicio;
-    $fim = $this->fim;
+  // public function atendimentos(Request $request){
+  //   $inicio = $this->inicio;
+  //   $fim = $this->fim;
 
-    if($request->has('dt_inicio'))
-    {
-      $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
-      $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
-    }
+  //   if($request->has('dt_inicio'))
+  //   {
+  //     $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
+  //     $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
+  //   }
 
-    $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
-                ->join('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
-                ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
-                ->leftJoin('mk_ate_os as ate_os','atendimento.codatendimento', 'ate_os.cd_atendimento' )
-                ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
-                ->select('atendimento.codatendimento','atendimento.dt_abertura', 'ate_os.cd_os', 
-                'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'atendimento.como_foi_contato', 'subprocesso.nome_subprocesso')
-                ->get();
+  //   $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
+  //               ->join('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
+  //               ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
+  //               ->leftJoin('mk_ate_os as ate_os','atendimento.codatendimento', 'ate_os.cd_atendimento' )
+  //               ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
+  //               ->select('atendimento.codatendimento','atendimento.dt_abertura', 'ate_os.cd_os', 
+  //               'pessoa.nome_razaosocial as cliente', 'atendimento.operador_abertura', 'atendimento.como_foi_contato', 'subprocesso.nome_subprocesso')
+  //               ->get();
     
-    $atendimentos = $result;
-    $processos = MkAtendimentoProcesso::all();
-    $subprocessos = MkAtendimentoSubProcesso::all();
+  //   $atendimentos = $result;
+  //   $processos = MkAtendimentoProcesso::all();
+  //   $subprocessos = MkAtendimentoSubProcesso::all();
 
-    return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'inicio', 'fim'));
-  }
+  //   return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'inicio', 'fim'));
+  // }
 
 }
