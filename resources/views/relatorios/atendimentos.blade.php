@@ -171,10 +171,6 @@
                   <th>Subprocesso</th>
                   <th>Op Abertura</th>
                   <th>O.S</th>
-                  <th>Consultor</th>
-                  <th>Plano</th>
-                  <th>Taxa</th>
-                  <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -215,22 +215,18 @@ class MkContratosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function contratos_old(Request $request)
+    public function contratos(Request $request)
     {
         $inicio = $this->inicio;
         $fim = $this->fim;
 
-        if($request->has('dt_inicio')){
-            $inicio = $request->dt_inicio;
-            $fim = $request->dt_fim;
-        }
-
         $result = DB::connection('pgsql')->table('mk_contratos as contrato')
         ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
         ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+        ->where('cancelado', "N") //causa das diferenças 
         // ->leftJoin('mk_contratos_historicos as historico','contrato.codcontrato', 'historico.cd_contrato')
         // ->leftJoin('mk_contratos_operacoes as operacao','historico.cd_operacao', 'operacao.codcontratooperacao')
-        ->whereBetween('contrato.adesao', [$inicio, $fim])
+        // ->whereBetween('contrato.adesao', [$inicio, $fim])
         // ->whereIn('historico.cd_operacao', [4,5])
         ->select(
             'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao'
@@ -240,11 +236,19 @@ class MkContratosController extends Controller
             // ,'operacao.descricao_operacao'
         )->get();
            
-        $contratos = $result->sortBy('adesao');
+        if($request->has('dt_inicio')){
+            $inicio = $request->dt_inicio;
+            $fim = $request->dt_fim;
 
-        if($request->has('situacao')){
-            $contratos = $result->where('inativo', $request->situacao)->sortBy('adesao');
+            $contratos = $result->whereBetween('adesao', [$inicio, $fim])->sortBy('adesao');
+        } else {
+            $contratos = $result->sortBy('adesao');
         }
+
+
+        // if($request->has('situacao')){
+        //     $contratos = $result->where('inativo', $request->situacao)->sortBy('adesao');
+        // }
 
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
     }
@@ -255,25 +259,36 @@ class MkContratosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function contratos(Request $request)
+    public function contratos_teste(Request $request)
     {
         $inicio = $this->inicio;
         $fim = $this->fim;
 
+        $result1 = DB::connection('pgsql')->table('mk_contratos as contrato')
+        ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
+        ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+        ->where('cancelado', "N") //causa das diferenças 
+        ->select(
+            'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao'
+            ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo'
+            ,'plano.descricao'
+        );
+        
+        $result2 = DB::connection('pgsql')->table('mk_contratos_historicos as historico')
+            ->leftJoin('mk_contratos_operacoes as operacao','historico.cd_operacao', 'operacao.codcontratooperacao')
+            // ->whereIn('cd_operacao', [4])
+            ->leftJoinSub($result1, 'result1', function ( $join ){
+                $join->on('historico.cd_contrato', '=', 'result1.codcontrato');
+            })->get();
+            
         if($request->has('dt_inicio')){
             $inicio = $request->dt_inicio;
             $fim = $request->dt_fim;
+            $contratos = $result2->whereBetween('adesao', [$inicio, $fim])->sortBy('adesao');
+        } else {
+            $contratos = $result2->sortBy('adesao');
         }
-
-        $cont = DB::connection('pgsql')->table('mk_contratos as contrato')
-            ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
-            ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
-            ->whereBetween('contrato.adesao', [$inicio, $fim]);
         
-        $contratos = DB::connection('pgsql')->table('mk_contratos_historicos as historico')
-            ->get();
-
-
         // if($request->has('situacao')){
         //     $contratos = $result->where('inativo', $request->situacao)->sortBy('adesao');
         // }
