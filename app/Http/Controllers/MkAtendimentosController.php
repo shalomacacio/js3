@@ -213,7 +213,7 @@ class MkAtendimentosController extends Controller
         return redirect()->back()->with('message', 'MkAtendimento deleted.');
     }
 
-    public function atendimentos(Request $request){
+    public function atendimentos (Request $request) {
         $inicio = $this->inicio;
         $fim = $this->fim;
 
@@ -226,7 +226,7 @@ class MkAtendimentosController extends Controller
           $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
           $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
         }
-        
+
         $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
                     ->join('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
                     ->leftjoin('mk_ate_processos as processo', 'atendimento.cd_processo', 'processo.codprocesso')
@@ -259,7 +259,7 @@ class MkAtendimentosController extends Controller
         } else {
             $atendimentos = $result;
         }
-        
+    
         return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'inicio', 'fim'));
       }
 }
