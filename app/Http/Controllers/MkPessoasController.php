@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\MkPessoaCreateRequest;
@@ -28,6 +30,8 @@ class MkPessoasController extends Controller
      * @var MkPessoaValidator
      */
     protected $validator;
+    protected $inicio;
+    protected $fim;
 
     /**
      * MkPessoasController constructor.
@@ -39,6 +43,8 @@ class MkPessoasController extends Controller
     {
         $this->repository = $repository;
         $this->validator  = $validator;
+        $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
+        $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
     }
 
     /**
@@ -200,6 +206,22 @@ class MkPessoasController extends Controller
         }
 
         return redirect()->back()->with('message', 'MkPessoa deleted.');
+    }
+
+    public function clientes( Request $request ){
+
+        $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
+        $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
+
+        $result = DB::connection('pgsql')->table('mk_pessoas as cli')
+        ->join('mk_contratos as contrato', 'cli.codpessoa', 'contrato.cliente')
+        ->where('contrato.cancelado', "N") //causa das diferenças 
+        ->get();
+
+        $clientes = $result;
+
+        return view('relatorios.clientes', compact('clientes', 'inicio', 'fim'));
+
     }
 
 }

@@ -296,4 +296,6 @@ class MkContratosController extends Controller
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim'));
     }
 
+
+
 }

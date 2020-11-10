@@ -31,12 +31,16 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'relatorios'], function () {
     Route::get('/servicos', 'ServicosController@servicos')->name('relatorio.servicos');
+    Route::get('/clientes', 'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos', 'MkContratosController@contratos')->name('relatorio.contratos');
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
 
   Route::group(['prefix' => 'financeiro'], function () {
     Route::get('/cancelamentos', 'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
+    Route::get('/contratos', 'FinanceiroController@contratos')->name('contratos');
+    Route::get('/ajaxCliente', 'FinanceiroController@ajaxCliente')->name('ajaxCliente');
+    Route::get('/autocomplete', 'FinanceiroController@autocomplete')->name('autocomplete');
   });
 
 });

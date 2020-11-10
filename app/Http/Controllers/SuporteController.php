@@ -30,7 +30,7 @@ class SuporteController extends Controller
     [
       239,531,533,535,537,539,541,543,545,547,550,552,554,556,558,560,
       295,532,534,536,538,540,542,544,546,548,551,553,555,557,559,561
-    ];
+    ]; 
 
     $result = $this->atendimentoRepository->scopeQuery( function($query) use ($suporte) {
       return $query
@@ -52,7 +52,6 @@ class SuporteController extends Controller
     $bairros  =  $result->countBy('bairro');
     $ruas     =  $result->countBy('logradouro');
     $tipos    =  $result->countBy('cd_processo');
-
     $tipoOs = [13,86,88,97,109,110,137];
 
     $resultCompromisso = $this->compromissoRepository->scopeQuery(function($query) use ($inicio, $fim, $tipoOs) {
@@ -68,37 +67,22 @@ class SuporteController extends Controller
     $pendentes = $result->count();
     $agendados = $resultCompromisso->count();
     $tecnicos = $resultCompromisso->countBy('cdpessoa');
-
     $concluidos = $resultCompromisso->where('status', 3)->count();
-    // $testes = $resultCompromisso->groupBy('cdpessoa');
 
     $porTec = $resultCompromisso->map( function($t){
       return $t->only(['cdpessoa', 'status']);
     });
-
-    // $tecs = $resultCompromisso->pipe(function ($collection) {
-
-    //   $porTec = $collection->map( function($t){
-    //     return $t->only(['cdpessoa', 'status']);
-    //   });
-
-    //   return collect([
-    //     'tecnico' => $porTec,
-    //     // 'total' => $collection->count(),
-    //     // 'concluidos' => $collection->where('status',3)->count('cdpessoa'),
-    //   ]);
-    // });
-
+ 
     return response()->json([
-      'pendentes'   => $pendentes,
-      'agendados'   => $agendados,
-      'concluidos'  => $concluidos,
+      'ruas'        => $ruas,
+      'tipos'       => $tipos,
+      'result'      => $result,
       'bairros'     => $bairros,
       'tecnicos'    => $tecnicos,
-      'tipos'       => $tipos,
-      'ruas'        => $ruas,
-      'concN1'      => $concN1->count(),
-      'result'      =>$result,
+      'agendados'   => $agendados,
+      'pendentes'   => $pendentes,
+      'concluidos'  => $concluidos,
+      'concN1'      => $concN1->count(), 
     ]);
   }
 
