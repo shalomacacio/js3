@@ -1,9 +1,6 @@
 @extends('layouts.relat-layout')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.css') }}">
-<link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
 <style>
   /* td {
@@ -16,7 +13,7 @@
     padding: .4rem 1.25rem;
   } 
   p .text-justify {
-    font-size: 8px;
+    font-size: 6%;
     text-align: justify;
   }
 </style>
@@ -35,15 +32,15 @@
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline" >
+        <form class="form-inline" action="{{ route('contratos') }}" method="GET" >
           @csrf
           <div class="col-12 col-sm-12 col-md-6" >
             <div class="input-group input-group-sm">
-                <input class="form-control form-control-navbar" name="nome_razaosocial" id="typeahead" data-provide="typeahead" data-items="4" type="text" placeholder="Nome" aria-label="Search">
+                <input class="form-control form-control-navbar" name="codcliente"  type="text" placeholder="codigo" aria-label="Search">
                 <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
+                  <button class="btn btn-navbar" type="submit">
+                      <i class="fas fa-search"></i>
+                  </button>
                 </div>
             </div>
           </div>
@@ -73,11 +70,6 @@
             <!-- /.col -->
           </div>
           <!-- info row -->
-          <div class="row invoice-info">
-
-
-          </div>
-          <!-- /.row -->
           <center>
             <h6>
             <br/>
@@ -88,38 +80,38 @@
           <br/>
 
           <p class="text-justify">
-            Por este instrumento particular, o ASSINANTE abaixo qualificado contrata e adere ao Serviço Comunicação Multimídia 
-            prestado por #contratado_nome#, autorizada pela Anatel para explorar o Serviço de Comunicação Multimídia 
+             Por este instrumento particular, o ASSINANTE abaixo qualificado contrata e adere ao Serviço Comunicação Multimídia 
+            prestado por <b>JNET PROVEDORES DE INTERNET LTDA ME</b>, autorizada pela Anatel para explorar o Serviço de Comunicação Multimídia 
             pelo Ato nº 3009, de 10 de Agosto de 2016, disponibilizado o recebimento de ligações a cobrar, endereço eletrônico 
             www.jnetce.com.br, e-mail suporte@jnetce.com.br, doravante denominada CONTRATADA.
           </p>
           <br/>
-          <table border="1">
+          <table  class="table">
               <tr>
                 <td><b>NOME: </b></td>
-                <td> FULANO DA SILVA ROCHA </td>
+                <td> {{ $cliente->nome_razaosocial }} </td>
                 <td><b>NASCIMENTO: </b></td>
-                <td> 21/12/2011 </td>
+                <td> {{ $cliente->nascimento }} </td>
                 <td><b>CPF/CNPJ: </b></td>
-                <td> TESTE </td>
+                <td> {{ $cliente->cpf }}</td>
               </tr>
 
               <tr>
-                <td><b> RG/ID: </b></td>
-                <td> TESTE </td>
-                <td><b> ENDEREÇO:</b></td>
-                <td> TESTE </td>
+                <td><b> ENDEREÇO: </b></td>
+                <td> {{ $cliente->complementoendereco }}</td>
+                <td><b> RG/ID:</b></td>
+                <td> {{ $cliente->rg }}</td>
                 <td><b> CEP </b></td>
-                <td> TESTE </td>
+                <td> {{ $cliente->cep }}</td>
               </tr>
 
               <tr>
-                <td><b>  TELEFONE </b></td>
-                <td> TESTE </td>
+                <td><b>  EMAIL </b></td>
+                <td> {{ $cliente->email }}</td>
                 <td><b>  CELULAR:</b></td>
-                <td> TESTE </td>
-                <td><b>  EMAIL:</b></td>
-                <td> TESTE </td>
+                <td> {{ $cliente->fone01 }}</td>
+                <td><b>  TELEFONE:</b></td>
+                <td> {{ $cliente->fone02 }}</td>
               </tr>
 
           </table>
@@ -134,11 +126,19 @@
                     Quando não incluídos no Plano de Acesso, o custo da Conexão Simultânea, Ponto de Acesso Adicional, das Horas de Conexão Adicionais (tecnologias distintas e/ou mesma tecnologia, mas fora dos períodos pré-definidos no Plano de Acesso), Franquia Adicional de Tráfego/Bits ou Horas, do Suporte Técnico e as visitas técnicas deverão ser pagas pelo ASSINANTE, juntamente com os pagamentos periódicos de seu Plano de Acesso, com base no número de ocorrências e/ou cálculo efetuado pelo sistema de bilhetagem (aferição e contagem de horas).
                     O ASSINANTE fica cientificado que as CONTRATADAS fiscalizarão a regular utilização dos serviços ora contratados, e a violação das normas, caso detectada pelas CONTRATADAS, implicará aplicação das sanções atinentes à espécie, conforme estipulado no Contrato de Prestação de Serviço de Comunicação Multimídia e Provimento de Acesso à Internet (SCM/SVA) aderido.
                     CONDIÇÕES DE DEGRADAÇÃO OU INTERRUPÇÃO DOS SERVIÇOS PRESTADOS: O ASSINANTE tem ciência dos motivos que podem culminar na degradação dos serviços de comunicação multimídia (SCM) prestados, são eles: (a) Ações da natureza, tais como chuvas, descargas atmosféricas e outras que configurem força maior; (b) Interferências prejudiciais provocadas por equipamentos de terceiros; (c) Bloqueio da visada limpa; (d) Casos fortuitos; (e) Interrupção de energia elétrica; (f) Falhas nos equipamentos e instalações; (g) Rompimento parcial ou total dos meios de rede; (h) Interrupções por ordem da ANATEL, ordem Judicial ou outra investida com poderes para tal; (i) outras previstas contratualmente;
-                    DECLARAÇÃO DE CONCORDÂNCIA: Declaro, para os devidos fins, que são corretos os dados cadastrais e informações por mim prestadas neste instrumento. Declaro ainda que os documentos apresentados para formalização deste contrato e as cópias dos documentos entregues às CONTRATADAS pertencem a minha pessoa, tendo ciência das sanções civis e criminais caso prestar declarações falsas, entregar documentos falsos e me passar por outrem. Declaro estar ciente que a assinatura deste instrumento representa expressa concordância aos termos e condições do CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE COMUNICAÇÃO MULTIMÍDIA E PROVIMENTO DE ACESSO À INTERNET, registrado junto ao Cartório da Comarca de Maranguape/CE, que juntamente com esse TERMO DE ADESÃO formam um só instrumento de direito, tendo lido e entendido claramente as condições ajustadas para esta contratação.
+                    DECLARAÇÃO DE CONCORDÂNCIA: Declaro, para os devidos fins, que são corretos os dados cadastrais e informações por mim prestadas neste instrumento. Declaro ainda que os documentos apresentados para formalização deste contrato e as cópias dos documentos entregues às CONTRATADAS pertencem a minha pessoa, tendo ciência das sanções civis e criminais caso prestar declarações falsas, entregar documentos falsos e me passar por outrem. Declaro estar ciente que a assinatura deste instrumento representa expressa concordância aos termos e condições do <b>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE COMUNICAÇÃO MULTIMÍDIA E PROVIMENTO DE ACESSO À INTERNET</b>, registrado junto ao Cartório da Comarca de Maranguape/CE, que juntamente com esse TERMO DE ADESÃO formam um só instrumento de direito, tendo lido e entendido claramente as condições ajustadas para esta contratação.
                     AUTORIZAÇÃO: Autorizo o Outorgado (a), , RG N° e CPF N° , a representar-me perante a s CONTRATADAS para o fim de solicitar alterações e/ou serviços adicionais, cancelamentos, negociar débitos, solicitar visitas e reparos, assinar ordens de serviço, termos de contratação e quaisquer solicitações, responder por mim frente a quaisquer questionamentos que sejam realizados, bem como transigir, firmar compromissos e dar quitação.
                     E por estar de acordo com as cláusulas do presente termo e do Contrato de Prestação de Serviço de Comunicação Multimídia e Provimento de Acesso à Internet (SCM), parte integrante deste Termo de Adesão, o ASSINANTE aposta sua assinatura abaixo ou o aceita eletronicamente, para que surta todos os seus efeitos legais. A cópia integral do Contrato de Prestação de Serviços de Comunicação Multimídia pode ser obtida www.jnetce.com.br na aba de serviços, ou no Cartório de Registro de Títulos e Documentos da Comarca de Maranguape/CE.
                   </p>
             </div>
+            <table  class="table">
+              <tr>
+                <td align="center"><b>_____________________________________________ </b></td>
+              </tr>
+              <tr>
+                <td align="center"> {{ $cliente->nome_razaosocial }} </td>
+              </tr>
+            </table>
             <!-- /.col -->
           </div>
           <!-- this row will not appear when printing -->
@@ -161,44 +161,4 @@
 @section('javascript')
 <!-- DataTables -->
 <script src="{{ asset('/vendor/plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('/vendor/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('/vendor/plugins/datatables/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('/vendor/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
-<script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('/vendor/plugins/select2/js/select2.full.min.js') }}"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
-
-<script>
-
-var cli = function (request, response) {
-        $.ajax({
-          url: "{{ route('autocomplete') }}",
-          data: {
-            query : request.term
-            },
-          dataType: "json",
-          success: function(data){
-            var resp = $.map(data,function(obj){
-              if(obj.id){
-                $('#cliente_id').val(obj.id);
-              }else if(obj.codpessoa){
-                $('#codpessoa').val(obj.codpessoa);
-
-              }
-              // console.log(obj);
-              return obj.nome_razaosocial;
-            });
-            response(resp);
-          }
-        });
-      }
-
-      $( "#typeahead" ).autocomplete({
-      source: cli,
-      minLength: 1
-    });
-
-
-</script>
-
 @stop
