@@ -134,14 +134,18 @@ class RelatorioController extends Controller
         ->leftJoin('mk_motivo_cancelamento as motivo', 'contrato.motivo_cancelamento_2', 'motivo.codmotcancel' )
         ->leftJoin('mk_logradouros as logradouro', 'cliente.codlogradouro', 'logradouro.codlogradouro' )
         ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
+        ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
 
         ->where('suspenso',"N") //causa das diferenças 
         ->where('cancelado', $situacao) //causa das diferenças 
         ->select(
-          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao'
+          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo'
+          ,'cliente.contato','cliente.fone01', 'cliente.fone02'
           ,'motivo.descricao_mot_cancel as motivo'
-          ,DB::raw('CONCAT(logradouro.logradouro, bairro.bairro )  as endereco')
+          ,'logradouro.logradouro'
+          ,'bairro.bairro'
+          ,'cidade.cidade'
           ,'plano.descricao'
         )->get();
            

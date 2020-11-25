@@ -178,11 +178,14 @@
                   <th>Código</th>
                   <th>Adesão</th>
                   <th>Cliente</th>
-                  <th>Endereço</th>
-                  <th>Plano</th>
+                  <th>Contato</th>
+                  <th>Logradouro</th>
+                  <th>Bairro</th>
+                  <th>Cidade</th>
                   <th>Vlr Plano</th>
                   {{-- <th>Operação</th> --}}
                   <th>Inativo</th>
+                  <th>Cancelamento</th>
                   <th>Motivo</th>
                 </tr>
                 </thead>
@@ -192,11 +195,14 @@
                   <td>{{ $contrato->codcontrato }}</td>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
                   <td>{{ $contrato->nome_razaosocial }}</td>
-                  <td>{{ $contrato->endereco }}</td>
-                  <td>{{ $contrato->descricao }}</td>
+                  <td>{{ $contrato->contato }} / {{ $contrato->fone01 }} / {{ $contrato->fone02 }}</td>
+                  <td>{{ $contrato->logradouro }}</td>
+                  <td>{{ $contrato->bairro }}</td>
+                  <td>{{ $contrato->cidade }}</td>
                   <td>{{ $contrato->vlr_renovacao }}</td>
-                  {{-- <td>{{ $contrato->cd_operacao }}</td> --}}
                   <td>{{ $contrato->inativo }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
+
                   <td>{{ $contrato->motivo }}</td>
                 </tr>
                 @endforeach
