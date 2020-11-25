@@ -207,7 +207,7 @@
           // console.log(Object.keys(data.bairros));
           $('#pendentes').text(data.pendentes);
           $('#agendados').text(data.agendados);
-          $('#concluidos').text(data.concluidos);
+          $('#concluidos').text(data.concluidos + "/" + data.agendados);
           $('#concN1').text(data.concN1);
           bairros = Object.keys(data.bairros);
           dados = Object.values(data.bairros);

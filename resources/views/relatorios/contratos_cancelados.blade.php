@@ -38,8 +38,9 @@
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="situacao" data-placeholder="-- SITUACAO --" style="width: 100%;">               
+                <option disabled selected value=""> -- Situacao -- </option>
                 <option value="N"> Ativo </option>
-                <option value="S"> Cancelado </option>
+                <option value="S"> Inativo </option>
               </select>
             </div>
           </div> 
@@ -178,12 +179,10 @@
                   <th>Código</th>
                   <th>Adesão</th>
                   <th>Cliente</th>
-                  <th>Endereço</th>
                   <th>Plano</th>
                   <th>Vlr Plano</th>
                   {{-- <th>Operação</th> --}}
                   <th>Inativo</th>
-                  <th>Motivo</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -192,12 +191,10 @@
                   <td>{{ $contrato->codcontrato }}</td>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
                   <td>{{ $contrato->nome_razaosocial }}</td>
-                  <td>{{ $contrato->endereco }}</td>
                   <td>{{ $contrato->descricao }}</td>
                   <td>{{ $contrato->vlr_renovacao }}</td>
                   {{-- <td>{{ $contrato->cd_operacao }}</td> --}}
                   <td>{{ $contrato->inativo }}</td>
-                  <td>{{ $contrato->motivo }}</td>
                 </tr>
                 @endforeach
                 </tbody>
