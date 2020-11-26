@@ -185,8 +185,10 @@
                   <th>Vlr Plano</th>
                   {{-- <th>Operação</th> --}}
                   <th>Inativo</th>
-                  <th>Cancelamento</th>
-                  <th>Motivo</th>
+                  @if ($request->situacao == "S" )
+                  <th>Canc dt</th>
+                  <th>Motivo</th> 
+                  @endif
                 </tr>
                 </thead>
                 <tbody>
@@ -195,15 +197,16 @@
                   <td>{{ $contrato->codcontrato }}</td>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
                   <td>{{ $contrato->nome_razaosocial }}</td>
-                  <td>{{ $contrato->contato }} / {{ $contrato->fone01 }} / {{ $contrato->fone02 }}</td>
-                  <td>{{ $contrato->logradouro }}</td>
+                  <td>{{ $contrato->fone01 }}  {{ $contrato->fone02 }}</td>
+                  <td>{{ $contrato->logradouro }},{{ $contrato->numero }} </td>
                   <td>{{ $contrato->bairro }}</td>
                   <td>{{ $contrato->cidade }}</td>
-                  <td>{{ $contrato->vlr_renovacao }}</td>
-                  <td>{{ $contrato->inativo }}</td>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
-
-                  <td>{{ $contrato->motivo }}</td>
+                  <td align="center">{{ $contrato->vlr_renovacao }}</td>
+                  <td align="center">{{ $contrato->inativo }}</td>
+                  @if ($request->situacao == "S" )
+                    <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
+                    <td>{{ $contrato->motivo }}</td>
+                  @endif
                 </tr>
                 @endforeach
                 </tbody>
