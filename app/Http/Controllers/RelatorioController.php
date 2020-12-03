@@ -26,8 +26,11 @@ class RelatorioController extends Controller
     }
 
     public function tipos(){
-      $tipos = DB::connection('pgsql')->table('mk_os_tipo')->get();
+      $tipos = DB::connection('pgsql')->table('mk_os_tipo')
+      ->select('codostipo','descricao')
+      ->get();
       return $tipos;
+      
     }
 
     public function classificacoes(){
@@ -37,11 +40,10 @@ class RelatorioController extends Controller
 
     public function radius(){
       $radius = DB::connection('pgsql2')->table('nas')->get();
-      return dd($radius);
+      return $radius;
     }
 
     public function servicos(Request $request){
-      $this-> radius();
 
         $inicio = $this->inicio;
         $fim = $this->fim;

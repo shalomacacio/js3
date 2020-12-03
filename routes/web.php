@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'relatorios'], function () {
     Route::get('/teste', 'RadacctsController@index')->name('teste');
-    Route::get('/servicos', 'ServicosController@servicos')->name('relatorio.servicos');
+    Route::get('/servicos', 'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes', 'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos', 'RelatorioController@contratos')->name('relatorio.contratos');
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
