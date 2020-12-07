@@ -17,9 +17,9 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-
+        @include('suporte.boxes-mini')
         @include('suporte.boxes')
-
+        
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->

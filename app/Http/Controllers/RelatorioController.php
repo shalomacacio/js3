@@ -47,11 +47,22 @@ class RelatorioController extends Controller
 
         $inicio = $this->inicio;
         $fim = $this->fim;
+        $dt_filtro = 'os.data_abertura';
     
         $tipos = $this->tipos();
         $tecnicos = $this->funcionarios();
         $consultores = $this->funcionarios();
         $classificacoes = $this->classificacoes();
+
+        if ($request->dt_filtro == 1){
+          $dt_filtro = 'os.data_fechamento';
+        }
+
+        if($request->has('dt_inicio'))
+        {
+          $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
+          $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
+        }
 
         if ($request->has('classificacoes')){
           $classiFiltro = $request->classificacoes;
@@ -61,12 +72,6 @@ class RelatorioController extends Controller
           }
         }
     
-        if($request->has('dt_inicio'))
-        {
-          $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
-          $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
-        }
-    
         $result = DB::connection('pgsql')->table('mk_os as os')
           ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
           ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
@@ -74,16 +79,16 @@ class RelatorioController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
           ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
           ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
-          ->whereIn('os.classificacao_encerramento', $classiFiltro)
-          ->whereBetween('os.data_fechamento', [$inicio, $fim])
+          // ->whereIn('os.classificacao_encerramento', $classiFiltro)
+          ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
-            'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 
-            'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento',
-            'cliente.nome_razaosocial as cliente', 'cliente.inativo',
-            'tecnico.usr_nome as tecnico',
-            'consultor.usr_nome as consultor',
-            'contrato.vlr_renovacao as plano',
-            'classificacao.classificacao'
+            'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
+            ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
+            ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
+            ,'tecnico.usr_nome as tecnico'
+            ,'consultor.usr_nome as consultor'
+            ,'contrato.vlr_renovacao as plano'
+            ,'classificacao.classificacao'
           )->get();
         //FILTROS
         if ($request->has('tecnicos'))

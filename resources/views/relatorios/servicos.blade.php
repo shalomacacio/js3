@@ -15,6 +15,10 @@
     .card-header {
       padding: .4rem 1.25rem;
     }
+
+    .compensacao {
+      margin-top: 15px;
+    }
   </style>
 @endsection
 
@@ -26,7 +30,7 @@
 
     <div class="row ">
 
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <h1>Filtros</h1>
       </div>
 
@@ -78,14 +82,20 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-3" >
+            <div class="col-12 col-sm-12 col-md-4" >
+              <div class="compensacao"> </div>
               <div class="form-group">
-                <div class="input-group input-group-sm">
+                <div class="input-group input-group-md mb-3">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="far fa-calendar-alt"></i>
-                    </span>
+                    <button id="btn_filter" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      Selecione
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li class="dropdown-item" id="abertura">Abertura</li>
+                      <li class="dropdown-item" id="fechamento">Fechamento</li>
+                    </ul>
                   </div>
+                  <!-- /btn-group -->
                   <input type="text" class="form-control float-right" id="reservation">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
@@ -96,6 +106,7 @@
 
             <input type="hidden" name="dt_inicio" id="dt_inicio">
             <input type="hidden" name="dt_fim" id="dt_fim">
+            <input type="hidden" name="dt_filtro" id="dt_filtro">
 
         </form>
       </div>
@@ -170,7 +181,11 @@
                 @foreach($servicos as $servico)
                 <tr>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_abertura)->format('d-m-Y') }}</td>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}</td>
+                  <td style=" width: 60px ">
+                    @isset($servico->data_fechamento)
+                      {{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}
+                    @endisset
+                  </td>
                   <td>{{ $servico->codos}}</td>
                   <td>{{ $servico->cliente }}</td>
                   <td>{{ $servico->servico }}</td>
@@ -258,7 +273,6 @@
     });
   });
 
-
     //Initialize Select2 Elements
     $('.select2').select2()
 
@@ -266,6 +280,16 @@
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
+
+    $('#abertura').click(function(e) {
+      $('#btn_filter').text("Abertura");
+      $('#dt_filtro').val(0);
+    });
+
+    $('#fechamento').click(function(e) {
+      $('#btn_filter').text("Fechamento");
+      $('#dt_filtro').val(1);
+    });
 
     function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
