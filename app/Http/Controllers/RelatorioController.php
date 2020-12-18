@@ -79,7 +79,7 @@ class RelatorioController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
           ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
           ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
-          // ->whereIn('os.classificacao_encerramento', $classiFiltro)
+          ->whereIn('os.classificacao_encerramento', $classiFiltro)
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
             'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
@@ -143,7 +143,7 @@ class RelatorioController extends Controller
         ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
         ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
 
-        ->where('suspenso',"N") //causa das diferenças 
+        // ->where('suspenso',"N") //causa das diferenças 
         ->where('cancelado', $situacao) //causa das diferenças 
         ->select(
           'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'

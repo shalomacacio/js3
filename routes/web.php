@@ -26,14 +26,14 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'suporte'], function () {
     Route::get('/dashboard',       'SuporteController@dashboard')->name('suporte.dashboard');
-    Route::get('/ajaxDashSuporte',       'SuporteController@ajaxDashSuporte')->name('suporte.ajaxDashSuporte');
+    Route::get('/ajaxDashSuporte',  'SuporteController@ajaxDashSuporte')->name('suporte.ajaxDashSuporte');
   });
 
   Route::group(['prefix' => 'relatorios'], function () {
-    Route::get('/teste', 'RadacctsController@index')->name('teste');
-    Route::get('/servicos', 'RelatorioController@servicos')->name('relatorio.servicos');
-    Route::get('/clientes', 'MkPessoasController@clientes')->name('relatorio.clientes');
-    Route::get('/contratos', 'RelatorioController@contratos')->name('relatorio.contratos');
+    Route::get('/teste',        'RadacctsController@index')->name('teste');
+    Route::get('/servicos',     'RelatorioController@servicos')->name('relatorio.servicos');
+    Route::get('/clientes',     'MkPessoasController@clientes')->name('relatorio.clientes');
+    Route::get('/contratos',    'RelatorioController@contratos')->name('relatorio.contratos');
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
 
@@ -42,6 +42,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/contratos', 'RelatorioController@contratos')->name('contratos');
     Route::get('/ajaxCliente', 'FinanceiroController@ajaxCliente')->name('ajaxCliente');
     Route::get('/autocomplete', 'FinanceiroController@autocomplete')->name('autocomplete');
+  });
+
+  Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/suporte', 'DashboardController@dash_suporte')->name('dash.suporte');
+    Route::get('/ajaxBarChart', 'DashboardController@ajaxBarChart')->name('dash.ajaxBarChart');
   });
 
 });

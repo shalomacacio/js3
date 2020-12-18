@@ -75,7 +75,6 @@ class MkAtendimentoClassificacaosController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
             $mkAtendimentoClassificacao = $this->repository->create($request->all());
 
             $response = [
@@ -84,7 +83,6 @@ class MkAtendimentoClassificacaosController extends Controller
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
@@ -113,7 +111,6 @@ class MkAtendimentoClassificacaosController extends Controller
         $mkAtendimentoClassificacao = $this->repository->find($id);
 
         if (request()->wantsJson()) {
-
             return response()->json([
                 'data' => $mkAtendimentoClassificacao,
             ]);
@@ -132,7 +129,6 @@ class MkAtendimentoClassificacaosController extends Controller
     public function edit($id)
     {
         $mkAtendimentoClassificacao = $this->repository->find($id);
-
         return view('mkAtendimentoClassificacaos.edit', compact('mkAtendimentoClassificacao'));
     }
 
@@ -151,7 +147,6 @@ class MkAtendimentoClassificacaosController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
             $mkAtendimentoClassificacao = $this->repository->update($request->all(), $id);
 
             $response = [
@@ -160,7 +155,6 @@ class MkAtendimentoClassificacaosController extends Controller
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
@@ -168,7 +162,6 @@ class MkAtendimentoClassificacaosController extends Controller
         } catch (ValidatorException $e) {
 
             if ($request->wantsJson()) {
-
                 return response()->json([
                     'error'   => true,
                     'message' => $e->getMessageBag()
