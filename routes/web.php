@@ -37,6 +37,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
 
+  Route::group(['prefix' => 'estoque'], function () {
+    Route::get('/fiscalizar',        'MkEstoquesController@fiscalizar')->name('estoque.fiscalizar');
+    Route::get('/ajaxEstoque',        'MkEstoquesController@ajaxEstoque')->name('estoque.ajaxEstoque');
+  });
+
   Route::group(['prefix' => 'financeiro'], function () {
     Route::get('/cancelamentos', 'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
     Route::get('/contratos', 'RelatorioController@contratos')->name('contratos');

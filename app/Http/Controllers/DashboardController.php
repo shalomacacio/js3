@@ -68,7 +68,10 @@ class DashboardController extends Controller
         ->rightJoin('mk_ate_os as ate_os', 'os.codos','=', 'ate_os.cd_os' )
         ->rightJoin('mk_atendimento as atendimento', 'ate_os.cd_atendimento', '=', 'atendimento.codatendimento')
         ->where('atendimento.finalizado','=' , 'N')
-        ->select('atendimento.cd_subprocesso','atendimento.codatendimento', 'os.codos', 'os.dt_hr_fechamento_tec')
+        ->select('atendimento.cd_subprocesso','atendimento.codatendimento', 
+                 'os.codos', 'os.dt_hr_fechamento_tec', 'os.status'
+                 
+                )
         ->get();
         return $restult;
     }
@@ -99,8 +102,9 @@ class DashboardController extends Controller
         $total       = $this->atendimentos()->whereIn('cd_subprocesso', $arr_nv1->merge($arr_nv2));
         $inexistente = $total->whereNull('codos' )->count();
         $atend_total = $total->whereNull('dt_hr_fechamento_tec')->count();
+        $sem_agenda = $total->where('status', 1)->count();
   
-        return view('dashboard.suporte.index', compact('nv1_total','nv2_total' ,'atend_total', 'por_tecnico', 'os_total', 'chartTipo', 'inexistente'));
+        return view('dashboard.suporte.index', compact('nv1_total','nv2_total' ,'atend_total', 'por_tecnico', 'os_total', 'chartTipo', 'inexistente', 'sem_agenda'));
     }
 
 }

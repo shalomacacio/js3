@@ -9,7 +9,9 @@
       <div class="container-fluid">
         <div class="row">
           @include('dashboard.suporte.card-user')
-          @include('dashboard.suporte.boxes')
+          @include('dashboard.suporte.progress-bar')
+          @include('dashboard.suporte.boxes-mini')
+          
         </div>
         <div class="row">
           @include('dashboard.suporte.os-geral')

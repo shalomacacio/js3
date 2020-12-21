@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class RelatorioController extends Controller
+/**
+ * Class MkEstoquesController.
+ *
+ * @package namespace App\Http\Controllers;
+ */
+class MkEstoquesController extends Controller
 {
     protected $inicio;
     protected $fim;
@@ -38,7 +43,7 @@ class RelatorioController extends Controller
       return $tipos;
     }
 
-    public function servicos (Request $request){
+    public function fiscalizar(Request $request){
 
         $inicio = $this->inicio;
         $fim = $this->fim;
@@ -114,52 +119,17 @@ class RelatorioController extends Controller
         return view('estoque.fiscalizar', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
       }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function contratos(Request $request)
-    {
-        $inicio = $this->inicio;
-        $fim = $this->fim;   
-        $situacao = "N";
+      public function ajaxEstoque(Request $request){
+        $result = DB::connection('pgsql')->table('mk_estoque_conta_clientes as estoque_cliente')
+            ->join('mk_estoque as estoque','estoque_cliente.cd_estoque', '=', 'estoque.codestoque')
+            ->where('estoque_cliente.cd_os', $request->codos)
+            ->select('estoque.descricao_produto','estoque_cliente.unidades' )
+            ->get();
 
-        if($request->situacao)
-        {
-          $situacao = $request->situacao;
-        }
-        
-        $result = DB::connection('pgsql')->table('mk_contratos as contrato')
-        ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
-        ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
-        ->leftJoin('mk_motivo_cancelamento as motivo', 'contrato.motivo_cancelamento_2', 'motivo.codmotcancel' )
-        ->leftJoin('mk_logradouros as logradouro', 'cliente.codlogradouro', 'logradouro.codlogradouro' )
-        ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
-        ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
+            return response()->json([
+                'result' => $result
+            ]);
 
-        // ->where('suspenso',"N") //causa das diferenças 
-        ->where('cancelado', $situacao) //causa das diferenças 
-        ->select(
-          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
-          ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
-          ,'cliente.contato','cliente.fone01', 'cliente.fone02'
-          ,'motivo.descricao_mot_cancel as motivo'
-          ,'logradouro.logradouro'
-          ,'bairro.bairro'
-          ,'cidade.cidade'
-          ,'plano.descricao'
-        )->get();
-           
-        if($request->has('dt_inicio')){
-            $inicio = $request->dt_inicio;
-            $fim = $request->dt_fim;
-
-            $contratos = $result->whereBetween('adesao', [$inicio, $fim])->sortBy('adesao');
-        } else {
-            $contratos = $result->sortBy('adesao');
-        }
-        return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
-    }
+      }
 
 }
