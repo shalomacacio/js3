@@ -111,7 +111,7 @@ class RelatorioController extends Controller
             'servicos'   => $servicos
           ]);
         }
-        return view('estoque.fiscalizar', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
+        return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
       }
 
     /**

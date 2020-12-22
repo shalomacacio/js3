@@ -175,7 +175,7 @@
                   <th>Taxa</th>
                   <th>Status</th>
                   <th>Inativo</th>
-                  <th>Estoque</th>
+                  <th><center>Estoque</center></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -336,13 +336,17 @@
       }
     });
 
+    function showModal(){
+      $('#modal-default').modal('focus')
+    }
+
     $.ajax({
       url: "{{ route('estoque.ajaxEstoque') }}",
       type: "GET",
       dataType: 'json',
       data: { codos: codigo },
       success: function(data) {
-        // console.log(data.result);
+        console.log(data.result);
         $("#produtos tr").remove();
         for(var i=0; i < data.result.length ; i++)
           {

@@ -79,6 +79,7 @@ class MkEstoquesController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
           ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
           ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
+          // ->leftJoin('mk_estoque_conta_clientes as estoque_cliente', 'os.codos', 'estoque_cliente.cd_os')
           ->whereIn('os.classificacao_encerramento', $classiFiltro)
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
@@ -120,11 +121,12 @@ class MkEstoquesController extends Controller
       }
 
       public function ajaxEstoque(Request $request){
-        $result = DB::connection('pgsql')->table('mk_estoque_conta_clientes as estoque_cliente')
-            ->join('mk_estoque as estoque','estoque_cliente.cd_estoque', '=', 'estoque.codestoque')
-            ->where('estoque_cliente.cd_os', $request->codos)
-            ->select('estoque.descricao_produto','estoque_cliente.unidades' )
+        $result = DB::connection('pgsql')->table('mk_os_itens as os_itens')
+            ->where('os_itens.cd_integracao', $request->codos)
+            ->select('os_itens.item','os_itens.qnt')
             ->get();
+
+
 
             return response()->json([
                 'result' => $result
