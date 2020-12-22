@@ -353,7 +353,7 @@
           $('#produtos').append(
           '<tr>'+
             '<td>'+data.result[i]['descricao_produto']+'</td>'+
-            '<td>'+data.result[i]['unidades']+'</td>'+
+            '<td>'+data.result[i]['qnt']+'</td>'+
           '</tr>');
           }
         }
