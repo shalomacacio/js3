@@ -79,7 +79,7 @@ class MkEstoquesController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
           ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
           ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
-          // ->leftJoin('mk_estoque_conta_clientes as estoque_cliente', 'os.codos', 'estoque_cliente.cd_os')
+          ->leftJoin('mk_os_itens as os_itens', 'os.codos', 'os_itens.cd_integracao')
           ->whereIn('os.classificacao_encerramento', $classiFiltro)
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
@@ -90,7 +90,9 @@ class MkEstoquesController extends Controller
             ,'consultor.usr_nome as consultor'
             ,'contrato.vlr_renovacao as plano'
             ,'classificacao.classificacao'
-          )->get();
+            ,'os_itens.qnt'
+          )->distinct()
+          ->get();
         //FILTROS
         if ($request->has('tecnicos'))
           {

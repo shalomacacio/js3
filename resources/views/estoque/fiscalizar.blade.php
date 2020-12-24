@@ -196,7 +196,11 @@
                   <td>{{ $servico->taxa }}</td>
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
-                  <td align="center"><a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a></td>
+                  <td align="center">
+                    @isset($servico->qnt)
+                    <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
+                    @endisset
+                  </td>
                 </tr>
                 @endforeach
                 </tbody>
