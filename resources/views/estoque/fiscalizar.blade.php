@@ -241,6 +241,14 @@
 
 <script>
 
+$(document).ready(function() {
+    $('#tblData').DataTable({
+      "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+        }
+    });
+} );
+
   $(function() {
   moment.locale('pt-br');
   $('#reservation').daterangepicker({
@@ -350,7 +358,7 @@
       dataType: 'json',
       data: { codos: codigo },
       success: function(data) {
-        console.log(data.result);
+        // console.log(data.result);
         $("#produtos tr").remove();
         for(var i=0; i < data.result.length ; i++)
           {
