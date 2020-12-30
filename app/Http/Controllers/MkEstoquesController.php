@@ -91,7 +91,7 @@ class MkEstoquesController extends Controller
             ,'contrato.vlr_renovacao as plano'
             ,'classificacao.classificacao'
             ,'os_itens.qnt'
-          )->distinct()
+          )->distinct('os.codos')
           ->get();
         //FILTROS
         if ($request->has('tecnicos'))
