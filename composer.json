@@ -12,6 +12,7 @@
         "artesaos/defender": "^0.10.0",
         "consoletvs/charts": "6.*",
         "fideloper/proxy": "^4.0",
+        "ixudra/curl": "^6.21",
         "laravel/framework": "^6.18.35",
         "laravel/tinker": "^2.0",
         "prettus/l5-repository": "^2.6"

@@ -16,6 +16,7 @@ use App\Http\Requests\MkAtendimentoCreateRequest;
 use App\Http\Requests\MkAtendimentoUpdateRequest;
 use App\Repositories\MkAtendimentoRepository;
 use App\Validators\MkAtendimentoValidator;
+use Ixudra\Curl\Facades\Curl;
 
 /**
  * Class MkAtendimentosController.
@@ -59,17 +60,24 @@ class MkAtendimentosController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $mkAtendimentos = $this->repository->all();
+        $response = Curl::to('http://www.byjg.com.br/site/webservice.php/ws/cep')
+        ->post();
 
-        if (request()->wantsJson()) {
+        return $response;
 
-            return response()->json([
-                'data' => $mkAtendimentos,
-            ]);
-        }
 
-        return view('mkAtendimentos.index', compact('mkAtendimentos'));
+
+        // $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        // $mkAtendimentos = $this->repository->all();
+
+        // if (request()->wantsJson()) {
+
+        //     return response()->json([
+        //         'data' => $mkAtendimentos,
+        //     ]);
+        // }
+
+        // return view('mkAtendimentos.index', compact('mkAtendimentos'));
     }
 
     /**

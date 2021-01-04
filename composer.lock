@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbbd48538fb8dbbdc0f372ee66a11f1b",
+    "content-hash": "3f78e4dd7b6b929a224a17e1e68b2d77",
     "packages": [
         {
             "name": "artesaos/defender",
@@ -583,6 +583,64 @@
                 "source": "https://github.com/fideloper/TrustedProxy/tree/4.4.1"
             },
             "time": "2020-10-22T13:48:01+00:00"
+        },
+        {
+            "name": "ixudra/curl",
+            "version": "6.21.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ixudra/curl.git",
+                "reference": "796bd307ca35c66a3f6a47b559f8ccad9f06e93f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ixudra/curl/zipball/796bd307ca35c66a3f6a47b559f8ccad9f06e93f",
+                "reference": "796bd307ca35c66a3f6a47b559f8ccad9f06e93f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "illuminate/support": ">=4.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ixudra\\Curl\\CurlServiceProvider"
+                    ],
+                    "aliases": {
+                        "Curl": "Ixudra\\Curl\\Facades\\Curl"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ixudra\\Curl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Oris",
+                    "email": "jan.oris@ixudra.be"
+                }
+            ],
+            "description": "Custom PHP Curl library for the Laravel framework - developed by Ixudra",
+            "homepage": "http://ixudra.be",
+            "keywords": [
+                "Ixudra",
+                "curl",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/ixudra/curl/issues",
+                "source": "https://github.com/ixudra/curl/tree/6.21.0"
+            },
+            "time": "2020-09-22T12:50:01+00:00"
         },
         {
             "name": "laravel/framework",

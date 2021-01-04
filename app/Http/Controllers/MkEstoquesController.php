@@ -38,6 +38,14 @@ class MkEstoquesController extends Controller
       
     }
 
+    public function grupos(){
+      $grupos = DB::connection('pgsql')->table('mk_agenda_grupo')
+      ->select('codagenda_grupo','nome')
+      ->get();
+      return $grupos;
+      
+    }
+
     public function classificacoes(){
       $tipos = DB::connection('pgsql')->table('mk_os_classificacao_encerramento')->get();
       return $tipos;
@@ -50,6 +58,7 @@ class MkEstoquesController extends Controller
         $dt_filtro = 'os.data_abertura';
     
         $tipos = $this->tipos();
+        $grupos = $this->grupos();
         $tecnicos = $this->funcionarios();
         $consultores = $this->funcionarios();
         $classificacoes = $this->classificacoes();
@@ -74,6 +83,7 @@ class MkEstoquesController extends Controller
     
         $result = DB::connection('pgsql')->table('mk_os as os')
           ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
+          ->leftJoin('mk_agenda_grupo as grupo', 'os.cdagendagrupo', 'grupo.codagenda_grupo')
           ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
           ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
@@ -83,7 +93,7 @@ class MkEstoquesController extends Controller
           ->whereIn('os.classificacao_encerramento', $classiFiltro)
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
-            'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
+            'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.cdagendagrupo'
             ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
             ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
             ,'tecnico.usr_nome as tecnico'
@@ -100,10 +110,10 @@ class MkEstoquesController extends Controller
             $servicos = $result
               ->whereIn('operador_fech_tecnico', $tecFiltro )
               ->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
-          } elseif ( $request->has('consultores')) {
-            $consultFiltro = $request->consultores;
+          } elseif ( $request->has('grupos')) {
+            $grupoFiltro = $request->grupos;
             $servicos = $result
-              ->whereIn('tecnico_responsavel', $consultFiltro )
+              ->whereIn('cdagendagrupo', $grupoFiltro)
               ->sortBy('tecnico_responsavel')->sortBy('data_fechamento');
           } elseif( $request->has('tipos')) {
             $tipoFiltro = $request->tipos;
@@ -119,7 +129,7 @@ class MkEstoquesController extends Controller
             'servicos'   => $servicos
           ]);
         }
-        return view('estoque.fiscalizar', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
+        return view('estoque.fiscalizar', compact('servicos','tecnicos', 'grupos', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
       }
 
       public function ajaxEstoque(Request $request){

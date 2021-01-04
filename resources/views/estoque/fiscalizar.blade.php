@@ -41,6 +41,17 @@
           <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
+              <select class="select2bs4"  name="grupos[]" multiple="multiple" data-placeholder="-- GRUPO --" style="width: 100%;">
+                @foreach($grupos as $grupo)
+                  <option value="{{ $grupo->codagenda_grupo }}"> {{ $grupo->nome }} </option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-2" >
+            <!-- select -->
+            <div class="form-group">
               <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
                 @foreach($tipos as $tipo)
                   <option value="{{ $tipo->codostipo }}"> {{ $tipo->descricao }} </option>
@@ -55,17 +66,6 @@
                 <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
                   @foreach($tecnicos as $tecnico)
                     <option value="{{ $tecnico->usr_codigo }}"> {{ $tecnico->usr_nome }} </option>
-                  @endforeach
-                </select>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-12 col-md-2" >
-              <!-- select -->
-              <div class="form-group">
-                <select class="select2bs4"  name="consultores[]" multiple="multiple" data-placeholder="-- CONSULTORES --" style="width: 100%;">
-                  @foreach($consultores as $consultor)
-                    <option value="{{ $consultor->usr_codigo }}"> {{ $consultor->usr_nome }} </option>
                   @endforeach
                 </select>
               </div>

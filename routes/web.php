@@ -20,6 +20,9 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('/logout',       'AuthController@logout')->name('logout');
   Route::get('/mkOs',         'MkOsController@index')->name('mkOs.index');
+ 
+  //WebServices
+  Route::resource('atendimentos', 'MkAtendimentosController');
 
   Route::get('/agenda',       'MkCompromissosController@agenda')->name('mkCompromissos.agenda');
   Route::get('/agendaStatus', 'MkCompromissosController@agendaStatus')->name('mkCompromissos.agendaStatus');
