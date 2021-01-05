@@ -167,7 +167,6 @@ class MkAtendimentoClassificacaosController extends Controller
                     'message' => $e->getMessageBag()
                 ]);
             }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
@@ -185,7 +184,6 @@ class MkAtendimentoClassificacaosController extends Controller
         $deleted = $this->repository->delete($id);
 
         if (request()->wantsJson()) {
-
             return response()->json([
                 'message' => 'MkAtendimentoClassificacao deleted.',
                 'deleted' => $deleted,

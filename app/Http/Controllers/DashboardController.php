@@ -96,7 +96,6 @@ class DashboardController extends Controller
         $arr_nv1 = $this->subprocessos()['nv1'];
         $arr_nv2 = $this->subprocessos()['nv2'];
 
-
         $nv1_total   = $this->atendimentos()->whereNull('dt_hr_fechamento_tec')->whereIn('cd_subprocesso', $arr_nv1  )->count();
         $nv2_total   = $this->atendimentos()->whereNull('dt_hr_fechamento_tec')->whereIn('cd_subprocesso', $arr_nv2  )->count();
         $total       = $this->atendimentos()->whereIn('cd_subprocesso', $arr_nv1->merge($arr_nv2));

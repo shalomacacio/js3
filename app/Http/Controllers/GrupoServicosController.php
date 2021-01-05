@@ -151,7 +151,6 @@ class GrupoServicosController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
             $grupoServico = $this->repository->update($request->all(), $id);
 
             $response = [
@@ -160,13 +159,11 @@ class GrupoServicosController extends Controller
             ];
 
             if ($request->wantsJson()) {
-
-                return response()->json($response);
+              return response()->json($response);
             }
 
             return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-
             if ($request->wantsJson()) {
 
                 return response()->json([
@@ -174,11 +171,9 @@ class GrupoServicosController extends Controller
                     'message' => $e->getMessageBag()
                 ]);
             }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+          return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -192,13 +187,11 @@ class GrupoServicosController extends Controller
         $deleted = $this->repository->delete($id);
 
         if (request()->wantsJson()) {
-
             return response()->json([
                 'message' => 'GrupoServicos deleted.',
                 'deleted' => $deleted,
             ]);
         }
-
         return redirect()->back()->with('message', 'GrupoServicos deleted.');
     }
 }

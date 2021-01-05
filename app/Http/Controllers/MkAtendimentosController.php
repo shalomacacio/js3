@@ -170,7 +170,6 @@ class MkAtendimentosController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
             $mkAtendimento = $this->repository->update($request->all(), $id);
 
             $response = [
@@ -179,7 +178,6 @@ class MkAtendimentosController extends Controller
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
@@ -197,7 +195,6 @@ class MkAtendimentosController extends Controller
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -267,7 +264,6 @@ class MkAtendimentosController extends Controller
         } else {
             $atendimentos = $result;
         }
-    
         return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'inicio', 'fim'));
       }
 }

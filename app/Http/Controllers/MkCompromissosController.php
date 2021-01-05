@@ -115,10 +115,6 @@ class MkCompromissosController extends Controller
           'labels' => [$labels],
           'datasets' => [$datasets],
         ];
-
         return response()->json($response);
-
     }
-
-
 }

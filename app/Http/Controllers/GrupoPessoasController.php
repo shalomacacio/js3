@@ -151,9 +151,7 @@ class GrupoPessoasController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
             $grupoPessoa = $this->repository->update($request->all(), $id);
-
             $response = [
                 'message' => 'GrupoPessoas updated.',
                 'data'    => $grupoPessoa->toArray(),
@@ -174,7 +172,6 @@ class GrupoPessoasController extends Controller
                     'message' => $e->getMessageBag()
                 ]);
             }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
@@ -198,7 +195,6 @@ class GrupoPessoasController extends Controller
                 'deleted' => $deleted,
             ]);
         }
-
         return redirect()->back()->with('message', 'GrupoPessoas deleted.');
     }
 }

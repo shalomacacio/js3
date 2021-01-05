@@ -59,6 +59,4 @@ class MkOsController extends Controller
         return view('mkOs.index', compact('mkOs'));
     }
 
-
-
 }

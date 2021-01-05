@@ -47,7 +47,7 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item has-treeview">
+              {{-- <li class="nav-item has-treeview">
                 <a href="#" class="nav-link"><i class="nav-icon fas fa-circle"></i>
                     <p>INSTALAÇÃO<i class="right fas fa-angle-left"></i></p>
                 </a>
@@ -57,12 +57,12 @@
                       <i class="far fa-circle nav-icon"></i>
                       <p>AGENDA</p>
                     </a>
-                  </li> --}}
+                  </li> 
                 </ul>
-              </li>
+              </li> 
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link"><i class="nav-icon fas fa-circle"></i>
-                    <p>EXPANSÃO<i class="right fas fa-angle-left"></i></p>
+                    <p>INFRA<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                   {{-- <li class="nav-item">
@@ -70,13 +70,13 @@
                       <i class="far fa-circle nav-icon"></i>
                       <p>AGENDA</p>
                     </a>
-                  </li> --}}
+                  </li> 
                 </ul>
-              </li>
+              </li>--}}
               {{-- fim banner-prinicipal  --}}
             </ul>
           </li>
-          <li class="nav-item has-treeview">
+          {{-- <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-line"></i>
               <p>COMERCIAL <i class="fa fa-angle-left right"></i></p>
@@ -88,9 +88,8 @@
                   <p>VENDAS DASH</p>
                 </a>
               </li>
-              {{-- fim banner-prinicipal  --}}
             </ul>
-          </li>
+          </li> 
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-dollar-sign"></i>
@@ -116,9 +115,8 @@
                   </li>
                 </ul>
               </li>
-              {{-- fim banner-prinicipal  --}}
             </ul>
-          </li>
+          </li> --}}
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-warehouse"></i>
@@ -169,8 +167,7 @@
                     </a>
                   </li>
                 </ul>
-              </li> --}}
-              {{-- fim banner-prinicipal  --}}
+              </li> 
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -192,7 +189,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li>--}}
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

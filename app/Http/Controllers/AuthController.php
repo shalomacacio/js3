@@ -7,7 +7,6 @@ use App\Entities\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthController extends Controller
 {
      /**Diret to login page */
@@ -41,7 +40,6 @@ class AuthController extends Controller
               $user = User::where('email', $request->email)->first();
               if(!$user){
                   throw new Exception("Email inválido");
-
                   return redirect()->back()->with(['message'=> "Email inválido"]);
               }
               if($user->password != $request->get('password')){
@@ -50,7 +48,6 @@ class AuthController extends Controller
 
               Auth::login($user);
               return redirect()->route('welcome');
-
           }
       } catch (Exception $e) {
           //throw $th;
