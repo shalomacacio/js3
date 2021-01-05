@@ -352,6 +352,42 @@ $(document).ready(function() {
       $('#modal-default').modal('focus')
     }
 
+    function status(tipo){
+      var tipo_saida;
+
+      switch (tipo) {
+        case 1:
+          tipo_saida = "venda"
+          break;
+        case 2:
+          tipo_saida = "comodato"
+          break;
+        case 3:
+          tipo_saida = "emprestimo"
+          break;
+        case 4:
+          tipo_saida = "demo"
+          break;
+        case 5:
+          tipo_saida = "locacao"
+          break;
+        case 9:
+          tipo_saida = "servico"
+          break;
+        case 101:
+          tipo_saida = "imobilizado"
+          break;
+        case 999:
+          tipo_saida = "retirada"
+          break;      
+        default:
+          break;
+      }
+
+      return tipo_saida;
+
+    }
+
     $.ajax({
       url: "{{ route('estoque.ajaxEstoque') }}",
       type: "GET",
@@ -367,6 +403,7 @@ $(document).ready(function() {
             '<td>'+data.result[i]['descricao_produto']+'</td>'+
             '<td>'+data.result[i]['qnt']+'</td>'+
             '<td>'+data.result[i]['retirada']+'</td>'+
+            '<td>'+status(data.result[i]['tipo_saida'])+'</td>'+
           '</tr>');
           }
         }

@@ -14,6 +14,7 @@
                     <td>Produto</td>
                     <td>Quantidade</td>
                     <td>Retirada</td>
+                    <td>Status</td>
                   </thead>
                   <tbody id="produtos">
 
