@@ -74,9 +74,9 @@
                       </thead>
                       <tbody>
                         @foreach ($compromissos as $compromisso)
-                        <tr id="{{ $compromisso->codcompromisso }}" >
+                        <tr id="{{ $compromisso->codcompromisso }}">
                           <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
-                            <a href="#">{!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}</a>
+                            {!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}
                           </td>
                           <td style="font-size: 9px"
                             @isset( $compromisso->os->logradouro)  title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}" @endisset >

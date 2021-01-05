@@ -136,7 +136,7 @@ class MkEstoquesController extends Controller
         $result = DB::connection('pgsql')->table('mk_os_itens as os_itens')
             ->leftJoin('mk_estoque as estoque', 'os_itens.item', '=' ,'estoque.codestoque')
             ->where('os_itens.cd_integracao', $request->codos)
-            ->select('estoque.descricao_produto','os_itens.qnt')
+            ->select('estoque.descricao_produto','os_itens.qnt', 'os_itens.retirada')
             ->get();
 
             return response()->json([

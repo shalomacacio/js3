@@ -13,6 +13,7 @@
                   <thead>
                     <td>Produto</td>
                     <td>Quantidade</td>
+                    <td>Retirada</td>
                   </thead>
                   <tbody id="produtos">
 

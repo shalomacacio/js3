@@ -366,6 +366,7 @@ $(document).ready(function() {
           '<tr>'+
             '<td>'+data.result[i]['descricao_produto']+'</td>'+
             '<td>'+data.result[i]['qnt']+'</td>'+
+            '<td>'+data.result[i]['retirada']+'</td>'+
           '</tr>');
           }
         }
