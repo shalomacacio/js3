@@ -126,7 +126,7 @@
               <li class="nav-item">
                 <a href="{{ route('estoque.fiscalizar')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Fiscalização</p>
+                  <p>O.S X ÍTENS</p>
                 </a>
               </li>
             </ul>

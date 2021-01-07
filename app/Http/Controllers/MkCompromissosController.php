@@ -51,15 +51,21 @@ class MkCompromissosController extends Controller
      */
     public function agenda(Request $request)
     {
+
+      // teste
+      // if($request->dt_filtro){
+      //   return dd($request);
+      // }
+
       $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
 
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $fim = Carbon::now()->format('Y-m-d 23:59:59');
 
-      if($request->dt_agenda)
+      if($request->dt_filtro)
       {
-        $inicio = Carbon::parse($request->dt_agenda)->format('Y-m-d 00:00:00');
-        $fim = Carbon::parse($request->dt_agenda)->format('Y-m-d 23:59:59');
+        $inicio = Carbon::parse($request->dt_filtro)->format('Y-m-d 00:00:00');
+        $fim = Carbon::parse($request->dt_filtro)->format('Y-m-d 23:59:59');
       }
 
       $result = $this->repository->scopeQuery(function($query) use ($inicio, $fim) {
@@ -79,7 +85,7 @@ class MkCompromissosController extends Controller
             ]);
         }
 
-        return view('mkCompromissos.agenda', compact('mkCompromissos', 'inicio'));
+        return view('mkCompromissos.agenda', compact('mkCompromissos', 'request'));
     }
 
     public function agendaStatus(){

@@ -31,6 +31,10 @@ class MkOs extends Model implements Transformable
     {
       return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
     }
+    public function conexao()
+    {
+      return $this->belongsTo('App\Entities\MkConexao', 'conexao_associada', 'codconexao');
+    }
 
     public function consultor()
     {

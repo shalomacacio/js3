@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class MkConexao.
+ * Class MkConexoesAcct.
  *
  * @package namespace App\Entities;
  */
-class MkConexao extends Model implements Transformable
+class MkConexoesAcct extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -20,13 +20,9 @@ class MkConexao extends Model implements Transformable
      *
      * @var array
      */
-    protected $connection = 'pgsql';
-    protected $table = "public.mk_conexoes";
-    protected $primaryKey = 'codconexao';
+    protected $connection = 'pgsql2';
+    protected $table = 'acct.mk_conexoes_acct';
+    protected $primaryKey = 'codconexaoacct';
     protected $fillable = [];
-
-    public function conexaoacct(){
-        return $this->belongsTo('App\Entities\MkConexoesAcct', 'username', 'username');
-    }
 
 }

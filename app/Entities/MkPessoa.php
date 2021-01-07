@@ -34,6 +34,4 @@ class MkPessoa extends Model implements Transformable
       return $this->hasManyThrough('App\Entities\MkContrato', 'App\Entities\MkOs', 'country_id', 'user_id');
     }
 
-
-
 }
