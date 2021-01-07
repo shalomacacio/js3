@@ -29,4 +29,8 @@ class MkConexao extends Model implements Transformable
         return $this->belongsTo('App\Entities\MkConexoesAcct', 'username', 'username');
     }
 
+    public function analiseauth(){
+        return $this->belongsTo('App\Entities\MkAnaliseAuth', 'username', 'username');
+    }
+
 }

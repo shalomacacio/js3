@@ -76,8 +76,8 @@
                   <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
                   <td style="font-size: 9px" > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                   <td style="font-size: 9px" > 
-                    @isset($compromisso->os->conexao) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
-                    @empty($compromisso->os->conexao) <span style="color: Tomato;"><span class="fa fa-user "></span></span> @endempty
+                    @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
+                    @empty($compromisso->os->conexao->analiseauth) <span style="color: Tomato;"><span class="fa fa-user "></span></span> @endempty
                   </td>
                 </tr>
                 @endforeach
