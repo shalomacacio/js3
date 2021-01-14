@@ -89,6 +89,7 @@
             </table>
           </div>
           <!-- /.card-body -->
+
         </div>
         <!-- /.card -->
       </section>
@@ -96,7 +97,7 @@
     </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
-  @include('estoque.modal')
+  {{-- @include('mkCompromissos.modal') --}}
 </section>
 <!-- /.content -->
 
