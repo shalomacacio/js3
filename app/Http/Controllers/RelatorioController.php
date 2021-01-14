@@ -59,13 +59,13 @@ class RelatorioController extends Controller
           $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
         }
 
-        if ($request->has('classificacoes')){
-          $classiFiltro = $request->classificacoes;
-        } else {
-          foreach ($classificacoes as $r) {
-            $classiFiltro[] = $r->codclassifenc;
-          }
-        }
+        // if ($request->has('classificacoes')){
+        //   $classiFiltro = $request->classificacoes;
+        // } else {
+        //   foreach ($classificacoes as $r) {
+        //     $classiFiltro[] = $r->codclassifenc;
+        //   }
+        // }
     
         $result = DB::connection('pgsql')->table('mk_os as os')
           ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
@@ -74,7 +74,7 @@ class RelatorioController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
           ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
           ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
-          ->whereIn('os.classificacao_encerramento', $classiFiltro)
+          // ->whereIn('os.classificacao_encerramento', $classiFiltro) // NÃO DESCOMENTAR
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
             'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
@@ -86,7 +86,12 @@ class RelatorioController extends Controller
             ,'classificacao.classificacao'
           )->get();
         //FILTROS
-        if ($request->has('tecnicos'))
+        if ($request->has('classificacoes') ){
+          $classiFiltro = $request->classificacoes;
+          $servicos = $result
+          ->whereIn('classificacao_encerramento', $classiFiltro );
+        }
+        elseif($request->has('tecnicos'))
           {
             $tecFiltro = $request->tecnicos;
             $servicos = $result
