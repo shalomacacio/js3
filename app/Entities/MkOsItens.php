@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class MkComissao.
+ * Class MkOsItens.
  *
  * @package namespace App\Entities;
  */
-class MkComissao extends Model implements Transformable
+class MkOsItens extends Model implements Transformable
 {
     use TransformableTrait;
     /**
@@ -19,5 +19,9 @@ class MkComissao extends Model implements Transformable
      *
      * @var array
      */
+    protected $connection = 'pgsql';
+    protected $table = "public.mk_os_itens";
+    protected $primaryKey = 'cododitem';
     protected $fillable = [];
+
 }

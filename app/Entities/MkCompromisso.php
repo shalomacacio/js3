@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entities;
+  namespace App\Entities;
 
-use App\Entities\MkOs;
-use App\Entities\MkPessoa;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
+  use App\Entities\MkOs;
+  use App\Entities\MkPessoa;
+  use Illuminate\Support\Str;
+  use Illuminate\Database\Eloquent\Model;
+  use Prettus\Repository\Contracts\Transformable;
+  use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class MkCompromisso.
@@ -17,7 +17,6 @@ use Prettus\Repository\Traits\TransformableTrait;
 class MkCompromisso extends Model implements Transformable
 {
     use TransformableTrait;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -34,21 +33,17 @@ class MkCompromisso extends Model implements Transformable
     //   $truncated = Str::limit($value, 20);
     //   return $truncated;
     // }
-    public function getCdPessoaAttribute($value)
-    {
+    
+    public function getCdPessoaAttribute($value) {
       $funcionario = MkPessoa::where('codpessoa', $value)->first();
       return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
     }
-
-    public function gettipoOsAttribute($value){
+    public function gettipoOsAttribute($value) {
       $result =  MkOs::find($value);
       return $value;
     }
-
     //RELATIONSHIPS
-    public function os()
-    {
+    public function os(){
       return $this->belongsTo('App\Entities\MkOs', 'cd_integracao', 'codos');
     }
-
 }

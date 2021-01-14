@@ -14,7 +14,6 @@ use Prettus\Repository\Traits\TransformableTrait;
 class MkAtendimentoProcesso extends Model implements Transformable
 {
     use TransformableTrait;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -24,5 +23,4 @@ class MkAtendimentoProcesso extends Model implements Transformable
     protected $table = "public.mk_ate_processos";
     protected $primaryKey = 'codprocesso';
     protected $fillable = [];
-
 }

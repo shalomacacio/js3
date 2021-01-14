@@ -19,7 +19,6 @@ use Prettus\Repository\Traits\TransformableTrait;
 class MkAtendimento extends Model implements Transformable
 {
     use TransformableTrait;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -64,7 +63,7 @@ class MkAtendimento extends Model implements Transformable
       }
       return $subproceso;
     }
-
+    
     public function processo(){
       return $this->belongsTo('App\Entities\MkProcesso', 'cd_processo' , 'codprocesso' );
     }

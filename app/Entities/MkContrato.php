@@ -30,6 +30,4 @@ class MkContrato extends Model implements Transformable
       return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
     }
 
-
-
 }

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dash-layout')
 
 @section('content')
 
@@ -8,9 +8,13 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          @include('dashboard.suporte.card-user')
-          @include('dashboard.suporte.progress-bar')
+          @foreach ($ordens as $os)
+          {{ $os->osTipo }}
+          @endforeach
+          
           @include('dashboard.suporte.boxes-mini')
+          {{-- @include('dashboard.suporte.card-user') --}}
+          @include('dashboard.suporte.progress-bar')
           
         </div>
         <div class="row">

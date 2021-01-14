@@ -24,5 +24,4 @@ class MkAtendimentoSubProcesso extends Model implements Transformable
     protected $table = "public.mk_ate_subprocessos";
     protected $primaryKey = 'codsubprocesso';
     protected $fillable = [];
-
 }

@@ -24,5 +24,4 @@ class MkConexoesAcct extends Model implements Transformable
     protected $table = 'acct.mk_conexoes_acct';
     protected $primaryKey = 'codconexaoacct';
     protected $fillable = [];
-
 }

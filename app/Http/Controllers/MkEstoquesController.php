@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use App\Repositories\MkOsRepository;
+use App\Entities\MkOs;;
 /**
  * Class MkEstoquesController.
  *
@@ -15,11 +16,13 @@ class MkEstoquesController extends Controller
 {
     protected $inicio;
     protected $fim;
+    protected $osRepository;
   
-    public function __construct()
+    public function __construct( MkOsRepository $osRepository)
     {
       $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
+      $this->osRepository = $osRepository;
     }
 
     public function funcionarios(){
@@ -35,7 +38,6 @@ class MkEstoquesController extends Controller
       ->select('codostipo','descricao')
       ->get();
       return $tipos;
-      
     }
 
     public function grupos(){
@@ -43,7 +45,6 @@ class MkEstoquesController extends Controller
       ->select('codagenda_grupo','nome')
       ->get();
       return $grupos;
-      
     }
 
     public function classificacoes(){
@@ -55,7 +56,7 @@ class MkEstoquesController extends Controller
 
         $inicio = $this->inicio;
         $fim = $this->fim;
-        $dt_filtro = 'os.data_abertura';
+        $dt_filtro = 'data_abertura';
     
         $tipos = $this->tipos();
         $grupos = $this->grupos();
@@ -64,7 +65,7 @@ class MkEstoquesController extends Controller
         $classificacoes = $this->classificacoes();
 
         if ($request->dt_filtro == 1){
-          $dt_filtro = 'os.data_fechamento';
+          $dt_filtro = 'data_fechamento';
         }
 
         if($request->has('dt_inicio'))
@@ -82,27 +83,29 @@ class MkEstoquesController extends Controller
         }
     
         $result = DB::connection('pgsql')->table('mk_os as os')
-          ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
-          ->leftJoin('mk_agenda_grupo as grupo', 'os.cdagendagrupo', 'grupo.codagenda_grupo')
-          ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
-          ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
-          ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
-          ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
-          ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
-          ->leftJoin('mk_os_itens as os_itens', 'os.codos', 'os_itens.cd_integracao')
-          ->whereIn('os.classificacao_encerramento', $classiFiltro)
-          ->whereBetween($dt_filtro, [$inicio, $fim])
-          ->select(
-            'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.cdagendagrupo'
-            ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
-            ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
-            ,'tecnico.usr_nome as tecnico'
-            ,'consultor.usr_nome as consultor'
-            ,'contrato.vlr_renovacao as plano'
-            ,'classificacao.classificacao'
-            ,'os_itens.qnt'
-          )->distinct('os.codos')
-          ->get();
+        ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
+        ->leftJoin('mk_agenda_grupo as grupo', 'os.cdagendagrupo', 'grupo.codagenda_grupo')
+        ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
+        ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
+        ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
+        ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
+        ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
+        ->leftJoin('mk_os_itens as os_itens', 'os.codos', 'os_itens.cd_integracao')
+        ->whereIn('os.classificacao_encerramento', $classiFiltro)
+        ->whereBetween($dt_filtro, [$inicio, $fim])
+        ->select(
+          'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.cdagendagrupo'
+          ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
+          ,'cliente.codpessoa' ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
+          ,'tecnico.usr_nome as tecnico'
+          ,'consultor.usr_nome as consultor'
+          ,'contrato.vlr_renovacao as plano'
+          ,'classificacao.classificacao'
+          ,'os_itens.qnt'
+
+        )->distinct('os.codos')
+        ->get();
+
         //FILTROS
         if ($request->has('tecnicos'))
           {
@@ -139,10 +142,17 @@ class MkEstoquesController extends Controller
             ->select('estoque.descricao_produto','os_itens.qnt', 'os_itens.retirada', 'os_itens.tipo_saida')
             ->get();
 
-            return response()->json([
-                'result' => $result
-            ]);
+        return response()->json([
+          'result' => $result
+        ]);
+      }
 
+      public function ajaxCliente(Request $request){
+        $os = MkOs::find($request->codos);
+        return response()->json([
+          'endereco' => $os->logradouro->logradouro.' '.$os->num_endereco.' '.$os->logradouro->bairro->bairro,
+          'status' => $os->conexao->analiseauth
+        ]);
       }
 
 }

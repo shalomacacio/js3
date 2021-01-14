@@ -24,5 +24,4 @@ class FrUsuario extends Model implements Transformable
     protected $table = "public.fr_usuario";
     protected $primaryKey = 'usr_codigo';
     protected $fillable = [];
-
 }

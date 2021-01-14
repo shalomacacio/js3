@@ -22,11 +22,9 @@ class MkCompromissoPessoa extends Model
     protected $primaryKey = ['codcompromisso','cdpessoa'];
     protected $fillable = [];
 
-
     public function getCdPessoaAttribute($value)
     {
       $funcionario = MkPessoa::where('codpessoa', $value)->first();
       return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
     }
-
 }

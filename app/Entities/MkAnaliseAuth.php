@@ -13,9 +13,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class MkAnaliseAuth extends Model implements Transformable
 {
-    use TransformableTrait;
-
-    /**
+    use TransformableTrait;    /**
      * The attributes that are mass assignable.
      *
      * @var array

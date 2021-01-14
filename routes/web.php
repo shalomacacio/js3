@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::group(['prefix' => 'estoque'], function () {
     Route::get('/fiscalizar',        'MkEstoquesController@fiscalizar')->name('estoque.fiscalizar');
     Route::get('/ajaxEstoque',        'MkEstoquesController@ajaxEstoque')->name('estoque.ajaxEstoque');
+    Route::get('/ajaxCliente',        'MkEstoquesController@ajaxCliente')->name('estoque.ajaxCliente');
   });
 
   Route::group(['prefix' => 'financeiro'], function () {

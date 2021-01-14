@@ -29,7 +29,6 @@ class MkBairro extends Model implements Transformable
     // MUTATORS
     public function getBairroAttribute($value)
     {
-
       if(Str::containsAll($value, ['Novo', 'Parque', 'Iracema'])){
         $value = "N.IRACEMA";
       }
@@ -45,7 +44,6 @@ class MkBairro extends Model implements Transformable
       if(Str::contains($value, ['São'])){
         $value = Str::replaceArray('São', ['S'], $value);
       }
-
       if(Str::contains($value, ['Planalto'])){
         $value = Str::replaceArray('Planalto', ['PL'], $value);
       }
@@ -67,7 +65,6 @@ class MkBairro extends Model implements Transformable
       if(Str::containsAll($value, ['Pau','Serrado'])){
         $value = "P.SERRADO";
       }
-
       if(Str::containsAll($value, ['Luzardo','Viana'])){
         $value = "LUZARDO";
       }

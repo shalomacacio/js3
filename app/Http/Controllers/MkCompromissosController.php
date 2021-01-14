@@ -52,11 +52,6 @@ class MkCompromissosController extends Controller
     public function agenda(Request $request)
     {
 
-      // teste
-      // if($request->dt_filtro){
-      //   return dd($request);
-      // }
-
       $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
 
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');

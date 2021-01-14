@@ -14,7 +14,6 @@ use Prettus\Repository\Traits\TransformableTrait;
 class GrupoServicos extends Model implements Transformable
 {
     use TransformableTrait;
-
     /**
      * The attributes that are mass assignable.
      *

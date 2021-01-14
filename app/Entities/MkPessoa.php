@@ -25,12 +25,15 @@ class MkPessoa extends Model implements Transformable
     protected $primaryKey = 'codpessoa';
     protected $fillable = [];
 
-
-    public function contratos(){
-      return $this->hasManyThrough('App\Entities\MkContrato', 'App\Entities\MkOs', 'country_id', 'user_id');
+    public function endereco(){
+      return $this->hasMany('App\Entities\MkLogradouro','codlogradouro', 'codlogradouro' );
     }
 
     public function bairro(){
+      return $this->hasMany('App\Entities\MkBairro','codbairro', 'codbairro' );
+    }
+
+    public function contratos(){
       return $this->hasManyThrough('App\Entities\MkContrato', 'App\Entities\MkOs', 'country_id', 'user_id');
     }
 

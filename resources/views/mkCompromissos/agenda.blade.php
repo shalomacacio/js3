@@ -60,6 +60,7 @@
                   <th>APP</th>
                   <th>STATUS</th>
                   <th>ONLINE</th>
+                  <th>ÍTENS</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,9 +76,12 @@
                   <td style="font-size: 9px"> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
                   <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
                   <td style="font-size: 9px" > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
-                  <td style="font-size: 9px" > 
+                  <td style="font-size: 9px" align="center" > 
                     @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
                     @empty($compromisso->os->conexao->analiseauth) <span style="color: Tomato;"><span class="fa fa-user "></span></span> @endempty
+                  </td>
+                  <td align="center">
+                    <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
                   </td>
                 </tr>
                 @endforeach
@@ -92,6 +96,7 @@
     </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
+  @include('estoque.modal')
 </section>
 <!-- /.content -->
 
@@ -114,6 +119,78 @@
   $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
+
+
+function getEstoque(codigo){
+
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  function showModal(){
+    $('#modal-default').modal('focus')
+  }
+
+  function status(tipo){
+  var tipo_saida;
+
+    switch (tipo) {
+      case 1:
+        tipo_saida = "venda"
+        break;
+      case 2:
+        tipo_saida = "comodato"
+        break;
+      case 3:
+        tipo_saida = "emprestimo"
+        break;
+      case 4:
+        tipo_saida = "demo"
+        break;
+      case 5:
+        tipo_saida = "locacao"
+        break;
+      case 9:
+        tipo_saida = "servico"
+        break;
+      case 101:
+        tipo_saida = "imobilizado"
+        break;
+      case 999:
+        tipo_saida = "retirada"
+        break;      
+      default:
+        break;
+    }
+
+    return tipo_saida;
+
+  }
+
+$.ajax({
+  url: "{{ route('estoque.ajaxEstoque') }}",
+  type: "GET",
+  dataType: 'json',
+  data: { codos: codigo },
+  success: function(data) {
+    // console.log(data.result);
+    $("#produtos tr").remove();
+    for(var i=0; i < data.result.length ; i++)
+      {
+      $('#produtos').append(
+      '<tr>'+
+        '<td>'+data.result[i]['descricao_produto']+'</td>'+
+        '<td>'+data.result[i]['qnt']+'</td>'+
+        '<td>'+data.result[i]['retirada']+'</td>'+
+        '<td>'+status(data.result[i]['tipo_saida'])+'</td>'+
+      '</tr>');
+      }
+    }
+});
+
+}
 
 </script>
 

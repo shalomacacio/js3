@@ -150,7 +150,7 @@
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>FISCALIZAR ESTOQUE </h4></center>
+          <center><h4>ORDENS DE SERVIÇO  X ÍTENS </h4></center>
           <br/>
           <!-- Table row -->
 
@@ -164,42 +164,50 @@
               <table class="table table-striped table-sm " id="tblData" >
                 <thead>
                 <tr>
-                  <th>Abertura</th>
                   <th>Fechamento</th>
                   <th>O.S</th>
                   <th>Cliente</th>
                   <th>Serviço</th>
                   <th>Técnico</th>
-                  <th>Consultor</th>
                   <th>Plano</th>
                   <th>Taxa</th>
                   <th>Status</th>
                   <th>Inativo</th>
                   <th><center>Estoque</center></th>
+                  <th>Cliente</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($servicos as $servico)
                 <tr>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_abertura)->format('d-m-Y') }}</td>
                   <td style=" width: 60px ">
                     @isset($servico->data_fechamento)
                       {{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}
                     @endisset
                   </td>
                   <td>{{ $servico->codos}}</td>
-                  <td>{{ $servico->cliente }}</td>
+                  <td> 
+                    @isset($servico->cliente)
+                      {{ $servico->cliente}}
+                    @endisset
+                  </td>
                   <td>{{ $servico->servico }}</td>
                   <td>{{ $servico->tecnico }}</td>
-                  <td>{{ $servico->consultor }}</td>
-                  <td>{{ $servico->plano }}</td>
-                  <td>{{ $servico->taxa }}</td>
+                  <td>
+                    @isset($servico->plano)
+                      {{ $servico->plano }} 
+                    @endisset
+                  </td>
+                  <td>{{ $servico->taxa  }}</td>
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
                   <td align="center">
                     @isset($servico->qnt)
-                    <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
+                      <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-estoque" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
                     @endisset
+                  </td>
+                  <td align="center">
+                      <a href="javascript:void(0)" onClick="getCliente({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-cliente" class="btn btn-xs btn-default float-right"><i class="fas fa-user"></i> </a>
                   </td>
                 </tr>
                 @endforeach
@@ -226,7 +234,8 @@
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </section>
-@include('estoque.modal')
+@include('estoque.modal-estoque')
+@include('estoque.modal-cliente')
 @endsection
 
 @section('javascript')
@@ -241,13 +250,13 @@
 
 <script>
 
-$(document).ready(function() {
-    $('#tblData').DataTable({
-      "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
-        }
-    });
-} );
+  $(document).ready(function() {
+      $('#tblData').DataTable({
+        "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+          }
+      });
+  } );
 
   $(function() {
   moment.locale('pt-br');
@@ -281,12 +290,12 @@ $(document).ready(function() {
     },
   },
 
-  function(start, end, label) {
-      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
-      $('#dt_fim').val( end.format('YYYY-MM-DD'));
+    function(start, end, label) {
+        // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+        $('#dt_fim').val( end.format('YYYY-MM-DD'));
+      });
     });
-  });
 
     //Initialize Select2 Elements
     $('.select2').select2()
@@ -305,8 +314,6 @@ $(document).ready(function() {
       $('#btn_filter').text("Fechamento");
       $('#dt_filtro').val(1);
     });
-
-
 
   function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
@@ -338,7 +345,6 @@ $(document).ready(function() {
         downloadLink.click();
     }
   }
-
 
   function getEstoque(codigo){
 
@@ -410,6 +416,32 @@ $(document).ready(function() {
     });
     
   }
+
+function getCliente(codos){
+
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  function showModal(){
+    $('#modal-cliente').modal('focus')
+  }
+
+  $.ajax({
+    url: "{{ route('estoque.ajaxCliente') }}",
+    type: "GET",
+    dataType: 'json',
+    data: { codos: codos },
+    success: function(data) {
+      console.log(data);
+      $("#cliente tr").remove();
+      $('#cliente').append('<tr>'+'<td> ENDEREÇO: '+data.endereco.toUpperCase()+'</td>'+'</tr>');
+      $('#cliente').append('<tr>'+'<td> STATUS: '+data.status.reply.toUpperCase()+'</td>'+'</tr>');
+      }
+  });
+}
 
 </script>
 

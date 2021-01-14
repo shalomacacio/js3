@@ -26,17 +26,12 @@ class MkOsMobileAtuStatus extends Model implements Transformable
     protected $primaryKey = 'codosatustatus';
     protected $fillable = [];
 
-
-
     public function getDescricaoAttribute($value)
     {
       if(Str::containsAll($value, ['Visualização ', 'de O.S' ])){
         $value = "VIS O.S";
       }
-
       return $value;
     }
-
-
 
 }

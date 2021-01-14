@@ -84,5 +84,4 @@ class MkOsTipo extends Model implements Transformable
       return $value;
     }
 
-
 }
