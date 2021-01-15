@@ -15,10 +15,10 @@
           <div class="col-12 col-sm-12 col-md-4" >
             <!-- select -->
             <div class="form-group">
-              <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
-                {{-- @foreach($tipos as $tipo)
-                  <option value="{{ $tipo->codostipo }}"> {{ $tipo->descricao }} </option>
-                @endforeach --}}
+              <select class="select2bs4"  name="grupos[]" multiple="multiple" data-placeholder="-- EQUIPE --" style="width: 100%;">
+                @foreach($grupos as $grupo)
+                  <option value="{{ $grupo->codagenda_grupo }}"> {{ $grupo->nome }} </option>
+                @endforeach
               </select>
             </div>
           </div>

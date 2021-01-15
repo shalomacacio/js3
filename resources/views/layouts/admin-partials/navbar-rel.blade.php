@@ -24,9 +24,18 @@
       <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
         <!-- SEARCH FORM -->
 
+        <input class="btn btn-primary" type="button" value="Atualizar" onClick="window.location.reload()"> 
+
       </ul>
 
     </div>
   </nav>
   <!-- /.navbar -->
+  @section('javascript')
+  <script>
+    function reloadThePage() {
+        window.location.reload();
+    } 
+  </script>
+  @endsection
 

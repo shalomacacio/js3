@@ -13,6 +13,7 @@ use App\Repositories\MkCompromissoRepository;
 use App\Validators\MkCompromissoValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use App\Entities\MkAgendaGrupo;
 
 
 /**
@@ -64,23 +65,29 @@ class MkCompromissosController extends Controller
       }
 
       $result = $this->repository->scopeQuery(function($query) use ($inicio, $fim) {
-                  return $query
-                  ->whereBetween('com_inicio',[$inicio, $fim])
-                  ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
-                  ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
-                  ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
-                  ->select('cdpessoa','com_inicio','com_titulo', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
-                })->all();
+        return $query
+        ->whereBetween('com_inicio',[$inicio, $fim])
+        ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
+        ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
+        ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
+        ->select('cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
+      })->all(); 
 
-      $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
+      $grupos = MkAgendaGrupo::all();
 
-        if (request()->wantsJson()) {
-            return response()->json([
-                'data' => $mkCompromissos,
-            ]);
-        }
+      if($request->grupos){
+        $mkCompromissos = $result->whereIn( 'cdagendagrupo', $request->grupos)
+          ->groupBy('cdpessoa')->sortBy('com_inicio'); 
+      }else {
+        $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
+      }
 
-        return view('mkCompromissos.agenda', compact('mkCompromissos', 'request'));
+      if (request()->wantsJson()) {
+        return response()->json([
+          'data' => $mkCompromissos,
+        ]);
+      }
+        return view('mkCompromissos.agenda', compact('mkCompromissos', 'grupos',  'request'));
     }
 
     public function agendaStatus(){

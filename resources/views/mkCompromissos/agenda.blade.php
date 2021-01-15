@@ -97,7 +97,7 @@
     </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
-  {{-- @include('mkCompromissos.modal') --}}
+  @include('mkCompromissos.modal')
 </section>
 <!-- /.content -->
 

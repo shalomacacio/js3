@@ -8,9 +8,6 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          @foreach ($ordens as $os)
-          {{ $os->osTipo }}
-          @endforeach
           
           @include('dashboard.suporte.boxes-mini')
           {{-- @include('dashboard.suporte.card-user') --}}
