@@ -70,18 +70,19 @@ class MkCompromissosController extends Controller
         ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
         ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
         ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
-        ->select('cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo', 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
+        ->select('cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo',
+                 'mk_os.dt_hr_fechamento_tec',
+                 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
       })->all(); 
 
       $grupos = MkAgendaGrupo::all();
 
       if($request->grupos){
         $mkCompromissos = $result->whereIn( 'cdagendagrupo', $request->grupos)
-          ->groupBy('cdpessoa')->sortBy('com_inicio'); 
-      }else {
-        $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('com_inicio');
+          ->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
+      }else{
+        $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
       }
-
       if (request()->wantsJson()) {
         return response()->json([
           'data' => $mkCompromissos,

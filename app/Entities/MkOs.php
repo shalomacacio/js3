@@ -81,19 +81,19 @@ class MkOs extends Model implements Transformable
     public function getUltimoStatusAppMkAttribute($value)
     {
       if(Str::contains($value, ['001'])){
-        $value = " badge-info";
+        $value = " bg-info";
       }
       if(Str::contains($value, ['002'])){
-        $value = " badge-success";
+        $value = " bg-teal disabled color-palette";
+      }
+      if(Str::contains($value, ['009'])){
+        $value = " badge-secondary ";
       }
       if(Str::contains($value, ['010'])){
-        $value = " badge-warning";
+        $value = " bg-yellow disabled color-palette";
       }
       if(Str::contains($value, ['011'])){
         $value = " badge-danger";
-      }
-      if(Str::contains($value, ['009'])){
-        $value = " badge-secondary";
       }
       return $value;
     }

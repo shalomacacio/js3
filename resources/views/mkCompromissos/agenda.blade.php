@@ -65,7 +65,7 @@
               </thead>
               <tbody>
                 @foreach ($compromissos as $compromisso)
-                <tr id="{{ $compromisso->codcompromisso }}">
+                <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->os->ultimo_status_app_mk }}" >
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
                     {!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}
                   </td>
@@ -78,7 +78,7 @@
                   <td style="font-size: 9px" > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                   <td style="font-size: 9px" align="center" > 
                     @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
-                    @empty($compromisso->os->conexao->analiseauth) <span style="color: Tomato;"><span class="fa fa-user "></span></span> @endempty
+                    @empty($compromisso->os->conexao->analiseauth) <span style="color: rgb(250, 62, 28);"><span class="fa fa-user "></span></span> @endempty
                   </td>
                   <td align="center">
                     <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
