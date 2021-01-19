@@ -75,7 +75,7 @@
                   </td>
                   <td style="font-size: 9px"> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
                   <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
-                  <td style="font-size: 9px" > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
+                  <td style="font-size: 9px" title="O.S:{{ $compromisso->os->servico_prestado}}"  > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                   <td style="font-size: 9px" align="center" > 
                     @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
                     @empty($compromisso->os->conexao->analiseauth) <span style="color: rgb(250, 62, 28);"><span class="fa fa-user "></span></span> @endempty
