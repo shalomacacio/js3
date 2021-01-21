@@ -33,6 +33,9 @@
   <!-- /.navbar -->
   @section('javascript')
   <script>
+
+    setInterval(function(){ alert('teste') }, 10000);
+
     function reloadThePage() {
         window.location.reload();
     } 

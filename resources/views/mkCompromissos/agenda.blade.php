@@ -81,7 +81,9 @@
                     @empty($compromisso->os->conexao->analiseauth) <span style="color: rgb(250, 62, 28);"><span class="fa fa-user "></span></span> @endempty
                   </td>
                   <td align="center">
-                    <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
+                    @if($compromisso->os->itens->count() > 0)
+                    <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>  
+                    @endif
                   </td>
                 </tr>
                 @endforeach
