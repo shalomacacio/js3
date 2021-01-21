@@ -39,7 +39,7 @@
           <div class="card-header">
             <h3 class="card-title">{{ $comps }}</h3>
             <div class="card-tools">
-              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">{{ $compromissos->count() }}</span>
+              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">{{ $compromissos->whereNotNull('dt_hr_fechamento_tec')->count() }}/{{ $compromissos->count() }}</span>
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
               </button>

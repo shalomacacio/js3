@@ -3,16 +3,19 @@
 @section('content')
 
 <div class="content-wrapper">
-  <br>
+    <br/>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          
-          @include('dashboard.suporte.boxes-mini')
-          {{-- @include('dashboard.suporte.card-user') --}}
-          @include('dashboard.suporte.progress-bar')
-          
+            @include('dashboard.suporte.boxes-mini')
+          <div class="col-3">
+            teste
+          </div>
+          <div class="col-9">  
+            @include('dashboard.suporte.progress-bar')
+            {{-- @include('dashboard.suporte.card-user') --}}
+          </div>
         </div>
         <div class="row">
           @include('dashboard.suporte.os-geral')

@@ -52,7 +52,6 @@ class MkCompromissosController extends Controller
      */
     public function agenda(Request $request)
     {
-
       $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
 
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
@@ -70,16 +69,18 @@ class MkCompromissosController extends Controller
         ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
         ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
         ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
-        ->select('cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo',
-                 'mk_os.dt_hr_fechamento_tec',
-                 'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
+        ->select(
+          'cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo',
+          'mk_os.dt_hr_fechamento_tec',
+          'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
       })->all(); 
 
       $grupos = MkAgendaGrupo::all();
+      $compromissos = $result;
 
       if($request->grupos){
-        $mkCompromissos = $result->whereIn( 'cdagendagrupo', $request->grupos)
-          ->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
+        $compromissos = $result->whereIn( 'cdagendagrupo', $request->grupos);
+        $mkCompromissos = $compromissos->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
       }else{
         $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
       }
@@ -88,11 +89,13 @@ class MkCompromissosController extends Controller
           'data' => $mkCompromissos,
         ]);
       }
-        return view('mkCompromissos.agenda', compact('mkCompromissos', 'grupos',  'request'));
+
+      $total = $compromissos->count();
+      $concluidos = $compromissos->whereNotNull('dt_hr_fechamento_tec')->count();
+      return view('mkCompromissos.agenda', compact('mkCompromissos','grupos', 'request', 'total', 'concluidos'));
     }
 
     public function agendaStatus(){
-
       $inicio = Carbon::now()->format('Y-m-d 00:00:00');
       $fim = Carbon::now()->format('Y-m-d 23:59:59');
 

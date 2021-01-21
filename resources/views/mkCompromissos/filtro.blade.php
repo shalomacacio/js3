@@ -46,6 +46,10 @@
         </form>
       </div>
 
+      <div class="col-sm-1">
+        <h1> {{ $concluidos }}  / {{ $total }}</h1>
+      </div>
+
     </div>
   </div><!-- /.container-fluid -->
 </section>
