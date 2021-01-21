@@ -103,7 +103,6 @@
 </section>
 <!-- /.content -->
 
-
 @endsection
 
 @section('javascript')
@@ -115,6 +114,10 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
 
 <script>
+
+  //atualiza página a cada 1min 
+  setInterval(function(){  window.location.reload(); }, 60000);
+
   //Initialize Select2 Elements
   $('.select2').select2()
 
