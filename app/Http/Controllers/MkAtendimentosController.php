@@ -37,6 +37,7 @@ class MkAtendimentosController extends Controller
 
     protected $inicio;
     protected $fim;
+    protected $url;
 
     /**
      * MkAtendimentosController constructor.
@@ -48,6 +49,7 @@ class MkAtendimentosController extends Controller
     {
         $this->repository = $repository;
         $this->validator  = $validator;
+        $this->url = env('WS_MK_URL');
 
         $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
         $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
@@ -58,26 +60,16 @@ class MkAtendimentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        $response = Curl::to('http://www.byjg.com.br/site/webservice.php/ws/cep')
-        ->post();
+        $response = $this->mkLogin();
 
-        return $response;
+        return $response->TokenAutenticacao;
+    }
 
-
-
-        // $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        // $mkAtendimentos = $this->repository->all();
-
-        // if (request()->wantsJson()) {
-
-        //     return response()->json([
-        //         'data' => $mkAtendimentos,
-        //     ]);
-        // }
-
-        // return view('mkAtendimentos.index', compact('mkAtendimentos'));
+    public function create(){
+        return view('mkAtendimentos.create');
     }
 
     /**
@@ -89,35 +81,21 @@ class MkAtendimentosController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(MkAtendimentoCreateRequest $request)
+    public function store(Request $request)
     {
-        try {
+        $login = $this->mkLogin();
+        $response = Curl::to($this->url.'/mk/WSMKNovoAtendimento.$rule?sys=MK0&token='.$login->tokenRetornoAutenticacao
+        .'&cd_contrato='.$request->cd_contrato
+        .'&cd_cliente='.$request->codigoCliente
+        .'&cd_processo='.$request->codigoProcesso
+        .'&cd_classificacao_ate='.$request->codigoClassificacaoAtendimento
+        .'&origem_contato='.$request->codigoOrigemContato
+        . '&info='.$request->informacaoAtendimento
+        )
+        ->post();
+        
+        return $response;
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $mkAtendimento = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'MkAtendimento created.',
-                'data'    => $mkAtendimento->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
     }
 
     /**
@@ -265,5 +243,12 @@ class MkAtendimentosController extends Controller
             $atendimentos = $result;
         }
         return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'inicio', 'fim'));
+      }
+
+      public function mkLogin(){
+        $response = Curl::to($this->url.'/mk/WSAutenticacaoOperador.$rule?sys=MK0&username=shalom.acacio&password=@Shalac79')
+        ->asJsonResponse()
+        ->get();
+        return $response;
       }
 }

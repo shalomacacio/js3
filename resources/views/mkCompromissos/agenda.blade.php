@@ -114,9 +114,8 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
 
 <script>
-
   //atualiza página a cada 1min 
-  setInterval(function(){  window.location.reload(); }, 60000);
+  setInterval(function(){  window.location.reload(); }, 120000);
 
   //Initialize Select2 Elements
   $('.select2').select2()
@@ -125,7 +124,6 @@
   $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
-
 
 function getEstoque(codigo){
 
