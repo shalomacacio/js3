@@ -50,14 +50,12 @@ class MkAnaliseAuthsController extends Controller
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $mkAnaliseAuths = $this->repository->all();
-
         if (request()->wantsJson()) {
 
             return response()->json([
                 'data' => $mkAnaliseAuths,
             ]);
         }
-
         return view('mkAnaliseAuths.index', compact('mkAnaliseAuths'));
     }
 

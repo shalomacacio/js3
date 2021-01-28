@@ -70,19 +70,19 @@ class MkCompromissosController extends Controller
         ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
         ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
         ->select(
-          'cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo',
+          'cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo','com_fim',
           'mk_os.dt_hr_fechamento_tec',
           'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
       })->all(); 
 
       $grupos = MkAgendaGrupo::all();
-      $compromissos = $result;
+      // $compromissos = $result;
 
       if($request->grupos){
         $compromissos = $result->whereIn( 'cdagendagrupo', $request->grupos);
-        $mkCompromissos = $compromissos->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
+        $mkCompromissos = $compromissos->groupBy('cdpessoa'); 
       }else{
-        $mkCompromissos = $result->groupBy('cdpessoa')->sortBy('dt_hr_fechamento_tec'); 
+        $mkCompromissos = $result->groupBy('cdpessoa'); 
       }
       if (request()->wantsJson()) {
         return response()->json([

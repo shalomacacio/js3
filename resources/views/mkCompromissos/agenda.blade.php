@@ -54,6 +54,7 @@
             <table class="table table-sm  table-head-fixed  ">
               <thead>
                 <tr>
+                  <th>HORA</th>
                   <th>CLIENTE</th>
                   <th>BAIRRO</th>
                   <th>SERVIÇO</th>
@@ -64,8 +65,10 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($compromissos as $compromisso)
+                @foreach ($compromissos->sortBy('com_inicio') as $compromisso)
+                
                 <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->os->ultimo_status_app_mk }}" >
+                  <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
                     {!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}
                   </td>

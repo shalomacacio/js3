@@ -63,9 +63,8 @@ class MkAtendimentosController extends Controller
 
     public function index()
     {
-        $response = $this->mkLogin();
-
-        return $response->TokenAutenticacao;
+      $token = $this->mkLogin()["Token"];
+      return $token;
     }
 
     public function create(){
@@ -83,8 +82,8 @@ class MkAtendimentosController extends Controller
      */
     public function store(Request $request)
     {
-        $login = $this->mkLogin();
-        $response = Curl::to($this->url.'/mk/WSMKNovoAtendimento.$rule?sys=MK0&token='.$login->tokenRetornoAutenticacao
+        $token = $this->mkLogin()["Token"];
+        $response = Curl::to($this->url.'/mk/WSMKNovoAtendimento.$rule?sys=MK0&token='.$token
         .'&cd_contrato='.$request->cd_contrato
         .'&cd_cliente='.$request->codigoCliente
         .'&cd_processo='.$request->codigoProcesso
@@ -93,9 +92,7 @@ class MkAtendimentosController extends Controller
         . '&info='.$request->informacaoAtendimento
         )
         ->post();
-        
         return $response;
-
     }
 
     /**
@@ -244,11 +241,12 @@ class MkAtendimentosController extends Controller
         }
         return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'inicio', 'fim'));
       }
-
       public function mkLogin(){
-        $response = Curl::to($this->url.'/mk/WSAutenticacaoOperador.$rule?sys=MK0&username=shalom.acacio&password=@Shalac79')
-        ->asJsonResponse()
+        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token=ac15acdc9a564b94448dcf2bcf4e673d&password=3462570e1b53236&cd_servico=9999')
         ->get();
+        $response = json_decode($result, true);
         return $response;
       }
+
 }
+

@@ -115,7 +115,6 @@
   </div><!-- /.container-fluid -->
 </section>
 
-
 <section class="content">
   <div class="container-fluid">
     <div class="row">
@@ -153,8 +152,6 @@
           <center><h4>RELATÓRIO DE SERVIÇOS </h4></center>
           <br/>
           <!-- Table row -->
-
-
         <div class="col-12">
         <p class="lead"><b>Serviços: {{ $servicos->count() }} </b></p>
         </div>
@@ -167,6 +164,7 @@
                   <th>Abertura</th>
                   <th>Fechamento</th>
                   <th>O.S</th>
+                  <th>Contrato</th>
                   <th>Cliente</th>
                   <th>Serviço</th>
                   <th>Técnico</th>
@@ -187,6 +185,7 @@
                     @endisset
                   </td>
                   <td>{{ $servico->codos}}</td>
+                  <td>{{ $servico->codcontrato }}</td>
                   <td>{{ $servico->cliente }}</td>
                   <td>{{ $servico->servico }}</td>
                   <td>{{ $servico->tecnico }}</td>

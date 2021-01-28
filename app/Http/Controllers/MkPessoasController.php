@@ -13,6 +13,7 @@ use App\Http\Requests\MkPessoaCreateRequest;
 use App\Http\Requests\MkPessoaUpdateRequest;
 use App\Repositories\MkPessoaRepository;
 use App\Validators\MkPessoaValidator;
+use Ixudra\Curl\Facades\Curl;
 
 /**
  * Class MkPessoasController.
@@ -32,6 +33,7 @@ class MkPessoasController extends Controller
     protected $validator;
     protected $inicio;
     protected $fim;
+    protected $url;
 
     /**
      * MkPessoasController constructor.
@@ -45,6 +47,7 @@ class MkPessoasController extends Controller
         $this->validator  = $validator;
         $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
         $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
+        $this->url = env('WS_MK_URL');
     }
 
     /**
@@ -58,12 +61,10 @@ class MkPessoasController extends Controller
         $mkPessoas = $this->repository->all();
 
         if (request()->wantsJson()) {
-
             return response()->json([
                 'data' => $mkPessoas,
             ]);
         }
-
         return view('mkPessoas.index', compact('mkPessoas'));
     }
 
@@ -76,36 +77,12 @@ class MkPessoasController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(MkPessoaCreateRequest $request)
+    public function store(Request $request)
     {
-        try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $mkPessoa = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'MkPessoa created.',
-                'data'    => $mkPessoa->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        
     }
+    
 
     /**
      * Display the specified resource.
@@ -223,5 +200,12 @@ class MkPessoasController extends Controller
         return view('relatorios.clientes', compact('clientes', 'inicio', 'fim'));
 
     }
+
+    public function mkLogin(){
+        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token=ac15acdc9a564b94448dcf2bcf4e673d&password=3462570e1b53236&cd_servico=9999')
+        ->get();
+        $response = json_decode($result, true);
+        return $response;
+      }
 
 }

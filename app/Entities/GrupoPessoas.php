@@ -19,5 +19,8 @@ class GrupoPessoas extends Model implements Transformable
      *
      * @var array
      */
+    // protected $connection = 'pgsql2';
+    protected $table = 'sis_cliente';
+    protected $primaryKey = 'id';
     protected $fillable = [];
 }

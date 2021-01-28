@@ -78,11 +78,11 @@ class RelatorioController extends Controller
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
             'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
-            ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
+            ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento', 'os.servico_prestado'
             ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
             ,'tecnico.usr_nome as tecnico'
             ,'consultor.usr_nome as consultor'
-            ,'contrato.vlr_renovacao as plano'
+            ,'contrato.vlr_renovacao as plano', 'contrato.codcontrato'
             ,'classificacao.classificacao'
           )->get();
         //FILTROS
@@ -128,7 +128,6 @@ class RelatorioController extends Controller
     {
         $inicio = $this->inicio;
         $fim = $this->fim;   
-        $situacao = "N";
 
         if($request->situacao)
         {
@@ -142,9 +141,6 @@ class RelatorioController extends Controller
         ->leftJoin('mk_logradouros as logradouro', 'cliente.codlogradouro', 'logradouro.codlogradouro' )
         ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
         ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
-
-        // ->where('suspenso',"N") //causa das diferenças 
-        ->where('cancelado', $situacao) //causa das diferenças 
         ->select(
           'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
@@ -159,12 +155,37 @@ class RelatorioController extends Controller
         if($request->has('dt_inicio')){
             $inicio = $request->dt_inicio;
             $fim = $request->dt_fim;
-
-            $contratos = $result->whereBetween('adesao', [$inicio, $fim])->sortBy('adesao');
+            $contratos = $result->whereBetween('dt_cancelamento', [$inicio, $fim])->sortBy('dt_cancelamento');
         } else {
             $contratos = $result->sortBy('adesao');
         }
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
     }
+
+    public function contratos_os() 
+    {
+      $result1 = DB::connection('pgsql')
+      ->table('mk_os as os')
+      ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
+      ->whereIn('tipo_os', [89,90,111,132])
+      ->whereBetween('os.data_fechamento', ['2020-11-01', '2021-01-27'])
+      ->select('codcontrato', 'codos')
+      ->count();
+
+
+      $result2 = DB::connection('pgsql')
+      ->table('mk_contratos ')
+      ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
+      ->whereIn('tipo_os', [89,90,111,132])
+      ->whereBetween('os.data_fechamento', ['2020-11-01', '2021-01-27'])
+      ->select('codcontrato', 'codos')
+      ->count();
+
+
+
+      return $result1;
+    }
+
+
 
 }

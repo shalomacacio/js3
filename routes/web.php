@@ -23,6 +23,9 @@ Route::group(['middleware' => ['auth']], function () {
  
   //WebServices
   Route::resource('atendimentos', 'MkAtendimentosController');
+  Route::resource('clientes', 'GrupoPessoasController');
+  Route::resource('/contratos', 'MkContratosController');
+  Route::resource('/analise', 'MkAnaliseAuthsController');
 
   Route::get('/agenda',       'MkCompromissosController@agenda')->name('mkCompromissos.agenda');
   Route::get('/agendaStatus', 'MkCompromissosController@agendaStatus')->name('mkCompromissos.agendaStatus');
@@ -30,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::group(['prefix' => 'suporte'], function () {
     Route::get('/dashboard',       'SuporteController@dashboard')->name('suporte.dashboard');
     Route::get('/ajaxDashSuporte',  'SuporteController@ajaxDashSuporte')->name('suporte.ajaxDashSuporte');
+    
   });
 
   Route::group(['prefix' => 'relatorios'], function () {
@@ -37,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/servicos',     'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',     'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',    'RelatorioController@contratos')->name('relatorio.contratos');
+    Route::get('/contratos_os',    'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
 
@@ -51,6 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/contratos', 'RelatorioController@contratos')->name('contratos');
     Route::get('/ajaxCliente', 'FinanceiroController@ajaxCliente')->name('ajaxCliente');
     Route::get('/autocomplete', 'FinanceiroController@autocomplete')->name('autocomplete');
+    
   });
 
   Route::group(['prefix' => 'dashboard'], function () {

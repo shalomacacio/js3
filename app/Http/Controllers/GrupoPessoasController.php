@@ -11,6 +11,9 @@ use App\Http\Requests\GrupoPessoasCreateRequest;
 use App\Http\Requests\GrupoPessoasUpdateRequest;
 use App\Repositories\GrupoPessoasRepository;
 use App\Validators\GrupoPessoasValidator;
+use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Str;
+
 
 /**
  * Class GrupoPessoasController.
@@ -29,6 +32,8 @@ class GrupoPessoasController extends Controller
      */
     protected $validator;
 
+    protected $url;
+
     /**
      * GrupoPessoasController constructor.
      *
@@ -39,6 +44,7 @@ class GrupoPessoasController extends Controller
     {
         $this->repository = $repository;
         $this->validator  = $validator;
+        $this->url = env('WS_MK_URL');   
     }
 
     /**
@@ -48,153 +54,67 @@ class GrupoPessoasController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $grupoPessoas = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $grupoPessoas,
-            ]);
-        }
-
-        return view('grupoPessoas.index', compact('grupoPessoas'));
+    //    return  $this->getEndereco();
+          return $this->migrar();
+        // $grupoPessoas = $this->repository->all();
+        // for($i=0; $i<=1; $i++){
+        //     $cliente =  $grupoPessoas->get(0);
+        //     $result =  $this->migrar($cliente);
+        //     return $result;  
+        // }
+        
+        // return ($grupoPessoas);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  GrupoPessoasCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(GrupoPessoasCreateRequest $request)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $grupoPessoa = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'GrupoPessoas created.',
-                'data'    => $grupoPessoa->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+    public function mkLogin(){
+        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token=ac15acdc9a564b94448dcf2bcf4e673d&password=3462570e1b53236&cd_servico=9999')
+        ->get();
+        $response = json_decode($result, true);
+        return $response;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $grupoPessoa = $this->repository->find($id);
+    public function novaLead(){
+        $token = $this->mkLogin()["Token"];
+        $result = Curl::to($this->url."/mk/WSMKNovaLead.rule?sys=MK0&token="
+        .$token.
+        "&cd_cliente=45800".
+        "&info=teste")
+        ->get();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $grupoPessoa,
-            ]);
-        }
-
-        return view('grupoPessoas.show', compact('grupoPessoa'));
+        return $result;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $grupoPessoa = $this->repository->find($id);
+      public function getEndereco(){
+        $token = $this->mkLogin()["Token"];
+        $response = Curl::to($this->url."/mk/WSMKListaEstruturaEnderecos.rule?sys=MK0&token=".$token )
+        ->get();
+        return $response;
+      }
 
-        return view('grupoPessoas.edit', compact('grupoPessoa'));
-    }
+    public function migrar(){
+        $token = $this->mkLogin()["Token"];
+        $string = "(85)987047679"; //preg_replace('/[^0-9]/', '', $string)
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  GrupoPessoasUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(GrupoPessoasUpdateRequest $request, $id)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-            $grupoPessoa = $this->repository->update($request->all(), $id);
-            $response = [
-                'message' => 'GrupoPessoas updated.',
-                'data'    => $grupoPessoa->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'GrupoPessoas deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-        return redirect()->back()->with('message', 'GrupoPessoas deleted.');
+         $result = Curl::to($this->url."/mk/WSMKNovaPessoa.rule?sys=MK0".
+        // "&token=".$token.
+        // "&doc=".$pessoa->cpf_cnpj.
+        // "&nome=".Str::upper($pessoa->nome).
+        // "&cep=".$pessoa->cep.
+        "&cd_uf=6".
+        "&cd_cidade=19".
+        "&cd_bairro=394".
+        "&cd_logradouro=7277".
+        "&numero=10".
+        "&complemento=".
+        "&cd_empresa=0".
+        "&email=jnet@jnece.com.br".
+        "&nascimento=".
+        "&fone=987047679".
+        "&cd_revenda=16".
+        "&lat=".
+        "&lon="
+        )
+        ->get();
+        return $result;
     }
 }
