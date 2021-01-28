@@ -76,7 +76,7 @@ class MkCompromissosController extends Controller
       })->all(); 
 
       $grupos = MkAgendaGrupo::all();
-      // $compromissos = $result;
+      $compromissos = $result;
 
       if($request->grupos){
         $compromissos = $result->whereIn( 'cdagendagrupo', $request->grupos);
