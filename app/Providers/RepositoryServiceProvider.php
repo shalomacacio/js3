@@ -50,6 +50,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkAnaliseAuthRepository::class, \App\Repositories\MkAnaliseAuthRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkOsItensRepository::class, \App\Repositories\MkOsItensRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkAgendaGrupoRepository::class, \App\Repositories\MkAgendaGrupoRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\MkApiRepository::class, \App\Repositories\MkApiRepositoryEloquent::class);
         //:end-bindings:
     }
 }

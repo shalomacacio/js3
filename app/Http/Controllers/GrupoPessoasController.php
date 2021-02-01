@@ -55,51 +55,57 @@ class GrupoPessoasController extends Controller
     public function index()
     {
     //    return  $this->getEndereco();
-          return $this->migrar();
-        // $grupoPessoas = $this->repository->all();
-        // for($i=0; $i<=1; $i++){
-        //     $cliente =  $grupoPessoas->get(0);
-        //     $result =  $this->migrar($cliente);
-        //     return $result;  
-        // }
+        //   return $this->migrar();
+        $grupoPessoas = $this->repository->all();
+        for($i=0; $i<=1; $i++){
+            $cliente =  $grupoPessoas->get(0);
+            $result =  $this->migrar($cliente);
+            return $result;  
+        }
         
         // return ($grupoPessoas);
     }
 
     public function mkLogin(){
-        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token=ac15acdc9a564b94448dcf2bcf4e673d&password=3462570e1b53236&cd_servico=9999')
+        $result = Curl::to($this->url.'/mk/WSAutenticacaoOperador.rule?sys=MK0&username=shalom.acacio&password=@Shalac79')
+        ->get();
+        $response = json_decode($result, true);
+        return $response;
+    }
+
+    public function mkAuth(){
+        $tokenUser =  $this->mkLogin()["TokenAutenticacao"];
+        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token='.$tokenUser.'&password=3462570e1b53236&cd_servico=9999')
         ->get();
         $response = json_decode($result, true);
         return $response;
     }
 
     public function novaLead(){
-        $token = $this->mkLogin()["Token"];
-        $result = Curl::to($this->url."/mk/WSMKNovaLead.rule?sys=MK0&token="
-        .$token.
+        $token = $this->mkLogin()["TokenAutenticacao"];
+        $result = Curl::to($this->url."/mk/WSMKNovaLead.rule?sys=MK0&token=".$token.
         "&cd_cliente=45800".
         "&info=teste")
         ->get();
 
         return $result;
     }
+    public function getEndereco(){
+      $token = $this->mkAuth()["Token"];
+      $response = Curl::to($this->url."/mk/WSMKListaEstruturaEnderecos.rule?sys=MK0&token=".$token )
+      ->get();
+      return $response;
+    }
 
-      public function getEndereco(){
-        $token = $this->mkLogin()["Token"];
-        $response = Curl::to($this->url."/mk/WSMKListaEstruturaEnderecos.rule?sys=MK0&token=".$token )
-        ->get();
-        return $response;
-      }
-
-    public function migrar(){
-        $token = $this->mkLogin()["Token"];
+    public function migrar($pessoa){
+        $token = $this->mkAuth()["Token"];
         $string = "(85)987047679"; //preg_replace('/[^0-9]/', '', $string)
 
          $result = Curl::to($this->url."/mk/WSMKNovaPessoa.rule?sys=MK0".
-        // "&token=".$token.
-        // "&doc=".$pessoa->cpf_cnpj.
-        // "&nome=".Str::upper($pessoa->nome).
-        // "&cep=".$pessoa->cep.
+        "&token=".$token.
+        "&doc=".$pessoa->cpf_cnpj.
+        "&nome=FulanoDeTal".//$pessoa->nome.
+        "&cep=".$pessoa->cep.
         "&cd_uf=6".
         "&cd_cidade=19".
         "&cd_bairro=394".
@@ -108,8 +114,8 @@ class GrupoPessoasController extends Controller
         "&complemento=".
         "&cd_empresa=0".
         "&email=jnet@jnece.com.br".
-        "&nascimento=".
-        "&fone=987047679".
+        "&nascimento=22041979".
+        "&fone=".preg_replace('/[^0-9]/', '', $pessoa->fone).
         "&cd_revenda=16".
         "&lat=".
         "&lon="
