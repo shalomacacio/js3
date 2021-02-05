@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @package namespace App\Entities;
  */
+
 class FrUsuario extends Authenticatable
 {
     use Notifiable, HasDefender;
@@ -27,4 +28,8 @@ class FrUsuario extends Authenticatable
     protected $table = "public.fr_usuario";
     protected $primaryKey = 'usr_codigo';
     protected $fillable = [];
+
+    public function perfis(){
+        return $this->belongsToMany('App\Entities\MkWsPerfil', 'mk_ws_perfil_ope', 'id_ope', 'cd_perfil' );
+    }
 }

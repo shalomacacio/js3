@@ -67,9 +67,12 @@ class MkCompromissosController extends Controller
         return $query
         ->whereBetween('com_inicio',[$inicio, $fim])
         ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
+        ->join('mk_pessoas as pessoa', 'mk_compromisso_pessoa.cdpessoa', '=', 'pessoa.codpessoa')
+        ->join('mk_pessoas as cliente', 'mk_compromissos.cliente', '=', 'cliente.codpessoa')
         ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
         ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
-        ->select(
+        ->select('pessoa.nome_razaosocial',
+          'cliente.nome_razaosocial as cliente','cliente.complementoendereco as complemento',
           'cdpessoa', 'cdagendagrupo' ,'com_inicio','com_titulo','com_fim',
           'mk_os.dt_hr_fechamento_tec',
           'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
@@ -80,9 +83,9 @@ class MkCompromissosController extends Controller
 
       if($request->grupos){
         $compromissos = $result->whereIn( 'cdagendagrupo', $request->grupos);
-        $mkCompromissos = $compromissos->groupBy('cdpessoa'); 
+        $mkCompromissos = $compromissos->groupBy('nome_razaosocial'); 
       }else{
-        $mkCompromissos = $result->groupBy('cdpessoa'); 
+        $mkCompromissos = $result->groupBy('nome_razaosocial'); 
       }
       if (request()->wantsJson()) {
         return response()->json([

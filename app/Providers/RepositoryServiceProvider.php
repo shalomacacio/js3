@@ -51,6 +51,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkOsItensRepository::class, \App\Repositories\MkOsItensRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkAgendaGrupoRepository::class, \App\Repositories\MkAgendaGrupoRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkApiRepository::class, \App\Repositories\MkApiRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\MkWsPerfilRepository::class, \App\Repositories\MkWsPerfilRepositoryEloquent::class);
         //:end-bindings:
     }
 }

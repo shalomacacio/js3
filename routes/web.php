@@ -64,4 +64,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/ajaxBarChart', 'DashboardController@ajaxBarChart')->name('dash.ajaxBarChart');
   });
 
+  Route::group(['prefix' => 'api'], function () {
+    Route::get('/tokenAuth', 'MkApisController@getTokenAuth')->name('tokenAuth');
+    Route::get('/dbMigracao', 'MkApisController@dbMigracao')->name('dbMigracao');
+    Route::get('/teste', 'MkApisController@teste')->name('teste');
+  });
+
 });

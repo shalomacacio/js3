@@ -34,10 +34,10 @@ class MkCompromisso extends Model implements Transformable
     //   return $truncated;
     // }
     
-    public function getCdPessoaAttribute($value) {
-      $funcionario = MkPessoa::where('codpessoa', $value)->first();
-      return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
-    }
+    // public function getCdPessoaAttribute($value) {
+    //   $funcionario = MkPessoa::where('codpessoa', $value)->first();
+    //   return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
+    // }
     public function gettipoOsAttribute($value) {
       $result =  MkOs::find($value);
       return $value;
@@ -45,5 +45,9 @@ class MkCompromisso extends Model implements Transformable
     //RELATIONSHIPS
     public function os(){
       return $this->belongsTo('App\Entities\MkOs', 'cd_integracao', 'codos');
+    }
+
+    public function cliente(){
+      return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
     }
 }

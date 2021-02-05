@@ -96,13 +96,12 @@ class MkEstoquesController extends Controller
         ->select(
           'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.cdagendagrupo'
           ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
-          ,'cliente.codpessoa' ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
+          ,'cliente.codpessoa' ,'cliente.nome_razaosocial as cliente', 'cliente.inativo', 'cliente.complementoendereco'
           ,'tecnico.usr_nome as tecnico'
           ,'consultor.usr_nome as consultor'
           ,'contrato.vlr_renovacao as plano'
           ,'classificacao.classificacao'
           ,'os_itens.qnt'
-
         )->distinct('os.codos')
         ->get();
 
@@ -151,8 +150,10 @@ class MkEstoquesController extends Controller
         $os = MkOs::find($request->codos);
         return response()->json([
           'endereco' => $os->logradouro->logradouro.' '.$os->num_endereco.' '.$os->logradouro->bairro->bairro,
-          'status' => $os->conexao->analiseauth
+          // 'status' => $os->conexao->analiseauth
         ]);
       }
+
+
 
 }

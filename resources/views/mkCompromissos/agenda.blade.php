@@ -61,7 +61,7 @@
                   <th>APP</th>
                   <th>STATUS</th>
                   <th>ONLINE</th>
-                  <th>ÍTENS</th>
+                  <th>AÇÕES</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,7 +70,7 @@
                 <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->os->ultimo_status_app_mk }}" >
                   <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
-                    {!! \Illuminate\Support\Str::before($compromisso->com_titulo, 'Aberta')  !!}
+                    {{ $compromisso->cliente}}
                   </td>
                   <td style="font-size: 9px"
                     @isset( $compromisso->os->logradouro)  title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}" @endisset >
@@ -86,6 +86,9 @@
                   <td align="center">
                     @if($compromisso->os->itens->count() > 0)
                     <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>  
+                    @endif
+                    @if($compromisso->complemento )
+                    <a title="{{Str::before($compromisso->complemento , '/') }}" href="https://www.google.com/search?q={{Str::before($compromisso->complemento , '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a> 
                     @endif
                   </td>
                 </tr>
