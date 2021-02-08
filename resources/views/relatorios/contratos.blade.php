@@ -167,7 +167,7 @@
 
 
         <div class="col-12">
-        <p class="lead"><b>Serviços: {{ $contratos->count() }} </b></p>
+        <p class="lead"><b>Total: {{ $contratos->count() }} </b></p>
         </div>
 
           <div class="row">
@@ -182,8 +182,9 @@
                   <th>Logradouro</th>
                   <th>Bairro</th>
                   <th>Cidade</th>
+                  <th>Revenda</th>
+                  <th>Plano</th>
                   <th>Vlr Plano</th>
-                  {{-- <th>Operação</th> --}}
                   <th>Inativo</th>
                   @if ($request->situacao == "S" )
                   <th>Canc dt</th>
@@ -201,6 +202,8 @@
                   <td>{{ $contrato->logradouro }},{{ $contrato->numero }} </td>
                   <td>{{ $contrato->bairro }}</td>
                   <td>{{ $contrato->cidade }}</td>
+                  <td>{{ $contrato->revenda }}</td>
+                  <td>{{ $contrato->plano }}</td>
                   <td align="center">{{ $contrato->vlr_renovacao }}</td>
                   <td align="center">{{ $contrato->inativo }}</td>
                   @if ($request->situacao == "S" )

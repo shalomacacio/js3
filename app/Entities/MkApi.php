@@ -3,11 +3,13 @@
 namespace App\Entities;
 
 use Exception;
+use App\Entities\FrUsuario;
 use Illuminate\Support\Str;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+
 
 /**
  * Class MkApi.
@@ -44,21 +46,29 @@ class MkApi extends Model implements Transformable
         return $response->TokenAutenticacao;
     }
 
-    public function getToken(){
-        $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token='.$this->token.'&password=3462570e1b53236&cd_servico=9999')
-        ->get();
-        $response = json_decode($result, true);
-        return $response;
+    public function getContraSenha(){
+        $tokenAcesso = $this->getTokenAuth();
+        $usuario =  FrUsuario::where('token_acesso', $tokenAcesso)->first();
+        return $usuario->perfis->get(0)['contra_senha'];
     }
 
-    public function createPessoa($pessoa){
-        $token = $this->getToken()->token;
+    public function getToken(){
+        $contraSenha = $this->getContraSenha();
+        $token = $this->getTokenAuth();
+        $response = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token='.$token.'&password='.$contraSenha.'&cd_servico=9999')
+        ->asJsonResponse()
+        ->get();
+        return $response->Token;
+    }
+
+    public function createPessoa(){
+        $token = $this->getToken();
 
          $result = Curl::to($this->url."/mk/WSMKNovaPessoa.rule?sys=MK0".
         "&token=".$token.
-        "&doc=".$pessoa->cpf_cnpj.
-        "&nome=Fulano%De%Tal".//$pessoa->nome.
-        "&cep=".$pessoa->cep.
+        "&doc=35676749350".//$pessoa->cpf_cnpj.
+        "&nome=FULANO%20DE%20TALZ".//$pessoa->nome.
+        "&cep=61946085".//$pessoa->cep.
         "&cd_uf=6".
         "&cd_cidade=19".
         "&cd_bairro=394".
@@ -68,13 +78,29 @@ class MkApi extends Model implements Transformable
         "&cd_empresa=0".
         "&email=jnet@jnece.com.br".
         "&nascimento=22041979".
-        "&fone=".preg_replace('/[^0-9]/', '', $pessoa->fone).
+        "&fone=85988885555".//preg_replace('/[^0-9]/', '', $pessoa->fone).
         "&cd_revenda=16".
         "&lat=".
         "&lon="
         )
         ->get();
         return $result;
+    }
+
+    public function createAtendimento(){
+      $token = $this->getToken();
+      $response = Curl::to($this->url."/mk/WSMKNovoAtendimento.rule?sys=MK0&".
+        "&token=".$token.
+        "&cd_contrato=45069".
+        "&cd_cliente=45800".
+        "&cd_processo=9".
+        "&cd_classificacao_ate=16".
+        "&origem_contato=2".
+        "&cd_grupo_visualizadores=2".
+        "&info='TesteAtendimentoAvertoViaJservices'")
+      ->get();
+      return $response;
+    
     }
 
 }

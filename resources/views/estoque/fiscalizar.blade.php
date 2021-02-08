@@ -25,9 +25,7 @@
 @section('content')
 
 <section class="content-header">
-
   <div class="container-fluid">
-
     <div class="row ">
 
       <div class="col-sm-1">
@@ -173,8 +171,7 @@
                   <th>Taxa</th>
                   <th>Status</th>
                   <th>Inativo</th>
-                  <th><center>Estoque</center></th>
-                  <th>Cliente</th>
+                  <th align="center">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -201,13 +198,14 @@
                   <td>{{ $servico->taxa  }}</td>
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
-                  <td align="center">
+                  <td>
                     @isset($servico->qnt)
                       <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-estoque" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
                     @endisset
-                  </td>
-                  <td align="center">
                       <a href="javascript:void(0)" onClick="getCliente({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-cliente" class="btn btn-xs btn-default float-right"><i class="fas fa-user"></i> </a>
+                    @if($servico->complementoendereco != null)
+                      <a title="{{ $servico->complementoendereco }}" href="https://www.google.com/search?q={{ Str::before( $servico->complementoendereco, '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a>
+                    @endif 
                   </td>
                 </tr>
                 @endforeach

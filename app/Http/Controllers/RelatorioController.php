@@ -126,8 +126,12 @@ class RelatorioController extends Controller
      */
     public function contratos(Request $request)
     {
+
+      // return dd($request);
+
         $inicio = $this->inicio;
-        $fim = $this->fim;   
+        $fim = $this->fim;  
+        $situacao = "N";
 
         if($request->situacao)
         {
@@ -137,28 +141,27 @@ class RelatorioController extends Controller
         $result = DB::connection('pgsql')->table('mk_contratos as contrato')
         ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
         ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
+        ->leftJoin('mk_revendas as revenda', 'cliente.cd_revenda', 'revenda.codrevenda')
         ->leftJoin('mk_motivo_cancelamento as motivo', 'contrato.motivo_cancelamento_2', 'motivo.codmotcancel' )
         ->leftJoin('mk_logradouros as logradouro', 'cliente.codlogradouro', 'logradouro.codlogradouro' )
         ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
         ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
+        ->where('cancelado', $situacao)
+        ->where('suspenso', 'N')
         ->select(
           'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
+          , 'revenda.nome_revenda as revenda'
           ,'cliente.contato','cliente.fone01', 'cliente.fone02'
           ,'motivo.descricao_mot_cancel as motivo'
           ,'logradouro.logradouro'
           ,'bairro.bairro'
           ,'cidade.cidade'
-          ,'plano.descricao'
+          ,'plano.descricao as plano'
         )->get();
-           
-        if($request->has('dt_inicio')){
-            $inicio = $request->dt_inicio;
-            $fim = $request->dt_fim;
-            $contratos = $result->whereBetween('dt_cancelamento', [$inicio, $fim])->sortBy('dt_cancelamento');
-        } else {
-            $contratos = $result->sortBy('adesao');
-        }
+        
+        $contratos = $result->sortBy('adesao');
+
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
     }
 

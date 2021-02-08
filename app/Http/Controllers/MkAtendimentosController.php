@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\MkApi;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -38,6 +39,7 @@ class MkAtendimentosController extends Controller
     protected $inicio;
     protected $fim;
     protected $url;
+    protected $api;
 
     /**
      * MkAtendimentosController constructor.
@@ -45,7 +47,7 @@ class MkAtendimentosController extends Controller
      * @param MkAtendimentoRepository $repository
      * @param MkAtendimentoValidator $validator
      */
-    public function __construct(MkAtendimentoRepository $repository, MkAtendimentoValidator $validator)
+    public function __construct(MkAtendimentoRepository $repository, MkAtendimentoValidator $validator, MkApi $api)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -53,7 +55,13 @@ class MkAtendimentosController extends Controller
 
         $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
         $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
+        
+        $this->api = $api;
     }
+
+
+        
+      
 
     /**
      * Display a listing of the resource.
@@ -63,12 +71,11 @@ class MkAtendimentosController extends Controller
 
     public function index()
     {
-      $token = $this->mkLogin()["Token"];
-      return $token;
+        return "não criada";
     }
 
     public function create(){
-        return view('mkAtendimentos.create');
+      return view('mkAtendimentos.create');
     }
 
     /**
@@ -105,14 +112,11 @@ class MkAtendimentosController extends Controller
     public function show($id)
     {
         $mkAtendimento = $this->repository->find($id);
-
         if (request()->wantsJson()) {
-
             return response()->json([
                 'data' => $mkAtendimento,
             ]);
         }
-
         return view('mkAtendimentos.show', compact('mkAtendimento'));
     }
 
@@ -126,7 +130,6 @@ class MkAtendimentosController extends Controller
     public function edit($id)
     {
         $mkAtendimento = $this->repository->find($id);
-
         return view('mkAtendimentos.edit', compact('mkAtendimento'));
     }
 
@@ -143,30 +146,23 @@ class MkAtendimentosController extends Controller
     public function update(MkAtendimentoUpdateRequest $request, $id)
     {
         try {
-
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
             $mkAtendimento = $this->repository->update($request->all(), $id);
-
             $response = [
                 'message' => 'MkAtendimento updated.',
                 'data'    => $mkAtendimento->toArray(),
             ];
-
             if ($request->wantsJson()) {
                 return response()->json($response);
             }
-
             return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-
             if ($request->wantsJson()) {
-
                 return response()->json([
                     'error'   => true,
                     'message' => $e->getMessageBag()
                 ]);
             }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
@@ -181,15 +177,12 @@ class MkAtendimentosController extends Controller
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
         if (request()->wantsJson()) {
-
             return response()->json([
                 'message' => 'MkAtendimento deleted.',
                 'deleted' => $deleted,
             ]);
         }
-
         return redirect()->back()->with('message', 'MkAtendimento deleted.');
     }
 
@@ -240,13 +233,13 @@ class MkAtendimentosController extends Controller
             $atendimentos = $result;
         }
         return view('relatorios.atendimentos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'inicio', 'fim'));
-      }
-      public function mkLogin(){
+    }
+
+    public function mkLogin(){
         $result = Curl::to($this->url.'/mk/WSAutenticacao.rule?sys=MK0&token=ac15acdc9a564b94448dcf2bcf4e673d&password=3462570e1b53236&cd_servico=9999')
         ->get();
         $response = json_decode($result, true);
         return $response;
-      }
-
+    }
 }
 
