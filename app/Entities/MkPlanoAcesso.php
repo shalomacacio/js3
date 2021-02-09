@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class Radacct.
+ * Class MkPlanoAcesso.
  *
  * @package namespace App\Entities;
  */
-class Radacct extends Model implements Transformable
+class MkPlanoAcesso extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -20,13 +20,9 @@ class Radacct extends Model implements Transformable
      *
      * @var array
      */
-    protected $connection = 'pgsql2';
-    protected $table = "radius.radacct";
-    protected $primaryKey = 'radacct_pkey';
+    protected $connection = 'pgsql';
+    protected $table = "public.mk_planos_acesso";
+    protected $primaryKey = 'codplano';
     protected $fillable = [];
-
-    public function conexao(){
-        return $this->belongsTo('App\Entities\MkConexao', 'username', 'username');
-      }
 
 }

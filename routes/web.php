@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/servicos',     'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',     'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',    'RelatorioController@contratos')->name('relatorio.contratos');
+    Route::get('/radacct',      'RelatorioController@radacct')->name('relatorio.radacct');
     Route::get('/contratos_os',    'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos', 'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });

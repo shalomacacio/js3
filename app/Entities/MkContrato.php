@@ -25,9 +25,12 @@ class MkContrato extends Model implements Transformable
     protected $primaryKey = 'codcontrato';
     protected $fillable = [];
 
-    public function pessoa()
-    {
+    public function pessoa(){
       return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
+    }
+
+    public function planoAcesso(){
+      return $this->belongsTo('App\Entities\MkPlanoAcesso', 'plano_acesso', 'codplano');
     }
 
 }

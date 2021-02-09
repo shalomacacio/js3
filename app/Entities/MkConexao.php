@@ -31,4 +31,24 @@ class MkConexao extends Model implements Transformable
     public function analiseauth(){
         return $this->belongsTo('App\Entities\MkAnaliseAuth', 'username', 'username');
     }
+
+    public function cliente(){
+        return $this->belongsTo('App\Entities\MkPessoa', 'codcliente', 'codpessoa');
+    }
+
+    public function contratoAtual(){
+        return $this->belongsTo('App\Entities\MkContrato', 'contrato', 'codcontrato');
+    }
+
+    public function endereco(){
+        return $this->belongsTo('App\Entities\MkLogradouro', 'logradouro', 'codlogradouro');
+    }
+
+    public function bairroConex(){
+        return $this->belongsTo('App\Entities\MkBairro', 'bairro', 'codbairro');
+    }
+
+    public function cidadeConex(){
+        return $this->belongsTo('App\Entities\MkCidade', 'cidade', 'codcidade');
+    }
 }

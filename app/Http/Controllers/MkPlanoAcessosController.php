@@ -7,35 +7,35 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\RadacctCreateRequest;
-use App\Http\Requests\RadacctUpdateRequest;
-use App\Repositories\RadacctRepository;
-use App\Validators\RadacctValidator;
+use App\Http\Requests\MkPlanoAcessoCreateRequest;
+use App\Http\Requests\MkPlanoAcessoUpdateRequest;
+use App\Repositories\MkPlanoAcessoRepository;
+use App\Validators\MkPlanoAcessoValidator;
 
 /**
- * Class RadacctsController.
+ * Class MkPlanoAcessosController.
  *
  * @package namespace App\Http\Controllers;
  */
-class RadacctsController extends Controller
+class MkPlanoAcessosController extends Controller
 {
     /**
-     * @var RadacctRepository
+     * @var MkPlanoAcessoRepository
      */
     protected $repository;
 
     /**
-     * @var RadacctValidator
+     * @var MkPlanoAcessoValidator
      */
     protected $validator;
 
     /**
-     * RadacctsController constructor.
+     * MkPlanoAcessosController constructor.
      *
-     * @param RadacctRepository $repository
-     * @param RadacctValidator $validator
+     * @param MkPlanoAcessoRepository $repository
+     * @param MkPlanoAcessoValidator $validator
      */
-    public function __construct(RadacctRepository $repository, RadacctValidator $validator)
+    public function __construct(MkPlanoAcessoRepository $repository, MkPlanoAcessoValidator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -49,40 +49,38 @@ class RadacctsController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        // $radaccts = $this->repository->all();
-        $radaccts = $this->repository->where('nasportidname', '502-93-POP-ADELIA')->first();
-        return $radaccts->conexao->cliente->nome_razaosocial;
+        $mkPlanoAcessos = $this->repository->all();
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $radaccts,
+                'data' => $mkPlanoAcessos,
             ]);
         }
 
-        return view('radaccts.index', compact('radaccts'));
+        return view('mkPlanoAcessos.index', compact('mkPlanoAcessos'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  RadacctCreateRequest $request
+     * @param  MkPlanoAcessoCreateRequest $request
      *
      * @return \Illuminate\Http\Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(RadacctCreateRequest $request)
+    public function store(MkPlanoAcessoCreateRequest $request)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $radacct = $this->repository->create($request->all());
+            $mkPlanoAcesso = $this->repository->create($request->all());
 
             $response = [
-                'message' => 'Radacct created.',
-                'data'    => $radacct->toArray(),
+                'message' => 'MkPlanoAcesso created.',
+                'data'    => $mkPlanoAcesso->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -112,16 +110,16 @@ class RadacctsController extends Controller
      */
     public function show($id)
     {
-        $radacct = $this->repository->find($id);
+        $mkPlanoAcesso = $this->repository->find($id);
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $radacct,
+                'data' => $mkPlanoAcesso,
             ]);
         }
 
-        return view('radaccts.show', compact('radacct'));
+        return view('mkPlanoAcessos.show', compact('mkPlanoAcesso'));
     }
 
     /**
@@ -133,32 +131,32 @@ class RadacctsController extends Controller
      */
     public function edit($id)
     {
-        $radacct = $this->repository->find($id);
+        $mkPlanoAcesso = $this->repository->find($id);
 
-        return view('radaccts.edit', compact('radacct'));
+        return view('mkPlanoAcessos.edit', compact('mkPlanoAcesso'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  RadacctUpdateRequest $request
+     * @param  MkPlanoAcessoUpdateRequest $request
      * @param  string            $id
      *
      * @return Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function update(RadacctUpdateRequest $request, $id)
+    public function update(MkPlanoAcessoUpdateRequest $request, $id)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $radacct = $this->repository->update($request->all(), $id);
+            $mkPlanoAcesso = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => 'Radacct updated.',
-                'data'    => $radacct->toArray(),
+                'message' => 'MkPlanoAcesso updated.',
+                'data'    => $mkPlanoAcesso->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -196,11 +194,11 @@ class RadacctsController extends Controller
         if (request()->wantsJson()) {
 
             return response()->json([
-                'message' => 'Radacct deleted.',
+                'message' => 'MkPlanoAcesso deleted.',
                 'deleted' => $deleted,
             ]);
         }
 
-        return redirect()->back()->with('message', 'Radacct deleted.');
+        return redirect()->back()->with('message', 'MkPlanoAcesso deleted.');
     }
 }

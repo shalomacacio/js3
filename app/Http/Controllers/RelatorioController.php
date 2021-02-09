@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Radacct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -186,5 +187,12 @@ class RelatorioController extends Controller
       ->count();
 
       return $result1;
+    }
+
+    public function radacct(){
+      $radaccts = Radacct::where('nasportidname', '502-93-POP-ADELIA')
+      ->select('username')
+      ->get();
+      return view('relatorios.radacct', compact('radaccts'));
     }
 }
