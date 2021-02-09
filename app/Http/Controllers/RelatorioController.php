@@ -157,9 +157,12 @@ class RelatorioController extends Controller
         )->get();
         
         $contratos = $result->sortBy('adesao');
-
         if($request->dt_inicio) {
-          $contratos = $result->whereBetween('dt_cancelamento', [$inicio, $fim])->get();
+          
+          $inicio = $request->dt_inicio;
+          $fim = $request->dt_fim;
+
+          $contratos = $result->whereBetween('dt_cancelamento',[$inicio, $fim])->sortBy('adesao');
         }
 
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
