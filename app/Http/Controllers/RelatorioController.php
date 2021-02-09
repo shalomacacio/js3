@@ -126,15 +126,11 @@ class RelatorioController extends Controller
      */
     public function contratos(Request $request)
     {
-
-      // return dd($request);
-
         $inicio = $this->inicio;
         $fim = $this->fim;  
         $situacao = "N";
 
-        if($request->situacao)
-        {
+        if($request->situacao) {
           $situacao = $request->situacao;
         }
         
@@ -151,8 +147,8 @@ class RelatorioController extends Controller
         ->select(
           'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
-          , 'revenda.nome_revenda as revenda'
           ,'cliente.contato','cliente.fone01', 'cliente.fone02'
+          ,'revenda.nome_revenda as revenda'
           ,'motivo.descricao_mot_cancel as motivo'
           ,'logradouro.logradouro'
           ,'bairro.bairro'
@@ -162,11 +158,14 @@ class RelatorioController extends Controller
         
         $contratos = $result->sortBy('adesao');
 
+        if($request->dt_inicio) {
+          $contratos = $result->whereBetween('dt_cancelamento', [$inicio, $fim])->get();
+        }
+
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
     }
 
-    public function contratos_os() 
-    {
+    public function contratos_os() {
       $result1 = DB::connection('pgsql')
       ->table('mk_os as os')
       ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
@@ -174,7 +173,6 @@ class RelatorioController extends Controller
       ->whereBetween('os.data_fechamento', ['2020-11-01', '2021-01-27'])
       ->select('codcontrato', 'codos')
       ->count();
-
 
       $result2 = DB::connection('pgsql')
       ->table('mk_contratos ')
@@ -184,11 +182,6 @@ class RelatorioController extends Controller
       ->select('codcontrato', 'codos')
       ->count();
 
-
-
       return $result1;
     }
-
-
-
 }
