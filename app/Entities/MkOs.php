@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use App\Entities\MkOsMobileAtuStatus;
 
 /**
  * Class MkOs.
@@ -51,10 +52,9 @@ class MkOs extends Model implements Transformable
     public function logradouro(){
       return $this->belongsTo('App\Entities\MkLogradouro', 'cd_logradouro', 'codlogradouro');
     }
-    public function mobileAtuStatus(){
-      return $this->belongsTo('App\Entities\MkOsMobileAtuStatus', 'ultimo_status_app_mk', 'codosatustatus');
+    public function mobileAtuStatus($value){
+      return MkOsMobileAtuStatus::where('cd_os', $value)->whereNotNull('tx_extra')->select('tx_extra')->first();
     }
-
     //HasMany
     public function itens(){
       return $this->hasMany('App\Entities\MkOsItens', 'cd_integracao', 'codos');
@@ -74,26 +74,6 @@ class MkOs extends Model implements Transformable
       }
       if(Str::containsAll($value, ['Atividade ', 'encerrada', 'sem'])){
         $value = "S.SOLUC";
-      }
-      return $value;
-    }
-
-    public function getUltimoStatusAppMkAttribute($value)
-    {
-      if(Str::contains($value, ['001'])){
-        $value = " bg-info";
-      }
-      if(Str::contains($value, ['002'])){
-        $value = " bg-teal disabled color-palette";
-      }
-      if(Str::contains($value, ['009'])){
-        $value = " badge-secondary ";
-      }
-      if(Str::contains($value, ['010'])){
-        $value = " bg-yellow disabled color-palette";
-      }
-      if(Str::contains($value, ['011'])){
-        $value = " badge-danger";
       }
       return $value;
     }

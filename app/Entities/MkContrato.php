@@ -33,4 +33,8 @@ class MkContrato extends Model implements Transformable
       return $this->belongsTo('App\Entities\MkPlanoAcesso', 'plano_acesso', 'codplano');
     }
 
+    public function conexao(){
+      return $this->hasOne('App\Entities\MkConexao', 'contrato', 'codcontrato');
+    }
+
 }

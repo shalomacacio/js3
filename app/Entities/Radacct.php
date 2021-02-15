@@ -26,7 +26,7 @@ class Radacct extends Model implements Transformable
     protected $fillable = [];
 
     public function conexao(){
-        return $this->belongsTo('App\Entities\MkConexao', 'username', 'username');
-      }
+      return $this->belongsTo('App\Entities\MkConexao', 'username', 'username');
+    }
 
 }

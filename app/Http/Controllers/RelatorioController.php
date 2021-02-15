@@ -59,14 +59,6 @@ class RelatorioController extends Controller
           $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
           $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
         }
-
-        // if ($request->has('classificacoes')){
-        //   $classiFiltro = $request->classificacoes;
-        // } else {
-        //   foreach ($classificacoes as $r) {
-        //     $classiFiltro[] = $r->codclassifenc;
-        //   }
-        // }
     
         $result = DB::connection('pgsql')->table('mk_os as os')
           ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
@@ -117,6 +109,7 @@ class RelatorioController extends Controller
             'servicos'   => $servicos
           ]);
         }
+        
         return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
       }
 
@@ -165,7 +158,6 @@ class RelatorioController extends Controller
 
           $contratos = $result->whereBetween('dt_cancelamento',[$inicio, $fim])->sortBy('adesao');
         }
-
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
     }
 

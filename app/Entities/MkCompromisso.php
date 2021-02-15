@@ -50,4 +50,25 @@ class MkCompromisso extends Model implements Transformable
     public function cliente(){
       return $this->belongsTo('App\Entities\MkPessoa', 'cliente', 'codpessoa');
     }
+
+
+    public function getCollor($value)
+    {
+      if(Str::contains($value, ['001'])){
+        $value = " bg-info";
+      }
+      if(Str::contains($value, ['002'])){
+        $value = " bg-teal disabled color-palette";
+      }
+      if(Str::contains($value, ['009'])){
+        $value = " badge-secondary ";
+      }
+      if(Str::contains($value, ['010'])){
+        $value = " bg-yellow disabled color-palette";
+      }
+      if(Str::contains($value, ['011'])){
+        $value = " badge-danger";
+      }
+      return $value;
+    }
 }

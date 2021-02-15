@@ -51,7 +51,7 @@
 
           <!-- /.card-header -->
           <div class="card-body table-responsive p-0" style="height: 200px;">
-            <table class="table table-sm  table-head-fixed  ">
+            <table class="table table-sm  table-head-fixed">
               <thead>
                 <tr>
                   <th>HORA</th>
@@ -67,7 +67,7 @@
               <tbody>
                 @foreach ($compromissos->sortBy('com_inicio') as $compromisso)
                 
-                <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->os->ultimo_status_app_mk }}" >
+                <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->getCollor($compromisso->os->ultimo_status_app_mk) }}" >
                   <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
                     {{ $compromisso->cliente}}
@@ -77,7 +77,7 @@
                     @isset( $compromisso->os->logradouro) {{ $compromisso->os->logradouro->bairro->bairro }} @endisset
                   </td>
                   <td style="font-size: 9px"> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
-                  <td style="font-size: 9px" > @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
+                  <td style="font-size: 9px" title="{{ $compromisso->os->mobileAtuStatus($compromisso->os->codos)}} "> @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->servico_prestado}}"  > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
                   <td style="font-size: 9px" align="center" > 
                     @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
@@ -91,13 +91,17 @@
                     <a title="{{Str::before($compromisso->complemento , '/') }}" href="https://www.google.com/search?q={{Str::before($compromisso->complemento , '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a> 
                     @endif
                   </td>
+                  {{-- <td> 
+                    @isset($compromisso->os-> )
+                    {{ $compromisso->os->codos }} 
+                    @endisset 
+                </td> --}}
                 </tr>
                 @endforeach
               </tbody>
             </table>
           </div>
           <!-- /.card-body -->
-
         </div>
         <!-- /.card -->
       </section>
@@ -174,31 +178,29 @@ function getEstoque(codigo){
       default:
         break;
     }
-
     return tipo_saida;
-
   }
 
-$.ajax({
-  url: "{{ route('estoque.ajaxEstoque') }}",
-  type: "GET",
-  dataType: 'json',
-  data: { codos: codigo },
-  success: function(data) {
-    // console.log(data.result);
-    $("#produtos tr").remove();
-    for(var i=0; i < data.result.length ; i++)
-      {
-      $('#produtos').append(
-      '<tr>'+
-        '<td>'+data.result[i]['descricao_produto']+'</td>'+
-        '<td>'+data.result[i]['qnt']+'</td>'+
-        '<td>'+data.result[i]['retirada']+'</td>'+
-        '<td>'+status(data.result[i]['tipo_saida'])+'</td>'+
-      '</tr>');
+  $.ajax({
+    url: "{{ route('estoque.ajaxEstoque') }}",
+    type: "GET",
+    dataType: 'json',
+    data: { codos: codigo },
+    success: function(data) {
+      // console.log(data.result);
+      $("#produtos tr").remove();
+      for(var i=0; i < data.result.length ; i++)
+        {
+        $('#produtos').append(
+        '<tr>'+
+          '<td>'+data.result[i]['descricao_produto']+'</td>'+
+          '<td>'+data.result[i]['qnt']+'</td>'+
+          '<td>'+data.result[i]['retirada']+'</td>'+
+          '<td>'+status(data.result[i]['tipo_saida'])+'</td>'+
+        '</tr>');
+        }
       }
-    }
-});
+  });
 
 }
 

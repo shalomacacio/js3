@@ -1,3 +1,4 @@
+
 <!-- jQuery -->
 <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -6,6 +7,7 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
+<script src="{{ asset('/vendor/popper/popper.js') }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->

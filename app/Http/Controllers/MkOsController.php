@@ -51,6 +51,8 @@ class MkOsController extends Controller
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $mkOs = $this->repository->first();
 
+        return $mkOs->mobileAtuStatus;
+
         if (request()->wantsJson()) {
             return response()->json([
                 'data' => $mkOs,
