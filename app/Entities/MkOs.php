@@ -53,7 +53,11 @@ class MkOs extends Model implements Transformable
       return $this->belongsTo('App\Entities\MkLogradouro', 'cd_logradouro', 'codlogradouro');
     }
     public function mobileAtuStatus($value){
-      return MkOsMobileAtuStatus::where('cd_os', $value)->whereNotNull('tx_extra')->select('tx_extra')->first();
+      $response =  MkOsMobileAtuStatus::where('cd_os', $value)
+              ->whereNotNull('tx_extra')
+              ->value('tx_extra');
+      // $response = $response->tx_extra;
+      return $response;
     }
     //HasMany
     public function itens(){
