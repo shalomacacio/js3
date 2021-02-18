@@ -67,13 +67,11 @@ class MkEstoquesController extends Controller
         if ($request->dt_filtro == 1){
           $dt_filtro = 'data_fechamento';
         }
-
         if($request->has('dt_inicio'))
         {
           $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
           $fim = Carbon::parse($request->dt_fim)->format('Y-m-d 23:59:59');
         }
-
         if ($request->has('classificacoes')){
           $classiFiltro = $request->classificacoes;
         } else {
@@ -153,7 +151,4 @@ class MkEstoquesController extends Controller
           // 'status' => $os->conexao->analiseauth
         ]);
       }
-
-
-
 }

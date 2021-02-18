@@ -56,7 +56,6 @@ class MkOs extends Model implements Transformable
       $response =  MkOsMobileAtuStatus::where('cd_os', $value)
               ->whereNotNull('tx_extra')
               ->value('tx_extra');
-      // $response = $response->tx_extra;
       return $response;
     }
     //HasMany
