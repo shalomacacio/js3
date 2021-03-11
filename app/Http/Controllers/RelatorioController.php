@@ -210,6 +210,7 @@ class RelatorioController extends Controller
     public function inadimplencias(Request $request)
     {
       $hoje = Carbon::now()->format('d-m-Y');
+      $dia = $request->dia;
 
       $result = MkFatura::where('data_vencimento', '<' ,$hoje )
       ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
@@ -222,6 +223,6 @@ class RelatorioController extends Controller
 
       $inadimplencias = $result->sortByDesc('data_vencimento');
 
-      return view('relatorios.inadimplencias', compact('inadimplencias'));
+      return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 }

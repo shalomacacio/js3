@@ -31,35 +31,35 @@
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.atendimentos') }}"   method="GET">
+        <form class="form-inline"  action="{{ route('relatorio.inadimplencias') }}"   method="GET">
           @csrf
 
-          <div class="col-12 col-sm-12 col-md-2" >
+          {{-- <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="processos[]" multiple="multiple" data-placeholder="-- PROCESSOS --" style="width: 100%;">
 
               </select>
             </div>
-          </div>
+          </div> --}}
 
-          <div class="col-12 col-sm-12 col-md-2" >
+          {{-- <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
 
               </select>
             </div>
-          </div>
+          </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-2" >
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="classificacaos[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
 
                 </select>
               </div>
-            </div>
+            </div> --}}
 
             {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
@@ -91,7 +91,8 @@
                       <i class="far fa-calendar-alt"></i>
                     </span>
                   </div>
-                  <input type="text" class="form-control float-right" id="reservation">
+                  {{-- <input type="text" class="form-control float-right" id="reservation"> --}}
+                  <input type="number" name="dia">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                   </span>
@@ -169,12 +170,14 @@
                 <tbody>
                 @foreach($inadimplencias as $inad)
                 <tr>
+                  @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
                   <td>{{ $inad->codfatura }}</td>
                   <td>{{ $inad->fone01 }}@isset ($inad->fone02) ;{{ $inad->fone02 }} @endisset</td>
                   <td>{{ $inad->nome_razaosocial }}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d-m-Y') }}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
                   <td>{{ $inad->valor_total }}</td>
+                  @endif
                 </tr>
                 @endforeach
                 </tbody>
