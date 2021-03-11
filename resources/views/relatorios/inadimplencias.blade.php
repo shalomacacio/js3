@@ -176,7 +176,7 @@
                   <td>{{ $inad->nome_razaosocial }}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d-m-Y') }}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
-                  <td>{{ $inad->valor_total }}</td>
+                  <td>{{  number_format($inad->valor_total , 2, ',', '.') }}</td>
                   @endif
                 </tr>
                 @endforeach
