@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/clientes',       'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',      'RelatorioController@contratos')->name('relatorio.contratos');
     Route::get('/radacct',        'RelatorioController@radacct')->name('relatorio.radacct');
+    Route::get('/inadimplencias', 'RelatorioController@inadimplencias')->name('relatorio.inadimplencias');
     Route::get('/contratos_os',   'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos',   'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
   });
@@ -52,10 +53,13 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'financeiro'], function () {
-    Route::get('/cancelamentos',  'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
-    Route::get('/contratos',      'RelatorioController@contratos')->name('contratos');
-    Route::get('/ajaxCliente',    'FinanceiroController@ajaxCliente')->name('ajaxCliente');
-    Route::get('/autocomplete',   'FinanceiroController@autocomplete')->name('autocomplete');
+    Route::get('/cancelamentos',      'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
+    Route::get('/contratos',          'RelatorioController@contratos')->name('contratos');
+    Route::get('/ajaxCliente',        'FinanceiroController@ajaxCliente')->name('ajaxCliente');
+    Route::get('/autocomplete',       'FinanceiroController@autocomplete')->name('autocomplete');
+    Route::get('/dashboard',          'MkMovimentacaoBancariasController@dashboard')->name('fin.dashboard');
+    Route::resource('/movimentacao',  'MkMovimentacaoCaixasController');
+  
   });
 
   Route::group(['prefix' => 'dashboard'], function () {

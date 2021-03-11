@@ -161,6 +161,12 @@
                   <p>Clientes X Nasport</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('relatorio.inadimplencias')}}" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Inadimplências</p>
+                </a>
+              </li>
               {{-- <li class="nav-item has-treeview">
                 <a href="#" class="nav-link"><i class="nav-icon fas fa-hand-holding-usd"></i>
                     <p>COMISSÕES<i class="right fas fa-angle-left"></i></p>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\MkFatura;
 use App\Entities\Radacct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -186,5 +187,41 @@ class RelatorioController extends Controller
       ->select('username')
       ->get();
       return view('relatorios.radacct', compact('radaccts'));
+    }
+
+    public function faturas(Request $request)
+    {
+      $hoje = Carbon::now()->format('d-m-Y');
+
+      $result = MkFatura::where('data_vencimento', '<' ,$hoje )
+      ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
+      ->where('liquidado', 'N')
+      ->where('excluida', 'N')
+      // ->where('estornado', 'N')
+      ->where('suspenso', 'N')
+      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total' )
+      ->get();
+
+      $faturas = $result->sortByDesc('data_vencimento');
+
+      return view('relatorios.faturas', compact('faturas'));
+    }
+
+    public function inadimplencias(Request $request)
+    {
+      $hoje = Carbon::now()->format('d-m-Y');
+
+      $result = MkFatura::where('data_vencimento', '<' ,$hoje )
+      ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
+      ->where('liquidado', 'N')
+      ->where('excluida', 'N')
+      // ->where('estornado', 'N')
+      ->where('suspenso', 'N')
+      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total' )
+      ->get();
+
+      $inadimplencias = $result->sortByDesc('data_vencimento');
+
+      return view('relatorios.inadimplencias', compact('inadimplencias'));
     }
 }

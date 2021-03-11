@@ -49,6 +49,7 @@ class MkOs extends Model implements Transformable
     public function classEncerramento(){
       return $this->belongsTo('App\Entities\MkOsClassificacaoEncerramento', 'classificacao_encerramento', 'codclassifenc');
     }
+    
     public function logradouro(){
       return $this->belongsTo('App\Entities\MkLogradouro', 'cd_logradouro', 'codlogradouro');
     }
