@@ -217,54 +217,6 @@
 
 <script>
 
-  $(function() {
-  moment.locale('pt-br');
-  $('#reservation').daterangepicker({
-    opens: 'right',
-    locale: {
-      "applyLabel": "Aplicar",
-      "daysOfWeek": [
-        "Dom",
-        "Seg",
-        "Ter",
-        "Qua",
-        "Jue",
-        "Vie",
-        "Sáb"
-    ],
-    "monthNames": [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Decembro"
-    ],
-    },
-  },
-
-  function(start, end, label) {
-      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
-      $('#dt_fim').val( end.format('YYYY-MM-DD'));
-    });
-  });
-
-
-    //Initialize Select2 Elements
-    $('.select2').select2()
-
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
-
     function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
