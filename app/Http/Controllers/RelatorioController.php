@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\MkAtendimento;
 use App\Entities\MkFatura;
 use App\Entities\Radacct;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class RelatorioController extends Controller
 {
     protected $inicio;
     protected $fim;
-  
+
     public function __construct()
     {
       $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
@@ -189,24 +190,6 @@ class RelatorioController extends Controller
       return view('relatorios.radacct', compact('radaccts'));
     }
 
-    public function faturas(Request $request)
-    {
-      $hoje = Carbon::now()->format('d-m-Y');
-
-      $result = MkFatura::where('data_vencimento', '<' ,$hoje )
-      ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
-      ->where('liquidado', 'N')
-      ->where('excluida', 'N')
-      // ->where('estornado', 'N')
-      ->where('suspenso', 'N')
-      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total' )
-      ->get();
-
-      $faturas = $result->sortByDesc('data_vencimento');
-
-      return view('relatorios.faturas', compact('faturas'));
-    }
-
     public function inadimplencias(Request $request)
     {
       $hoje = Carbon::now()->format('d-m-Y');
@@ -216,13 +199,31 @@ class RelatorioController extends Controller
       ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
       ->where('liquidado', 'N')
       ->where('excluida', 'N')
-      // ->where('estornado', 'N')
       ->where('suspenso', 'N')
       ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total' )
       ->get();
 
-      $inadimplencias = $result->sortByDesc('data_vencimento');
+      $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
+      ->where('finalizado', 'N')
+      ->whereNotNull('cd_processo')
+      ->select('cliente_cadastrado')
+      ->get('cd_processo');
+      // ->pluck('cliente_cadastrado');
 
+      $atend = $this->selectToArray($atendimentos);
+      // return dd($teste);
+
+      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');      
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
+    }
+
+    public function selectToArray($select){
+      $arr = [];
+      foreach($select as $row)
+      {
+          $arr[] =  $row;
+      }
+      return $arr;
+
     }
 }

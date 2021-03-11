@@ -57,11 +57,7 @@ class MkAtendimentosController extends Controller
         $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
         
         $this->api = $api;
-    }
-
-
-        
-      
+    }    
 
     /**
      * Display a listing of the resource.
