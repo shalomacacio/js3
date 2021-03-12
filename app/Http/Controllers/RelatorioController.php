@@ -197,10 +197,10 @@ class RelatorioController extends Controller
 
       $result = MkFatura::where('data_vencimento', '<' ,$hoje )
       ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
-      ->where('liquidado', 'N')
-      ->where('excluida', 'N')
-      ->where('suspenso', 'N')
-      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total' )
+      ->where('liquidado','N')
+      ->where('excluida','N')
+      ->where('suspenso','N')
+      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total', 'cd_pessoa' )
       ->get();
 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
@@ -208,12 +208,15 @@ class RelatorioController extends Controller
       ->whereNotNull('cd_processo')
       ->select('cliente_cadastrado')
       ->get('cd_processo');
-      // ->pluck('cliente_cadastrado');
 
       $atend = $this->selectToArray($atendimentos);
-      // return dd($teste);
 
-      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');      
+      // SOMENTE QUEM NÃO TEM CHAMADO ABERTO 
+      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      //QUEM TEM CHAMADO ABERTO 
+      // $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      //SEM NENHUM FILTRO
+      // $inadimplencias = $result->sortByDesc('data_vencimento');      
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 
@@ -221,9 +224,8 @@ class RelatorioController extends Controller
       $arr = [];
       foreach($select as $row)
       {
-          $arr[] =  $row;
+        $arr[] =  $row->cliente_cadastrado;
       }
       return $arr;
-
     }
 }
