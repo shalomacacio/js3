@@ -77,7 +77,7 @@ class RelatorioController extends Controller
             ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
             ,'tecnico.usr_nome as tecnico'
             ,'consultor.usr_nome as consultor'
-            ,'contrato.vlr_renovacao as plano', 'contrato.codcontrato'
+            ,'contrato.vlr_renovacao as plano', 'contrato.codcontrato', 'contrato_eletronico'
             ,'classificacao.classificacao'
           )->get();
         //FILTROS
@@ -213,15 +213,16 @@ class RelatorioController extends Controller
       $atend = $this->selectToArray($atendimentos);
 
       // SOMENTE QUEM NÃO TEM CHAMADO ABERTO 
-      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      // $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
       //QUEM TEM CHAMADO ABERTO 
-      // $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
       //SEM NENHUM FILTRO
       // $inadimplencias = $result->sortByDesc('data_vencimento');      
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 
-    public function selectToArray($select){
+    public function selectToArray($select)
+    {
       $arr = [];
       foreach($select as $row)
       {

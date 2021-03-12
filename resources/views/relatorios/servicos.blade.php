@@ -173,6 +173,7 @@
                   <th>Taxa</th>
                   <th>Status</th>
                   <th>Inativo</th>
+                  <th>Aceite</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -194,6 +195,7 @@
                   <td>{{ $servico->taxa }}</td>
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
+                  <td>{{ $servico->contrato_eletronico }}</td>
                 </tr>
                 @endforeach
                 </tbody>
