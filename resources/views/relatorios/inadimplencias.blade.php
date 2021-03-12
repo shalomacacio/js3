@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-{{-- <style>
+{{-- 
+  <style>
   td {
     font-size: 9px;
   }
@@ -15,7 +16,8 @@
     .card-header {
     padding: .4rem 1.25rem;
   }
-</style> --}}
+</style> 
+--}}
 @endsection
 
 @section('content')
@@ -151,7 +153,7 @@
 
 
         <div class="col-12">
-        <p class="lead"><b>Faturas: {{ $inadimplencias->count() }} </b></p>
+        <p class="lead"><b>Faturas <div id="total"> </div> </b></p>
         </div>
 
           <div class="row">
@@ -174,9 +176,9 @@
                   @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
                   <td>{{ $inad->fone01 }}@isset ($inad->fone02) ;{{ $inad->fone02 }} @endisset</td>
                   <td>{{ $inad->nome_razaosocial }}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d-m-Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y') }}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
-                  <td>{{  number_format($inad->valor_total , 2, ',', '.') }}</td>
+                  <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
                   @endif
                 </tr>
                 @endforeach
@@ -247,6 +249,12 @@
         downloadLink.click();
     }
 }
+
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+      var rowCount = $('#tblData >tbody >tr').length;
+      alert("Total :" + rowCount);
+    });
 
 </script>
 

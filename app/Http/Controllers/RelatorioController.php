@@ -200,6 +200,7 @@ class RelatorioController extends Controller
       ->where('liquidado','N')
       ->where('excluida','N')
       ->where('suspenso','N')
+      ->where('valor_total', '>', 0)
       ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total', 'cd_pessoa' )
       ->get();
 
