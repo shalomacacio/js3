@@ -213,9 +213,9 @@ class RelatorioController extends Controller
       $atend = $this->selectToArray($atendimentos);
 
       // SOMENTE QUEM NÃO TEM CHAMADO ABERTO 
-      // $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
       //QUEM TEM CHAMADO ABERTO 
-      $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
+      // $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
       //SEM NENHUM FILTRO
       // $inadimplencias = $result->sortByDesc('data_vencimento');      
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
