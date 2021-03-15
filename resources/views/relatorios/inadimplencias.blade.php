@@ -174,9 +174,9 @@
                 @foreach($inadimplencias as $inad)
                 <tr>
                   @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
-                  <td>{{ $inad->fone01 }}@isset ($inad->fone02) ;{{ $inad->fone02 }} @endisset</td>
+                  <td>{{ $inad->fone01 }}</td>
                   <td>{{ $inad->nome_razaosocial }}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                   <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
                   <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
                   @endif

@@ -192,7 +192,7 @@ class RelatorioController extends Controller
 
     public function inadimplencias(Request $request)
     {
-      $hoje = Carbon::now()->format('d-m-Y');
+      $hoje = Carbon::now()->format('Y-m-d');
       $dia = $request->dia;
 
       $result = MkFatura::where('data_vencimento', '<' ,$hoje )
@@ -201,12 +201,11 @@ class RelatorioController extends Controller
       ->where('excluida','N')
       ->where('suspenso','N')
       ->where('valor_total', '>', 0)
-      ->select('codfatura','data_vencimento', 'nome_razaosocial', 'fone01', 'fone02', 'valor_total', 'cd_pessoa' )
+      ->select('codfatura','data_vencimento','dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02', 'valor_total', 'cd_pessoa')
       ->get();
 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
       ->where('finalizado', 'N')
-      ->whereNotNull('cd_processo')
       ->select('cliente_cadastrado')
       ->get('cd_processo');
 
@@ -220,6 +219,7 @@ class RelatorioController extends Controller
       // $inadimplencias = $result->sortByDesc('data_vencimento');      
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
+
 
     public function selectToArray($select)
     {
