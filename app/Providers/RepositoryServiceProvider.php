@@ -57,6 +57,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkMovimentacaoCaixaRepository::class, \App\Repositories\MkMovimentacaoCaixaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkMovimentacaoBancariaRepository::class, \App\Repositories\MkMovimentacaoBancariaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkFaturaRepository::class, \App\Repositories\MkFaturaRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\MkContaRepository::class, \App\Repositories\MkContaRepositoryEloquent::class);
         //:end-bindings:
     }
 }

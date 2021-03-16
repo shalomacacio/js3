@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entities\MkAtendimento;
+use App\Entities\MkContrato;
 use App\Entities\MkFatura;
 use App\Entities\Radacct;
 use Illuminate\Http\Request;
@@ -181,6 +182,22 @@ class RelatorioController extends Controller
       ->count();
 
       return $result1;
+    }
+
+    public function contratos_faturas(Request $request) {
+
+      if(!$request->dt_inicio){
+        $inicio = $this->inicio;
+        $fim = $this->fim;
+      } else {
+        $inicio = $request->dt_inicio;
+        $fim = $request->dt_fim;
+      }    
+
+      $contratos = MkContrato::whereBetween('data_hora_ativacao', [$inicio, $fim ])
+      ->get();
+
+      return view('relatorios.contratos_faturas', compact('contratos', 'inicio', 'fim'));
     }
 
     public function radacct(){

@@ -5,8 +5,7 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-{{-- 
-  <style>
+<style>
   td {
     font-size: 9px;
   }
@@ -16,8 +15,7 @@
     .card-header {
     padding: .4rem 1.25rem;
   }
-</style> 
---}}
+</style>
 @endsection
 
 @section('content')
@@ -33,59 +31,21 @@
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.inadimplencias') }}"   method="GET">
+        <form class="form-inline"  action="{{ route('relatorio.contratos_faturas') }}"   method="GET">
           @csrf
 
-          {{-- <div class="col-12 col-sm-12 col-md-2" >
+          <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
-              <select class="select2bs4"  name="processos[]" multiple="multiple" data-placeholder="-- PROCESSOS --" style="width: 100%;">
-
+              <select class="select2bs4"  name="situacao" data-placeholder="-- SITUACAO --" style="width: 100%;">               
+                <option disabled selected value=""> -- Situacao -- </option>
+                <option value="N"> Ativo </option>
+                <option value="S"> Inativo </option>
               </select>
             </div>
-          </div> --}}
-
-          {{-- <div class="col-12 col-sm-12 col-md-2" >
-            <!-- select -->
-            <div class="form-group">
-              <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
-
-              </select>
-            </div>
-          </div> --}}
-
-            {{-- <div class="col-12 col-sm-12 col-md-2" >
-              <!-- select -->
-              <div class="form-group">
-                <select class="select2bs4"  name="classificacaos[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
-
-                </select>
-              </div>
-            </div> --}}
-
-            {{-- <div class="col-12 col-sm-12 col-md-2" >
-              <!-- select -->
-              <div class="form-group">
-                <select class="select2bs4"  name="consultores[]" multiple="multiple" data-placeholder="-- CONSULTORES --" style="width: 100%;">
-                  @foreach($consultores as $consultor)
-                    <option value="{{ $consultor->usr_codigo }}"> {{ $consultor->usr_nome }} </option>
-                  @endforeach
-                </select>
-              </div>
-            </div> --}}
-{{-- 
-            <div class="col-12 col-sm-12 col-md-2" >
-              <!-- select -->
-              <div class="form-group">
-                <select class="select2bs4"  name="classificacoes[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
-                  @foreach($classificacoes as $classificacao)
-                    <option value="{{ $classificacao->codclassifenc }}"> {{ $classificacao->classificacao }} </option>
-                  @endforeach
-                </select>
-              </div>
-            </div> --}}
-
-            <div class="col-12 col-sm-12 col-md-3" >
+          </div> 
+          
+          <div class="col-12 col-sm-12 col-md-3" >
               <div class="form-group">
                 <div class="input-group input-group-sm">
                   <div class="input-group-prepend">
@@ -93,17 +53,16 @@
                       <i class="far fa-calendar-alt"></i>
                     </span>
                   </div>
-                  {{-- <input type="text" class="form-control float-right" id="reservation"> --}}
-                  <input type="number" name="dia">
+                  <input type="text" class="form-control float-right" id="reservation">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                   </span>
                 </div>
               </div>
-            </div>
+          </div>
 
-            {{-- <input type="hidden" name="dt_inicio" id="dt_inicio">
-            <input type="hidden" name="dt_fim" id="dt_fim"> --}}
+            <input type="hidden" name="dt_inicio" id="dt_inicio">
+            <input type="hidden" name="dt_fim" id="dt_fim">
 
         </form>
       </div>
@@ -134,52 +93,61 @@
             <div class="col-sm-4 invoice-col">
               Data Inicial
               <address>
-                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::parse($inicio)->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col">
               Data Final
               <address>
-                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::parse($fim)->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>RELATÓRIO DE INADIMPLÊNCIAS </h4></center>
+          <center><h4>RELATÓRIO DE CONTRATOS x FATURAS </h4></center>
           <br/>
           <!-- Table row -->
 
 
         <div class="col-12">
-        <p class="lead"><b>Faturas <div id="total"> </div> </b></p>
+        <p class="lead"><b>Serviços: {{ $contratos->count() }} </b></p>
         </div>
 
           <div class="row">
             <div class="col-12 table-responsive">
-              <table class="table table-striped table-sm" >
-                <thead>
-                  <tr>
-                    <th style="width: 300px">TELEFONE</th>
-                    <th style="width: 1000px">CLIENTE</th>
-                    <th>VENCIMENTO</th>
-                    <th>DIAS</th>
-                    <th>VALOR</th>
-                  </tr>
-                  </thead>
-              </table>
               <table class="table table-striped table-sm " id="tblData" >
-                <tbody>
-                @foreach($inadimplencias as $inad)
+                <thead>
                 <tr>
-                  @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
-                  <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
-                  <td>{{ $inad->nome_razaosocial }}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
-                  <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
-                  @endif
+                  <th>Contrato</th>
+                  <th>Ativação</th>
+                  <th>Cliente</th>
+                  <th>Taxa</th>
+                  <th>Parc 1</th>
+                  <th>Parc 2</th>
+                  <th>Cancelado</th>
+                  <th>Dt Cancel</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($contratos as $contrato)
+                <tr>
+                  <td>{{ $contrato->codcontrato }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->data_hora_ativacao)->format('d-m-Y') }}</td>
+                  <td>{{ $contrato->pessoa->nome_razaosocial }}</td>
+                  <td>
+                    {{ $contrato->pessoa->faturas->get(0)->valor_total }}
+                  </td>
+                  <td> # </td>
+                  <td> # </td>
+                  <td>{{ $contrato->cancelado }}</td>
+                  <td>@isset($contrato->dt_cancelamento){{ \Carbon\Carbon::parse($contrato->dt_cancelamento)->format('d-m-Y')}}@endisset</td>
+
+                  
+                  
+                  {{-- <td>{{ $contrato->cd_operacao }}</td> --}}
+                  <td>{{ $contrato->inativo }}</td>
                 </tr>
                 @endforeach
                 </tbody>
@@ -219,6 +187,53 @@
 
 <script>
 
+  $(function() {
+  moment.locale('pt-br');
+  $('#reservation').daterangepicker({
+    opens: 'right',
+    locale: {
+      "applyLabel": "Aplicar",
+      "daysOfWeek": [
+        "Dom",
+        "Seg",
+        "Ter",
+        "Qua",
+        "Jue",
+        "Vie",
+        "Sáb"
+    ],
+    "monthNames": [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Decembro"
+    ],
+    },
+  },
+
+  function(start, end, label) {
+      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+      $('#dt_fim').val( end.format('YYYY-MM-DD'));
+    });
+  });
+
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
     function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
@@ -227,7 +242,6 @@
 
     // Specify file name
     filename = filename?filename+'.xls':'excel_data.xls';
-
     // Create download link element
     downloadLink = document.createElement("a");
 
@@ -241,20 +255,12 @@
     }else{
         // Create a link to the file
         downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-
         // Setting the file name
         downloadLink.download = filename;
-
         //triggering the function
         downloadLink.click();
     }
 }
-
-    // A $( document ).ready() block.
-    $( document ).ready(function() {
-      var rowCount = $('#tblData >tbody >tr').length;
-      alert("Total :" + rowCount);
-    });
 
 </script>
 

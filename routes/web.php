@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/inadimplencias', 'RelatorioController@inadimplencias')->name('relatorio.inadimplencias');
     Route::get('/contratos_os',   'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos',   'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
+    Route::get('/contratos/faturas','RelatorioController@contratos_faturas')->name('relatorio.contratos_faturas');
   });
 
   Route::group(['prefix' => 'estoque'], function () {

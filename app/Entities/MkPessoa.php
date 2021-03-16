@@ -33,6 +33,10 @@ class MkPessoa extends Model implements Transformable
       return $this->hasMany('App\Entities\MkBairro','codbairro', 'codbairro' );
     }
 
+    public function faturas(){
+      return $this->hasMany('App\Entities\MkFatura','cd_pessoa', 'codpessoa' );
+    }
+
     public function contratos(){
       return $this->hasManyThrough('App\Entities\MkContrato', 'App\Entities\MkOs', 'country_id', 'user_id');
     }
