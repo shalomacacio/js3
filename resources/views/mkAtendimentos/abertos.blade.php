@@ -39,7 +39,7 @@
 
           <!-- /.card-header -->
           <div class="card-body table-responsive p-0" style="height: 500px;">
-            <table class="table table-sm  table-head-fixed">
+            <table class="table table-sm  table-head-fixed" id="tblData">
               <thead>
                 <tr>
                   <th>COD </th>
@@ -52,8 +52,8 @@
                   <th>CELULAR</th>
                   <th>TELEFONE</th>
                   <th>TEL COM</th>
-                  <th>PRCESSO</th>
-                  <th>SUBPRCESSO</th>
+                  <th>PROCESSO</th>
+                  <th>SUBPROCESSO</th>
                   <th>CLASSIF</th>
                 </tr>
               </thead>
@@ -96,11 +96,23 @@
 @section('javascript')
 <!-- DataTables -->
 <script src="{{ asset('/vendor/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('/vendor/plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/select2/js/select2.full.min.js') }}"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
 
 <script>
+  
+  $(document).ready(function() {
+      $('#tblData').DataTable({
+        "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+          },
+        "paging":   false,
+        "ordering": true,
+        "info":     false
+      });
+  } );
   //atualiza página a cada 1min 
   setInterval(function(){  window.location.reload(); }, 120000);
 
