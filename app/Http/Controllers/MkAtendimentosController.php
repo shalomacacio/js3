@@ -284,7 +284,7 @@ class MkAtendimentosController extends Controller
             $atendimentos = $result;
         }
 
-        $atendimentos = $atendimentos->sortBy('dt_abertura')->sortBy('logradouro');
+        $atendimentos = $atendimentos->sortBy('logradouro');
         return view('mkAtendimentos.abertos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'request'));
     }
    
