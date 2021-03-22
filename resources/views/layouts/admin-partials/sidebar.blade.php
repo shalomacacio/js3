@@ -35,7 +35,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('atendimentos.abertos') }}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>ATEND ABERTOS</p>
                 </a>
