@@ -109,8 +109,9 @@
               "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
           },
         "paging":   false,
-        "ordering": true,
-        "info":     false
+        "info":     false,
+        "bFilter": false,
+        "ordering": true
       });
   } );
   //atualiza página a cada 1min 
