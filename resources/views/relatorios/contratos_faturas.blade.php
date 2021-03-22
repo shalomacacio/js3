@@ -121,33 +121,44 @@
                 <thead>
                 <tr>
                   <th>Contrato</th>
-                  <th>Ativação</th>
+                  <th>Adesao</th>
+                  <th>Ativacao</th>
                   <th>Cliente</th>
+                  <th>Vencimento</th>
                   <th>Taxa</th>
                   <th>Parc 1</th>
-                  <th>Parc 2</th>
                   <th>Cancelado</th>
+                  <th>Suspenso</th>
                   <th>Dt Cancel</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($contratos as $contrato)
                 <tr>
+                  
                   <td>{{ $contrato->codcontrato }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
                   <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->data_hora_ativacao)->format('d-m-Y') }}</td>
-                  <td>{{ $contrato->pessoa->nome_razaosocial }}</td>
+                  <td>{{ $contrato->cliente }}</td>
+                  <td>{{ \Carbon\Carbon::parse($contrato->data_vencimento)->format('d-m-Y') }}</td>
                   <td>
-                    {{ $contrato->pessoa->faturas->get(0)->valor_total }}
-                  </td>
-                  <td> # </td>
-                  <td> # </td>
+                    @foreach ($contrato->planoContas as $plano)
+                     @if ($plano->unidade_financeira === '01.05.06' || $plano->unidade_financeira === '01.05.07' )
+                      {{ $plano->valor_lancamento }} 
+                     @endif
+                    @endforeach
+                  </td> 
+                  <td>
+                    @foreach ($contrato->planoContas as $plano)
+                     @if ($plano->parcela_atual === 1 || $plano->unidade_financeira === '01.01.01'   )
+                      {{ $plano->valor_lancamento }} / {{ $plano->liquidado }} 
+                     @endif
+                    @endforeach
+                  </td> 
+                  
                   <td>{{ $contrato->cancelado }}</td>
-                  <td>@isset($contrato->dt_cancelamento){{ \Carbon\Carbon::parse($contrato->dt_cancelamento)->format('d-m-Y')}}@endisset</td>
-
-                  
-                  
-                  {{-- <td>{{ $contrato->cd_operacao }}</td> --}}
-                  <td>{{ $contrato->inativo }}</td>
+                  <td>{{ $contrato->suspenso }}</td>
+                  <td>{{ $contrato->dt_cancelamento }}</td>
                 </tr>
                 @endforeach
                 </tbody>

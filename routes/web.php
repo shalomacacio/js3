@@ -21,13 +21,10 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/logout',       'AuthController@logout')->name('logout');
   Route::get('/mkOs',         'MkOsController@index')->name('mkOs.index');
  
-  //WebServices
-  Route::resource('atendimentos', 'MkAtendimentosController');
-  Route::resource('clientes',     'GrupoPessoasController');
-  Route::resource('/contratos',   'MkContratosController');
-  Route::resource('/analise',     'MkAnaliseAuthsController');
+
 
   Route::get('/agenda',       'MkCompromissosController@agenda')->name('mkCompromissos.agenda');
+  Route::get('/atendimentos/abertos', 'MkAtendimentosController@abertos')->name('atendimentos.abertos');
   Route::get('/agendaStatus', 'MkCompromissosController@agendaStatus')->name('mkCompromissos.agendaStatus');
 
   Route::group(['prefix' => 'suporte'], function () {
@@ -73,5 +70,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dbMigracao', 'MkApisController@dbMigracao')->name('dbMigracao');
     Route::get('/teste',      'MkApisController@teste')->name('teste');
   });
+
+
+  //WebServices
+  Route::resource('atendimentos', 'MkAtendimentosController');
+  Route::resource('clientes',     'GrupoPessoasController');
+  Route::resource('/contratos',   'MkContratosController');
+  Route::resource('/analise',     'MkAnaliseAuthsController');
 
 });

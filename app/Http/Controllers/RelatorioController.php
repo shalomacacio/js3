@@ -194,11 +194,35 @@ class RelatorioController extends Controller
         $fim = $request->dt_fim;
       }    
 
-      $contratos = MkContrato::whereBetween('data_hora_ativacao', [$inicio, $fim ])
+      $contratos = MkContrato::whereBetween('adesao', [$inicio, $fim ])
       ->get();
 
       return view('relatorios.contratos_faturas', compact('contratos', 'inicio', 'fim'));
     }
+
+//      public function contratos_faturas(Request $request) {
+
+//       if(!$request->dt_inicio){
+//         $inicio = $this->inicio;
+//         $fim = $this->fim;
+//       } else {
+//         $inicio = $request->dt_inicio;
+//         $fim = $request->dt_fim;
+//       }    
+// // codvinculado
+//       $result = DB::connection('pgsql')->table('mk_contratos as c')->whereBetween('c.adesao', [$inicio, $fim ])
+//                     ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
+//                     ->join('mk_plano_contas as pc', 'c.codcontrato','pc.codvinculado')
+//                     ->select( 'p.nome_razaosocial','p.inativo',
+//                               'c.codcontrato','c.adesao', 'c.data_hora_ativacao', 'c.dt_cancelamento','c.cancelado','c.suspenso', 
+//                               'pc.codvinculado', 'pc.parcela_atual', 'pc.valor_lancamento' , 'pc.liquidado', 'pc.data_vencimento'
+//                             )
+//                     ->where('pc.parcela_atual',1)
+//                     ->get()
+//                     ->sortBy('adesao');
+
+//       return view('relatorios.contratos_faturas', compact('contratos', 'inicio', 'fim'));
+//     }
 
     public function radacct(){
       $radaccts = Radacct::whereIn('nasportid',[3167309, 3166710])

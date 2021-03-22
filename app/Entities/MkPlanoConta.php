@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class MkConta.
+ * Class MkPlanoConta.
  *
  * @package namespace App\Entities;
  */
-class MkConta extends Model implements Transformable
+class MkPlanoConta extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -21,10 +21,8 @@ class MkConta extends Model implements Transformable
      * @var array
      */
     protected $connection = 'pgsql';
-    protected $table = "public.codconta";
-    protected $primaryKey = 'codcontap';
+    protected $table = "public.mk_plano_contas";
+    protected $primaryKey = 'codconta';
     protected $fillable = [];
-
-    
 
 }

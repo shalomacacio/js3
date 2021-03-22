@@ -237,5 +237,57 @@ class MkAtendimentosController extends Controller
         $response = json_decode($result, true);
         return $response;
     }
+
+    public function abertos(Request $request) {
+
+        $processos = MkAtendimentoProcesso::all();
+        $subprocessos = MkAtendimentoSubProcesso::all();
+        $classificacaos = MkAtendimentoClassificacao::all();
+    
+        $result = DB::connection('pgsql')->table('mk_atendimento as atendimento')
+                    ->join('mk_pessoas as pessoa', 'atendimento.cliente_cadastrado', 'pessoa.codpessoa')
+                    ->leftjoin('mk_cidades as cidade', 'atendimento.cidade', 'cidade.codcidade' )
+                    ->leftjoin('mk_bairros as bairro', 'atendimento.bairro', 'bairro.codbairro' )
+                    ->leftjoin('mk_logradouros as logradouro', 'atendimento.logradouro', 'logradouro.codlogradouro' )
+                    ->leftjoin('mk_ate_processos as processo', 'atendimento.cd_processo', 'processo.codprocesso')
+                    ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
+                    ->leftjoin('mk_atendimento_classificacao as classificacao', 'atendimento.classificacao_atendimento', 'classificacao.codatclass')
+                    ->where('finalizado', 'N')
+                    ->whereNotNull('cliente_cadastrado')
+                    ->whereNotNull('classificacao_atendimento')
+                    ->whereNotNull('cd_subprocesso')
+                    ->select(
+                    'atendimento.codatendimento','atendimento.dt_abertura', 'atendimento.operador_abertura', 
+                    'atendimento.como_foi_contato', 'atendimento.cd_processo', 'atendimento.cd_subprocesso',
+                    'atendimento.classificacao_atendimento',
+                    'pessoa.nome_razaosocial as cliente', 'pessoa.numero','pessoa.contato', 'pessoa.fone01', 'pessoa.fone02', 'pessoa.fax',
+                    'bairro.bairro', 'cidade.cidade', 'logradouro.logradouro',
+                    'processo.nome_processo',
+                    'subprocesso.nome_subprocesso',
+                    'classificacao.descricao as classificacao'
+                    )
+                    ->get();
+        //FILTROS
+        if($request->processos){
+            $procFiltro = $request->processos;
+            $atendimentos = $result
+            ->whereIn('cd_processo', $procFiltro );
+        } else if ($request->subprocessos){
+            $subFiltro = $request->subprocessos;
+            $atendimentos = $result
+            ->whereIn('cd_subprocesso', $subFiltro );
+        } else if( $request->classificacaos ){
+            $classFiltro = $request->classificacaos;
+            $atendimentos = $result
+            ->whereIn('classificacao_atendimento', $classFiltro );
+        } else {
+            $atendimentos = $result;
+        }
+
+        $atendimentos = $atendimentos->sortBy('dt_abertura')->sortBy('logradouro');
+        return view('mkAtendimentos.abertos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'request'));
+    }
+   
+
 }
 
