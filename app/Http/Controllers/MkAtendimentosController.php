@@ -287,6 +287,12 @@ class MkAtendimentosController extends Controller
         $atendimentos = $atendimentos->sortBy('logradouro');
         return view('mkAtendimentos.abertos', compact('atendimentos','processos','subprocessos', 'classificacaos', 'request'));
     }
+
+
+    public function osPorAtend(Request $request){
+        
+
+    }
    
 
 }

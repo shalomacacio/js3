@@ -33,7 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'relatorios'], function () {
-    Route::get('/teste',          'RadacctsController@index')->name('teste');
+    // Route::get('/teste',          'RadacctsController@index')->name('teste');
     Route::get('/servicos',       'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',       'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',      'RelatorioController@contratos')->name('relatorio.contratos');
@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/contratos_os',   'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos',   'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
     Route::get('/contratos/faturas','RelatorioController@contratos_faturas')->name('relatorio.contratos_faturas');
+    //teste
+    Route::get('/teste','RelatorioController@teste')->name('relatorios.teste');
+
   });
 
   Route::group(['prefix' => 'estoque'], function () {
@@ -68,7 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::group(['prefix' => 'api'], function () {
     Route::get('/tokenAuth',  'MkApisController@getTokenAuth')->name('tokenAuth');
     Route::get('/dbMigracao', 'MkApisController@dbMigracao')->name('dbMigracao');
-    Route::get('/teste',      'MkApisController@teste')->name('teste');
+    // Route::get('/teste',      'MkApisController@teste')->name('teste');
   });
 
 

@@ -46,9 +46,9 @@ class MkApisController extends Controller
         }
      }
 
-    public function teste(Request $request){
-        return dd($request);
-        // return $this->api->createAtendimento();
-    }
+    // public function teste(Request $request){
+    //     return dd($request);
+    //     // return $this->api->createAtendimento();
+    // }
 
 }

@@ -271,4 +271,10 @@ class RelatorioController extends Controller
       }
       return $arr;
     }
+
+    public function teste(){
+      
+      return view('relatorios.teste');
+      
+    }
 }

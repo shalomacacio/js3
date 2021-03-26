@@ -85,6 +85,7 @@ class MkEstoquesController extends Controller
         ->leftJoin('mk_agenda_grupo as grupo', 'os.cdagendagrupo', 'grupo.codagenda_grupo')
         ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
         ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
+        ->leftJoin('mk_contratos_aceite as aceite', 'contrato.codcontrato', 'aceite.contrato')
         ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
         ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
         ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
@@ -100,6 +101,7 @@ class MkEstoquesController extends Controller
           ,'contrato.vlr_renovacao as plano'
           ,'classificacao.classificacao'
           ,'os_itens.qnt'
+          ,'aceite.aceito', 'aceite.local_aceite'
         )->distinct('os.codos')
         ->get();
 

@@ -171,6 +171,7 @@
                   <th>Taxa</th>
                   <th>Status</th>
                   <th>Inativo</th>
+                  <th>Aceito</th>
                   <th align="center">Ações</th>
                 </tr>
                 </thead>
@@ -198,6 +199,7 @@
                   <td>{{ $servico->taxa  }}</td>
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
+                  <td>{{ $servico->aceito  }}</td>
                   <td>
                     @isset($servico->qnt)
                       <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-estoque" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
@@ -207,6 +209,7 @@
                       <a title="{{ $servico->complementoendereco }}" href="https://www.google.com/search?q={{ Str::before( $servico->complementoendereco, '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a>
                     @endif 
                   </td>
+                  
                 </tr>
                 @endforeach
                 </tbody>
@@ -248,13 +251,27 @@
 
 <script>
 
+  // $(document).ready(function() {
+  //     var table = $('#tblData').DataTable({
+  //       "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json" },
+  //       "dom": 'Bfrtip',
+  //       "buttons": [ 'copy', 'csv', 'excel', 'pdf', 'print'],
+  //       "paging":   false,
+  //       "info":     false,
+  //       "bFilter": false,
+  //       "ordering": true,
+  //       "lengthChange": false,
+  //     });
+  // } );
+
   $(document).ready(function() {
-      $('#tblData').DataTable({
-        "language": {
-              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
-          }
-      });
-  } );
+    $('#tblData').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
 
   $(function() {
   moment.locale('pt-br');
