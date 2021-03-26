@@ -267,9 +267,13 @@
   $(document).ready(function() {
     $('#tblData').DataTable( {
         dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        language: {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json" },
+        buttons: ['csv', 'excel', 'pdf', 'print'],
+        paging:   false,
+        info:     false,
+        bFilter: false,
+        ordering: false,
+        lengthChange: false,
     } );
 } );
 
