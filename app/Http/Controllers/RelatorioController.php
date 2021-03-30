@@ -200,30 +200,6 @@ class RelatorioController extends Controller
       return view('relatorios.contratos_faturas', compact('contratos', 'inicio', 'fim'));
     }
 
-//      public function contratos_faturas(Request $request) {
-
-//       if(!$request->dt_inicio){
-//         $inicio = $this->inicio;
-//         $fim = $this->fim;
-//       } else {
-//         $inicio = $request->dt_inicio;
-//         $fim = $request->dt_fim;
-//       }    
-// // codvinculado
-//       $result = DB::connection('pgsql')->table('mk_contratos as c')->whereBetween('c.adesao', [$inicio, $fim ])
-//                     ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
-//                     ->join('mk_plano_contas as pc', 'c.codcontrato','pc.codvinculado')
-//                     ->select( 'p.nome_razaosocial','p.inativo',
-//                               'c.codcontrato','c.adesao', 'c.data_hora_ativacao', 'c.dt_cancelamento','c.cancelado','c.suspenso', 
-//                               'pc.codvinculado', 'pc.parcela_atual', 'pc.valor_lancamento' , 'pc.liquidado', 'pc.data_vencimento'
-//                             )
-//                     ->where('pc.parcela_atual',1)
-//                     ->get()
-//                     ->sortBy('adesao');
-
-//       return view('relatorios.contratos_faturas', compact('contratos', 'inicio', 'fim'));
-//     }
-
     public function radacct(){
       $radaccts = Radacct::whereIn('nasportid',[3167309, 3166710])
       ->select('username')
@@ -236,13 +212,16 @@ class RelatorioController extends Controller
       $hoje = Carbon::now()->format('Y-m-d');
       $dia = $request->dia;
 
-      $result = MkFatura::where('data_vencimento', '<' ,$hoje )
-      ->join('mk_pessoas as pessoa','cd_pessoa', 'codpessoa')
-      ->where('liquidado','N')
-      ->where('excluida','N')
-      ->where('suspenso','N')
-      ->where('valor_total', '>', 0)
-      ->select('codfatura','data_vencimento','dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02', 'valor_total', 'cd_pessoa')
+      $result = DB::connection('pgsql') ->table('mk_faturas as f')
+      ->where('f.data_vencimento', '<' ,$hoje )
+      ->join('mk_pessoas as p','f.cd_pessoa', 'p.codpessoa')
+      ->where('f.liquidado','N')
+      ->where('f.excluida','N')
+      ->where('f.suspenso','N')
+      ->where('f.valor_total', '>', 0)
+      ->whereRaw('DATE(NOW()) - data_vencimento > ?', [6])
+      ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02', 
+      'valor_total', 'cd_pessoa', DB::raw( 'DATE(NOW()) - data_vencimento  as dias'))
       ->get();
 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
@@ -273,8 +252,6 @@ class RelatorioController extends Controller
     }
 
     public function teste(){
-      
       return view('relatorios.teste');
-      
     }
 }

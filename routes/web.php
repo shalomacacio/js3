@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'AuthController@login')->name('login');
+
 Route::post('/auth', 'AuthController@auth')->name('auth');
 
 Route::group(['middleware' => ['auth']], function () {
@@ -21,8 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/logout',       'AuthController@logout')->name('logout');
   Route::get('/mkOs',         'MkOsController@index')->name('mkOs.index');
  
-
-
   Route::get('/agenda',       'MkCompromissosController@agenda')->name('mkCompromissos.agenda');
   Route::get('/atendimentos/abertos', 'MkAtendimentosController@abertos')->name('atendimentos.abertos');
   Route::get('/agendaStatus', 'MkCompromissosController@agendaStatus')->name('mkCompromissos.agendaStatus');
@@ -33,7 +32,6 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'relatorios'], function () {
-    // Route::get('/teste',          'RadacctsController@index')->name('teste');
     Route::get('/servicos',       'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',       'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',      'RelatorioController@contratos')->name('relatorio.contratos');

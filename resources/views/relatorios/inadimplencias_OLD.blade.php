@@ -5,21 +5,19 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-<style>
-    td {
-      font-size: 10px;
-    }
+{{-- 
+  <style>
+  td {
+    font-size: 9px;
+  }
     th {
-      font-size: 11px;
-    }
+    font-size: 11px;
+  }
     .card-header {
-      padding: .4rem 1.25rem;
-    }
-
-    .compensacao {
-      margin-top: 15px;
-    }
-</style>
+    padding: .4rem 1.25rem;
+  }
+</style> 
+--}}
 @endsection
 
 @section('content')
@@ -30,37 +28,42 @@
 
     <div class="row ">
 
-      <div class="col-sm-1">
+      <div class="col-sm-2">
         <h1>Filtros</h1>
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.servicos') }}"   method="GET">
+        <form class="form-inline"  action="{{ route('relatorio.inadimplencias') }}"   method="GET">
           @csrf
 
-          <div class="col-12 col-sm-12 col-md-2" >
+          {{-- <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
-              <select class="select2bs4"  name="tipos[]" multiple="multiple" data-placeholder="-- SERVIÇOS --" style="width: 100%;">
-                @foreach($tipos as $tipo)
-                  <option value="{{ $tipo->codostipo }}"> {{ $tipo->descricao }} </option>
-                @endforeach
+              <select class="select2bs4"  name="processos[]" multiple="multiple" data-placeholder="-- PROCESSOS --" style="width: 100%;">
+
               </select>
             </div>
-          </div>
+          </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-2" >
+          {{-- <div class="col-12 col-sm-12 col-md-2" >
+            <!-- select -->
+            <div class="form-group">
+              <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
+
+              </select>
+            </div>
+          </div> --}}
+
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
-                <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
-                  @foreach($tecnicos as $tecnico)
-                    <option value="{{ $tecnico->usr_codigo }}"> {{ $tecnico->usr_nome }} </option>
-                  @endforeach
+                <select class="select2bs4"  name="classificacaos[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
+
                 </select>
               </div>
-            </div>
+            </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-2" >
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="consultores[]" multiple="multiple" data-placeholder="-- CONSULTORES --" style="width: 100%;">
@@ -69,8 +72,8 @@
                   @endforeach
                 </select>
               </div>
-            </div>
-
+            </div> --}}
+{{-- 
             <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
@@ -80,23 +83,18 @@
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-4" >
-              <div class="compensacao"> </div>
+            <div class="col-12 col-sm-12 col-md-3" >
               <div class="form-group">
-                <div class="input-group input-group-md mb-3">
+                <div class="input-group input-group-sm">
                   <div class="input-group-prepend">
-                    <button id="btn_filter" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      Selecione
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li class="dropdown-item" id="abertura">Abertura</li>
-                      <li class="dropdown-item" id="fechamento">Fechamento</li>
-                    </ul>
+                    <span class="input-group-text">
+                      <i class="far fa-calendar-alt"></i>
+                    </span>
                   </div>
-                  <!-- /btn-group -->
-                  <input type="text" class="form-control float-right" id="reservation">
+                  {{-- <input type="text" class="form-control float-right" id="reservation"> --}}
+                  <input type="number" name="dia">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                   </span>
@@ -104,9 +102,8 @@
               </div>
             </div>
 
-            <input type="hidden" name="dt_inicio" id="dt_inicio">
-            <input type="hidden" name="dt_fim" id="dt_fim">
-            <input type="hidden" name="dt_filtro" id="dt_filtro">
+            {{-- <input type="hidden" name="dt_inicio" id="dt_inicio">
+            <input type="hidden" name="dt_fim" id="dt_fim"> --}}
 
         </form>
       </div>
@@ -114,6 +111,7 @@
     </div>
   </div><!-- /.container-fluid -->
 </section>
+
 
 <section class="content">
   <div class="container-fluid">
@@ -136,66 +134,52 @@
             <div class="col-sm-4 invoice-col">
               Data Inicial
               <address>
-                <strong>{{ \Carbon\Carbon::parse($inicio)->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col">
               Data Final
               <address>
-                <strong>{{ \Carbon\Carbon::parse($fim)->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>RELATÓRIO DE SERVIÇOS </h4></center>
+          <center><h4>RELATÓRIO DE INADIMPLÊNCIAS </h4></center>
           <br/>
           <!-- Table row -->
+
+
         <div class="col-12">
-        <p class="lead"><b>Serviços: {{ $servicos->count() }} </b></p>
+        <p class="lead"><b>Faturas <div id="total"> </div> </b></p>
         </div>
 
           <div class="row">
             <div class="col-12 table-responsive">
-              <table class="table table-striped table-sm " id="tblData" >
+              <table class="table table-striped table-sm" >
                 <thead>
-                <tr>
-                  <th>Abertura</th>
-                  <th>Fechamento</th>
-                  <th>O.S</th>
-                  <th>Contrato</th>
-                  <th>Cliente</th>
-                  <th>Serviço</th>
-                  <th>Técnico</th>
-                  <th>Consultor</th>
-                  <th>Plano</th>
-                  <th>Taxa</th>
-                  <th>Status</th>
-                  <th>Inativo</th>
-                  <th>Aceite</th>
-                </tr>
-                </thead>
+                  <tr>
+                    <th style="width: 300px">TELEFONE</th>
+                    <th style="width: 1000px">CLIENTE</th>
+                    <th>VENCIMENTO</th>
+                    <th>DIAS</th>
+                    <th>VALOR</th>
+                  </tr>
+                  </thead>
+              </table>
+              <table class="table table-striped table-sm " id="EX" >
                 <tbody>
-                @foreach($servicos as $servico)
+                @foreach($inadimplencias as $inad)
                 <tr>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($servico->data_abertura)->format('d-m-Y') }}</td>
-                  <td style=" width: 60px ">
-                    @isset($servico->data_fechamento)
-                      {{ \Carbon\Carbon::parse($servico->data_fechamento)->format('d-m-Y') }}
-                    @endisset
-                  </td>
-                  <td>{{ $servico->codos}}</td>
-                  <td>{{ $servico->codcontrato }}</td>
-                  <td>{{ $servico->cliente }}</td>
-                  <td>{{ $servico->servico }}</td>
-                  <td>{{ $servico->tecnico }}</td>
-                  <td>{{ $servico->consultor }}</td>
-                  <td>{{ $servico->plano }}</td>
-                  <td>{{ $servico->taxa }}</td>
-                  <td>{{ $servico->classificacao }}</td>
-                  <td>{{ $servico->inativo }}</td>
-                  <td>{{ $servico->contrato_eletronico }}</td>
+                  @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
+                  <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
+                  <td>{{ $inad->nome_razaosocial }}</td>
+                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
+                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
+                  <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
+                  @endif
                 </tr>
                 @endforeach
                 </tbody>
@@ -235,63 +219,6 @@
 
 <script>
 
-  $(function() {
-  moment.locale('pt-br');
-  $('#reservation').daterangepicker({
-    opens: 'right',
-    locale: {
-      "applyLabel": "Aplicar",
-      "daysOfWeek": [
-        "Dom",
-        "Seg",
-        "Ter",
-        "Qua",
-        "Jue",
-        "Vie",
-        "Sáb"
-    ],
-    "monthNames": [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Decembro"
-    ],
-    },
-  },
-
-  function(start, end, label) {
-      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
-      $('#dt_fim').val( end.format('YYYY-MM-DD'));
-    });
-  });
-
-    //Initialize Select2 Elements
-    $('.select2').select2()
-
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
-
-    $('#abertura').click(function(e) {
-      $('#btn_filter').text("Abertura");
-      $('#dt_filtro').val(0);
-    });
-
-    $('#fechamento').click(function(e) {
-      $('#btn_filter').text("Fechamento");
-      $('#dt_filtro').val(1);
-    });
-
     function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
@@ -322,6 +249,12 @@
         downloadLink.click();
     }
 }
+
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+      var rowCount = $('#tblData >tbody >tr').length;
+      alert("Total :" + rowCount);
+    });
 
 </script>
 
