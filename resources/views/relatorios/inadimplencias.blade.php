@@ -22,7 +22,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4>NOME DO RELATÓRIO  </h4></center>
+        <center><h4>RELATÓRIO DE INADIMPLENTES </h4></center>
           
         <div class="row">
             <div class="col-12 table-responsive">
@@ -48,7 +48,8 @@
                             <td>{{ $inad->nome_razaosocial }}</td>
                             <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                             <td>{{ $inad->dias }}</td>
-                            <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
+                            <td> {{ $inad->valor_total }}</td>
+                            {{-- <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td> --}}
                           </tr>
                           @endforeach
         
@@ -86,7 +87,6 @@
 
 <script>
 
-
 $(document).ready(function() {
 
     // Setup - add a text input to each footer cell
@@ -110,11 +110,7 @@ $(document).ready(function() {
         buttons: [ 
             'excel', 
             'csvHtml5',
-            {
-                extend: 'pdfHtml5',
-                orientation: 'landscape',
-                pageSize: 'LEGAL'
-            },
+            'pdfHtml5',
         ],
         paging:   true,
         info:     true,

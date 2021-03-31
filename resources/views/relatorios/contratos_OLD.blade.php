@@ -5,8 +5,7 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-{{-- 
-  <style>
+<style>
   td {
     font-size: 9px;
   }
@@ -16,8 +15,7 @@
     .card-header {
     padding: .4rem 1.25rem;
   }
-</style> 
---}}
+</style>
 @endsection
 
 @section('content')
@@ -33,14 +31,27 @@
       </div>
 
       <div class="col-sm-10">
-        <form class="form-inline"  action="{{ route('relatorio.inadimplencias') }}"   method="GET">
+        <form class="form-inline"  action="{{ route('relatorio.contratos') }}"   method="GET">
           @csrf
 
-          {{-- <div class="col-12 col-sm-12 col-md-2" >
+          <div class="col-12 col-sm-12 col-md-2" >
+            <!-- select -->
+            <div class="form-group">
+              <select class="select2bs4"  name="situacao" data-placeholder="-- SITUACAO --" style="width: 100%;">               
+                <option value="N"> Ativo </option>
+                <option value="S"> Cancelado </option>
+              </select>
+            </div>
+          </div> 
+          
+          {{-- 
+          <div class="col-12 col-sm-12 col-md-2" >
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="processos[]" multiple="multiple" data-placeholder="-- PROCESSOS --" style="width: 100%;">
-
+                @foreach($processos as $processo)
+                  <option value="{{ $processo->codprocesso }}"> {{ $processo->nome_processo }} </option>
+                @endforeach
               </select>
             </div>
           </div> --}}
@@ -49,7 +60,9 @@
             <!-- select -->
             <div class="form-group">
               <select class="select2bs4"  name="subprocessos[]" multiple="multiple" data-placeholder="-- SUBPROCESSOS --" style="width: 100%;">
-
+                @foreach($subprocessos as $subprocesso)
+                  <option value="{{ $subprocesso->codsubprocesso }}"> {{ $subprocesso->nome_subprocesso }} </option>
+                @endforeach
               </select>
             </div>
           </div> --}}
@@ -57,8 +70,10 @@
             {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
-                <select class="select2bs4"  name="classificacaos[]" multiple="multiple" data-placeholder="-- CLASSIFICAÇÃO --" style="width: 100%;">
-
+                <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
+                  @foreach($tecnicos as $tecnico)
+                    <option value="{{ $tecnico->usr_codigo }}"> {{ $tecnico->usr_nome }} </option>
+                  @endforeach
                 </select>
               </div>
             </div> --}}
@@ -93,8 +108,7 @@
                       <i class="far fa-calendar-alt"></i>
                     </span>
                   </div>
-                  {{-- <input type="text" class="form-control float-right" id="reservation"> --}}
-                  <input type="number" name="dia">
+                  <input type="text" class="form-control float-right" id="reservation">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                   </span>
@@ -102,8 +116,8 @@
               </div>
             </div>
 
-            {{-- <input type="hidden" name="dt_inicio" id="dt_inicio">
-            <input type="hidden" name="dt_fim" id="dt_fim"> --}}
+            <input type="hidden" name="dt_inicio" id="dt_inicio">
+            <input type="hidden" name="dt_fim" id="dt_fim">
 
         </form>
       </div>
@@ -134,51 +148,67 @@
             <div class="col-sm-4 invoice-col">
               Data Inicial
               <address>
-                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::parse($inicio)->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col">
               Data Final
               <address>
-                <strong>{{ \Carbon\Carbon::now()->format('d/m/Y')}}</strong><br>
+                <strong>{{ \Carbon\Carbon::parse($fim)->format('d/m/Y')}}</strong><br>
               </address>
             </div>
             <!-- /.col -->
           </div>
           <!-- /.row -->
-          <center><h4>RELATÓRIO DE INADIMPLÊNCIAS </h4></center>
+          <center><h4>RELATÓRIO DE CONTRATOS </h4></center>
           <br/>
           <!-- Table row -->
 
 
         <div class="col-12">
-        <p class="lead"><b>Faturas <div id="total"> </div> </b></p>
+        <p class="lead"><b>Total: {{ $contratos->count() }} </b></p>
         </div>
 
           <div class="row">
             <div class="col-12 table-responsive">
-              <table class="table table-striped table-sm" >
+              <table class="table table-striped table-sm " id="tblData" >
                 <thead>
-                  <tr>
-                    <th style="width: 300px">TELEFONE</th>
-                    <th style="width: 1000px">CLIENTE</th>
-                    <th>VENCIMENTO</th>
-                    <th>DIAS</th>
-                    <th>VALOR</th>
-                  </tr>
-                  </thead>
-              </table>
-              <table class="table table-striped table-sm " id="EX" >
-                <tbody>
-                @foreach($inadimplencias as $inad)
                 <tr>
-                  @if ( \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) >= $dia)
-                  <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
-                  <td>{{ $inad->nome_razaosocial }}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
-                  <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->diffInDays(\Carbon\Carbon::now()->format('d-m-Y')) }}</td>
-                  <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td>
+                  <th>Código</th>
+                  <th>Adesão</th>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Logradouro</th>
+                  <th>Bairro</th>
+                  <th>Cidade</th>
+                  <th>Revenda</th>
+                  <th>Plano</th>
+                  <th>Vlr Plano</th>
+                  <th>Inativo</th>
+                  @if ($request->situacao == "S" )
+                  <th>Canc dt</th>
+                  <th>Motivo</th> 
+                  @endif
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($contratos as $contrato)
+                <tr>
+                  <td>{{ $contrato->codcontrato }}</td>
+                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
+                  <td>{{ $contrato->nome_razaosocial }}</td>
+                  <td>{{ $contrato->fone01 }}  {{ $contrato->fone02 }}</td>
+                  <td>{{ $contrato->logradouro }},{{ $contrato->numero }} </td>
+                  <td>{{ $contrato->bairro }}</td>
+                  <td>{{ $contrato->cidade }}</td>
+                  <td>{{ $contrato->revenda }}</td>
+                  <td>{{ $contrato->plano }}</td>
+                  <td align="center">{{ $contrato->vlr_renovacao }}</td>
+                  <td align="center">{{ $contrato->inativo }}</td>
+                  @if ($request->situacao == "S" )
+                    <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
+                    <td>{{ $contrato->motivo }}</td>
                   @endif
                 </tr>
                 @endforeach
@@ -219,6 +249,53 @@
 
 <script>
 
+  $(function() {
+  moment.locale('pt-br');
+  $('#reservation').daterangepicker({
+    opens: 'right',
+    locale: {
+      "applyLabel": "Aplicar",
+      "daysOfWeek": [
+        "Dom",
+        "Seg",
+        "Ter",
+        "Qua",
+        "Jue",
+        "Vie",
+        "Sáb"
+    ],
+    "monthNames": [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Decembro"
+    ],
+    },
+  },
+
+  function(start, end, label) {
+      // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+      $('#dt_fim').val( end.format('YYYY-MM-DD'));
+    });
+  });
+
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
     function exportTableToExcel(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
@@ -249,12 +326,6 @@
         downloadLink.click();
     }
 }
-
-    // A $( document ).ready() block.
-    $( document ).ready(function() {
-      var rowCount = $('#tblData >tbody >tr').length;
-      alert("Total :" + rowCount);
-    });
 
 </script>
 
