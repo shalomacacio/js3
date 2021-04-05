@@ -112,7 +112,7 @@ $(document).ready(function() {
         ],
         paging:   true,
         info:     true,
-        bFilter: false,
+        bFilter: true,
         ordering: true,
         pageLength: 100,
         language: {

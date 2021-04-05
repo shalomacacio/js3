@@ -32,7 +32,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4>NOME DO RELATÓRIO  </h4></center>
+        <center><h4>Contratos Ativos  </h4></center>
           
         <div class="row">
             <div class="col-12 table-responsive">
@@ -151,7 +151,11 @@
             buttons: [ 
                 'excel', 
                 'csvHtml5',
-                'pdfHtml5',
+                {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+                }
             ],
             paging:   true,
             info:     true,

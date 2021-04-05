@@ -225,30 +225,17 @@ class RelatorioController extends Controller
       ->get();
 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
+      // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
+      ->whereIn('cd_processo', [121,122])
       ->where('finalizado', 'N')
       ->select('cliente_cadastrado')
-      ->get('cd_processo');
+      ->pluck('cliente_cadastrado')
+      ->toArray();
 
-      $atend = $this->selectToArray($atendimentos);
-
-      // SOMENTE QUEM NÃO TEM CHAMADO ABERTO 
-      $inadimplencias = $result->whereNotIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
-      //QUEM TEM CHAMADO ABERTO 
-      // $inadimplencias = $result->whereIN('cd_pessoa', $atend)->sortByDesc('data_vencimento');
-      //SEM NENHUM FILTRO
-      // $inadimplencias = $result->sortByDesc('data_vencimento');      
+      // SOMENTE QUEM NÃO TEM ATENDIMENTO ABERTO 
+      $inadimplencias = $result->whereNotIN('cd_pessoa', $atendimentos)->sortByDesc('data_vencimento');
+    
       return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
-    }
-
-
-    public function selectToArray($select)
-    {
-      $arr = [];
-      foreach($select as $row)
-      {
-        $arr[] =  $row->cliente_cadastrado;
-      }
-      return $arr;
     }
 
     public function teste(){
