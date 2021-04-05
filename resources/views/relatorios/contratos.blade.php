@@ -40,7 +40,7 @@
                     <br>
                     <br>
                     <br>
-                    <table id="tabId" class="table table-striped table-sm  display nowrap" style="width:100%">
+                    <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Código</th>
@@ -127,18 +127,51 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
 
 <script>
-$(document).ready(function(){
-    $('#tabId').DataTable({
-        dom: 'Bfrtip',
-        language: {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json" },
-        buttons: ['csv', 'excel', 'pdf', 'print'],
-        paging:   false,
-        info:     false,
-        bFilter: false,
-        ordering: true,
-        lengthChange: false,
 
-    });
-});
-</script>
+    $(document).ready(function() {
+    
+        // Setup - add a text input to each footer cell
+        // $('#example thead tr').clone(true).appendTo( '#example thead' );
+        $('#example thead tr:eq(1) th').each( function (i) {
+            $(this).html( '<input type="text" placeholder="'+title+'" style="width: 100%"  />' );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            });
+    
+        });
+    
+        var table = $('#example').DataTable( {
+            processing: true,
+            lengthChange: false,
+            buttons: [ 
+                'excel', 
+                'csvHtml5',
+                'pdfHtml5',
+            ],
+            paging:   true,
+            info:     true,
+            bFilter: true,
+            ordering: true,
+            pageLength: 100,
+            language: {
+                search: "Pesquisar",
+                info: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                paginate: {
+                "next": "Próximo",
+                "previous": "Anterior",
+                "first": "Primeiro",
+                "last": "Último"
+                },
+            }
+        } );
+     
+        table.buttons().container()
+            .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+    } );
+    </script>
 @endsection
