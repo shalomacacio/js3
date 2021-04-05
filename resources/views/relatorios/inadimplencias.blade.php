@@ -110,7 +110,7 @@ $(document).ready(function() {
             'csvHtml5',
             'pdfHtml5',
         ],
-        paging:   true,
+        paging:   false,
         info:     true,
         bFilter: true,
         ordering: true,
