@@ -142,7 +142,7 @@ class RelatorioController extends Controller
         ->where('cancelado', $situacao)
         ->where('suspenso', 'N')
         ->select(
-          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
+          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento', 'contrato.unidade_financeira'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
           ,'cliente.contato','cliente.fone01', 'cliente.fone02'
           ,'revenda.nome_revenda as revenda'

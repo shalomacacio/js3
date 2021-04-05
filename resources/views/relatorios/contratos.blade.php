@@ -4,7 +4,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.bootstrap4.min.css">
-
+<style>
+    td {
+      font-size: 9px;
+    }
+      th {
+      font-size: 11px;
+    }
+      .card-header {
+      padding: .4rem 1.25rem;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -33,29 +43,65 @@
                     <table id="tabId" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Cod</th>
-                                <th>Paciente</th>
-                                <th>Sexo</th>
-                                <th>Idade</th>
-                                <th>Endereço</th>
-                                <th>Telefone</th>
-                                <th>CPF</th>
-                                <th>CNS</th>
+                                <th>Código</th>
+                                <th>Adesão</th>
+                                <th>Cliente</th>
+                                <th>Contato</th>
+                                <th>Logradouro</th>
+                                <th>Bairro</th>
+                                <th>Cidade</th>
+                                <th>Revenda</th>
+                                <th>Unidade</th>
+                                <th>Plano</th>
+                                <th>Vlr Plano</th>
+                                <th>Inativo</th>
+                                @if ($request->situacao == "S" )
+                                <th>Canc dt</th>
+                                <th>Motivo</th> 
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($contratos as $contrato)
+                                <tr>
+                                <td>{{ $contrato->codcontrato }}</td>
+                                <td style=" width: 60px ">{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
+                                <td>{{ $contrato->nome_razaosocial }}</td>
+                                <td>{{ $contrato->fone01 }}  {{ $contrato->fone02 }}</td>
+                                <td>{{ $contrato->logradouro }},{{ $contrato->numero }} </td>
+                                <td>{{ $contrato->bairro }}</td>
+                                <td>{{ $contrato->cidade }}</td>
+                                <td>{{ $contrato->revenda }}</td>
+                                <td>{{ $contrato->unidade_financeira }}</td>
+                                <td>{{ $contrato->plano }}</td>
+                                <td align="center">{{ $contrato->vlr_renovacao }}</td>
+                                <td align="center">{{ $contrato->inativo }}</td>
+                                @if ($request->situacao == "S" )
+                                    <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
+                                    <td>{{ $contrato->motivo }}</td>
+                                @endif
+                                </tr>
+                            @endforeach
         
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Cod</th>
-                                <th>Paciente</th>
-                                <th>Sexo</th>
-                                <th>Idade</th>
-                                <th>Endereço</th>
-                                <th>Telefone</th>
-                                <th>CPF</th>
-                                <th>CNS</th>
+                                <th>Código</th>
+                                <th>Adesão</th>
+                                <th>Cliente</th>
+                                <th>Contato</th>
+                                <th>Logradouro</th>
+                                <th>Bairro</th>
+                                <th>Cidade</th>
+                                <th>Revenda</th>
+                                <th>Unidade</th>
+                                <th>Plano</th>
+                                <th>Vlr Plano</th>
+                                <th>Inativo</th>
+                                @if ($request->situacao == "S" )
+                                <th>Canc dt</th>
+                                <th>Motivo</th> 
+                                @endif
                             </tr>
                         </tfoot>
                     </table>

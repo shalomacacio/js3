@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.bootstrap4.min.css">
-
 @endsection
 
 @section('content')
@@ -30,7 +29,6 @@
                     <br>
                     <br>
                     <br>
-                  
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
