@@ -72,7 +72,6 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::get('/teste',      'MkApisController@teste')->name('teste');
   });
 
-
   //WebServices
   Route::resource('atendimentos', 'MkAtendimentosController');
   Route::resource('clientes',     'GrupoPessoasController');
