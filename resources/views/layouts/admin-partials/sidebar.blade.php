@@ -95,7 +95,7 @@
                 </a>
               </li>
             </ul>
-          </li> 
+          </li> --}}
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-dollar-sign"></i>
@@ -103,12 +103,18 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href=" {{ route('contratos') }}" class="nav-link">
+                <a href="{{ route('financeiro.inadimplencias')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
-                  <p>MODELO CONTRATO</p>
+                  <p>Inadimplências</p>
                 </a>
               </li>
-              <li class="nav-item has-treeview">
+              <li class="nav-item">
+                <a href="{{ route('financeiro.renovacoes')}}" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Renovações</p>
+                </a>
+              </li>
+              {{-- <li class="nav-item has-treeview">
                 <a href="#" class="nav-link"><i class="nav-icon fas fa-hand-holding-usd"></i>
                     <p>COMISSÕES<i class="right fas fa-angle-left"></i></p>
                 </a>
@@ -120,9 +126,9 @@
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> --}}
             </ul>
-          </li> --}}
+          </li> 
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-warehouse"></i>
@@ -167,12 +173,7 @@
                   <p>Clientes X Nasport</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{ route('relatorio.inadimplencias')}}" class="nav-link">
-                  <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Inadimplências</p>
-                </a>
-              </li>
+
               {{-- <li class="nav-item has-treeview">
                 <a href="#" class="nav-link"><i class="nav-icon fas fa-hand-holding-usd"></i>
                     <p>COMISSÕES<i class="right fas fa-angle-left"></i></p>

@@ -172,13 +172,15 @@
                   <th>Subprocesso</th>
                   <th>Classificacao</th>
                   <th>Op Abertura</th>
+                  <th>DH Fim </th>
+                  <th>Tempo</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($atendimentos as $atendimento)
                 <tr>
                   <td>{{ $atendimento->codatendimento }}</td>
-                  <td style=" width: 60px ">{{ \Carbon\Carbon::parse($atendimento->dt_abertura)->format('d-m-Y') }}</td>
+                  <td style=" width: 60px ">{{ $atendimento->dt_hr_insert }}</td>
                   <td>{{ $atendimento->cliente }}</td>
                   <td>
                     @switch($atendimento->como_foi_contato )
@@ -234,6 +236,8 @@
                   <td>{{ $atendimento->nome_processo }}</td>
                   <td>{{ $atendimento->classificacao }}</td>
                   <td>{{ Str::upper($atendimento->operador_abertura) }}</td>
+                  <td>{{ Str::upper($atendimento->dh_fim) }}</td>
+                  <td>{{  \Carbon\Carbon::parse($atendimento->dh_fim)->diffForHumans($atendimento->dt_hr_insert) }}</td>
                 </tr>
                 @endforeach
                 </tbody>

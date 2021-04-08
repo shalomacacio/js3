@@ -235,7 +235,34 @@ class RelatorioController extends Controller
       // SOMENTE QUEM NÃO TEM ATENDIMENTO ABERTO 
       $inadimplencias = $result->whereNotIN('cd_pessoa', $atendimentos)->sortByDesc('data_vencimento');
     
-      return view('relatorios.inadimplencias', compact('inadimplencias', 'dia'));
+      return view('financeiro.relatorios.inadimplencias', compact('inadimplencias', 'dia'));
+    }
+
+    public function renovacoes(){
+
+      $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as mccrd')
+        // ->join('mk_contratos_controle_renovacao as ccr', 'mccrd.cd_renvoacao_auto', 'ccr.codcontratocontrenova')
+        // ->join('mk_contratos_renovacao as cr', 'mccrd.cd_contrato', 'cr.contrato')
+        ->join('mk_contratos as c', 'mccrd.cd_contrato', 'c.codcontrato') 
+        ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
+        ->where('mccrd.ocorrencia', 1)
+        // ->whereRaw('vcto_final >= ( DATE(NOW()) - 30 )')
+        // ->whereDate('dt_renovacao', '>=' , '2021-03-01')
+        // ->whereDate('dt_renovacao', '<=' , '2021-04-01')
+        ->select( 'mccrd.cd_contrato', 'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
+        // , 'cr.dt_renovacao' 
+        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02'
+        ,'c.codcontrato', 'c.primeiro_vencimento')
+        ->get();
+
+        $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
+        ->where('cd_processo', [86])
+        ->select('cliente_cadastrado')
+        ->pluck('cliente_cadastrado')
+        ->toArray();  
+      
+      $renovacoes = $result;//->whereNotIN('codpessoa', $atendimentos);
+        return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
     }
 
     public function teste(){

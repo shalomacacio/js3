@@ -84,10 +84,9 @@ class MkCompromissosController extends Controller
       if($request->grupos){
         $compromissos = $result->whereIn( 'cdagendagrupo', $request->grupos);
         $mkCompromissos = $compromissos->groupBy('nome_razaosocial'); 
-      }else{
+      } else {
         $mkCompromissos = $result->groupBy('nome_razaosocial'); 
-      }
-      if (request()->wantsJson()) {
+      } if (request()->wantsJson()) {
         return response()->json([
           'data' => $mkCompromissos,
         ]);
@@ -97,40 +96,5 @@ class MkCompromissosController extends Controller
       $concluidos = $compromissos->whereNotNull('dt_hr_fechamento_tec')->count();
       return view('mkCompromissos.agenda', compact('mkCompromissos','grupos', 'request', 'total', 'concluidos'));
     }
-
-    // public function agendaStatus(){
-    //   $inicio = Carbon::now()->format('Y-m-d 00:00:00');
-    //   $fim = Carbon::now()->format('Y-m-d 23:59:59');
-
-    //   $result = $this->repository->scopeQuery(function($query) use ($inicio, $fim) {
-    //     return $query
-    //     ->whereBetween('com_inicio',[$inicio, $fim])
-    //     ->join('mk_compromisso_pessoa', 'mk_compromissos.codcompromisso', '=', 'mk_compromisso_pessoa.codcompromisso')
-    //     ->join('mk_os', 'mk_compromissos.cd_integracao', '=', 'mk_os.codos')
-    //     ->join('mk_os_tipo', 'mk_os.tipo_os', '=', 'mk_os_tipo.codostipo')
-    //     ->select('cdpessoa');
-    //   })->all();
-
-    //   $arr = [];
-    //     foreach($result as $funcionario)
-    //     {
-    //       $arr[] = (array) $funcionario;
-    //     }
-
-    //     $data = [700,500,400];
-    //     $labels = ['teste', 'teste1', 'teste2'];
-    //     $backgroundColor = ['#f56954', '#00a65a', '#f39c12'];
-
-    //     $datasets = [
-    //       'data' => $data,
-    //       'backgroundColor' => $backgroundColor,
-    //     ];
-
-    //     $response = [
-    //       'labels' => [$labels],
-    //       'datasets' => [$datasets],
-    //     ];
-    //     return response()->json($response);
-    // }
     
 }

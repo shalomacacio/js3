@@ -205,7 +205,7 @@ class MkAtendimentosController extends Controller
                     ->select(
                     'atendimento.codatendimento','atendimento.dt_abertura', 'atendimento.operador_abertura', 
                     'atendimento.como_foi_contato', 'atendimento.cd_processo', 'atendimento.cd_subprocesso',
-                    'atendimento.classificacao_atendimento',
+                    'atendimento.classificacao_atendimento','atendimento.dt_hr_insert','atendimento.dh_fim',
                     'pessoa.nome_razaosocial as cliente', 
                     'processo.nome_processo',
                     'subprocesso.nome_subprocesso',

@@ -4,6 +4,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap4.min.css">
+    <style>
+        td {
+          font-size: 9px;
+        }
+          th {
+          font-size: 11px;
+        }
+          .card-header {
+          padding: .4rem 1.25rem;
+        }
+    </style>
+
 @endsection
 
 @section('content')
@@ -21,8 +33,8 @@
             <!-- /.col -->
         </div>
 
-        <center><h4>RELATÓRIO DE INADIMPLENTES </h4></center>
-          
+        <center><h4>CONTRATOS X RENOVAÇÕES </h4></center>
+        
         <div class="row">
             <div class="col-12 table-responsive">
                 <div class="col-12">
@@ -32,33 +44,34 @@
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>TELEFONE</th>
+                                <th>COD RENOVACAO </th>
+                                <th>CONTRATO</th>
                                 <th>CLIENTE</th>
-                                <th>VENCIMENTO</th>
-                                <th>DIAS</th>
-                                <th>VALOR</th>
+                                <th>TELEFONE</th>
+                                <th> VCTO_FINAL </th>
+                                <th> VALOR </th>
                             </tr>
                         </thead>
                         <tbody>
-                          @foreach($inadimplencias as $inad)
+                          @foreach($renovacoes as $r)
                           <tr>
-                            <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
-                            <td>{{ $inad->nome_razaosocial }}</td>
-                            <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
-                            <td>{{ $inad->dias }}</td>
-                            <td> {{ $inad->valor_total }}</td>
-                            {{-- <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td> --}}
+                            <td>{{ $r->cd_renvoacao_auto }}</td>
+                            <td>{{ $r->cd_contrato }}</td>
+                            <td>{{ $r->nome_razaosocial }}</td>
+                            <td>{{ $r->fone01 }}@isset($r->fone02)|{{ $r->fone02 }}@endisset</td>
+                            <td>{{ \Carbon\Carbon::parse($r->vcto_final )->format('d-m-Y') }}</td>
+                            <td>{{ $r->vlr_renovacao }}</td>
                           </tr>
                           @endforeach
-        
                         </tbody>
                         <tfoot>
                             <tr>
-                              <th>TELEFONE</th>
-                              <th>CLIENTE</th>
-                              <th>VENCIMENTO</th>
-                              <th>DIAS</th>
-                              <th>VALOR</th>
+                                <th>COD RENOVACAO </th>
+                                <th>CONTRATO</th>
+                                <th>CLIENTE</th>
+                                <th>TELEFONE</th>
+                                <th> VCTO_FINAL </th>
+                                <th> VALOR </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -91,7 +104,7 @@
         $('#example thead tr').clone(true).appendTo( '#example thead' );
         $('#example thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="'+title+'" />' );
+            $(this).html( '<input type="text" placeholder="'+title+'" style="width: 100%" />' );
     
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
