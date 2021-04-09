@@ -287,8 +287,8 @@ class RelatorioController extends Controller
         ->leftJoin('fr_usuario as u', 'os.operador_fech_tecnico', 'u.usr_codigo')
         ->whereBetween('dt_abertura', [$inicio, $fim])
         ->select('p.nome_razaosocial'
-            ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim'
-            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec'
+            ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim', 'a.finalizado'
+            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado'
             ,'u.usr_nome'
             ,'tipo.descricao'
             )

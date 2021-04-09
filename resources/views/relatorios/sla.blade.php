@@ -90,12 +90,14 @@
                                 <th>INI_ATEND</th>
                                 <th>FIM_ATEND</th>
                                 <th>TMP_ATEND</th>
+                                <th>ATE_ENC</th>
                                 <th>OS</th>
                                 <th>OS TIPO</th>
                                 <th>TECNICO</th>
                                 <th>INI_OS</th>
                                 <th>OS_FECH_TEC</th>
                                 <th>TEMP_FECH_TEC</th>
+                                <th>OS_ENC</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,9 +111,8 @@
                                         {{ \Carbon\Carbon::parse($a->dh_fim)->format('d/m/Y H:i:s') }}
                                       @endisset 
                                     </td>
-
-                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffForHumans($a->dh_fim)}} </td>
-                                    
+                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffForHumans($a->dh_fim, true, true )}} </td>
+                                    <td>{{$a->finalizado}}</td>
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
                                     <td>{{$a->usr_nome}}</td>
@@ -121,8 +122,8 @@
                                          {{ \Carbon\Carbon::parse($a->dt_hr_fechamento_tec)->format('d/m/Y H:i:s') }}
                                         @endisset 
                                     </td>
-
-                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffForHumans($a->dt_hr_fechamento_tec )}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffForHumans($a->dt_hr_fechamento_tec, true, true)}} </td>
+                                    <td>{{$a->encerrado}}</td>
                                 </tr>
                             @endforeach
                             
@@ -134,12 +135,14 @@
                                 <th>INI_ATEND</th>
                                 <th>FIM_ATEND</th>
                                 <th>TMP_ATEND</th>
+                                <th>ATE_ENC</th>
                                 <th>OS</th>
                                 <th>OS TIPO</th>
                                 <th>TECNICO</th>
                                 <th>INI_OS</th>
                                 <th>OS_FECH_TEC</th>
                                 <th>TEMP_FECH_TEC</th>
+                                <th>OS_ENC</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -198,7 +201,7 @@
                     ],
             paging:   false, //paginação
             info:     true, //mostrando 1 de x paginas 
-            bFilter: false, //campo pesquisa 
+            bFilter: true, //campo pesquisa 
             ordering: true, // ordenação
             pageLength: 100, //por pagina 
             language: {
