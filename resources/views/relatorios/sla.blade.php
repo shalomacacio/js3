@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap4.min.css">
-
     <style>
         td {
           font-size: 9px;
@@ -33,7 +32,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4> CONTRATOS </h4></center>
+        <center><h4>RELATÓRIO DE SLA </h4></center>
           
         <div class="row">
             <div class="col-12 table-responsive">
@@ -44,62 +43,58 @@
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Código</th>
-                                <th>Adesão</th>
-                                <th>Cliente</th>
-                                <th>Contato</th>
-                                <th>Logradouro</th>
-                                <th>Bairro</th>
-                                <th>Cidade</th>
-                                <th>Revenda</th>
-                                <th>Unidade</th>
-                                <th>Plano</th>
-                                <th>Vlr Plano</th>
-                                <th>Inativo</th>
-                                <th>Canc dt</th>
-                                <th>Motivo</th> 
+                                <th>ATEND</th>
+                                <th>CLIENTE</th>
+                                <th>INI_ATEND</th>
+                                <th>FIM_ATEND</th>
+                                <th>TEMP_ATEND</th>
+                                <th>OS</th>
+                                <th>TECNICO</th>
+                                <th>INI_OS</th>
+                                <th>OS_FECH_TEC</th>
+                                <th>TEMP_FECH_TEC</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($contratos as $contrato)
+                            @foreach ($atendimentos as $a )
                                 <tr>
-                                <td>{{ $contrato->codcontrato }}</td>
-                                <td>{{ \Carbon\Carbon::parse($contrato->adesao)->format('d-m-Y') }}</td>
-                                <td>{{ Str::limit($contrato->nome_razaosocial , 50)  }}</td>
-                                <td>{{ $contrato->fone01 }}  {{ $contrato->fone02 }}</td>
-                                <td>{{ Str::limit( $contrato->logradouro, 50) }},{{ $contrato->numero }} </td>
-                                <td>{{ $contrato->bairro }}</td>
-                                <td>{{ $contrato->cidade }}</td>
-                                <td>{{ $contrato->revenda }}</td>
-                                <td>{{ $contrato->unidade_financeira }}</td>
-                                <td>{{ $contrato->plano }}</td>
-                                <td align="center">{{ $contrato->vlr_renovacao }}</td>
-                                <td align="center">{{ $contrato->inativo }}</td>
-                                <td style=" width: 60px ">{{ \Carbon\Carbon::parse( $contrato->dt_cancelamento )->format('d-m-Y') }}</td>
-                                <td>{{ $contrato->motivo }}</td>
+                                    <td>{{$a->codatendimento}}</td>
+                                    <td>{{ Str::limit($a->nome_razaosocial, 40)  }}</td>                                    
+                                    <td>{{ \Carbon\Carbon::parse($a->dt_hr_insert)->format('d/m/Y H:i:s') }}</td>
+                                    <td> 
+                                      @isset($a->dh_fim)
+                                        {{ \Carbon\Carbon::parse($a->dh_fim)->format('d/m/Y H:i:s') }}
+                                      @endisset 
+                                    </td>
+
+                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffInHours($a->dh_fim)}} </td>
+                                    
+                                    <td>{{$a->codos}}</td>
+                                    <td>{{$a->usr_nome}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($a->dh_insert)->format('d/m/Y H:i:s') }}</td>
+                                    <td>
+                                        @isset($a->dh_fim)
+                                         {{ \Carbon\Carbon::parse($a->dt_hr_fechamento_tec)->format('d/m/Y H:i:s') }}
+                                        @endisset 
+                                    </td>
+
+                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec )}} </td>
                                 </tr>
                             @endforeach
-    
                             
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Código</th>
-                                <th>Adesão</th>
-                                <th>Cliente</th>
-                                <th>Contato</th>
-                                <th>Logradouro</th>
-                                <th>Bairro</th>
-                                <th>Cidade</th>
-                                <th>Revenda</th>
-                                <th>Unidade</th>
-                                <th>Plano</th>
-                                <th>Vlr Plano</th>
-                                <th>Inativo</th>
-                                @if ($request->situacao == "S" )
-                                <th>Canc dt</th>
-                                <th>Motivo</th> 
-                                @endif
+                                <th>ATEND</th>
+                                <th>CLIENTE</th>
+                                <th>INI_ATEND</th>
+                                <th>FIM_ATEND</th>
+                                <th>TEMP_ATEND</th>
+                                <th>OS</th>
+                                <th>TECNICO</th>
+                                <th>INI_OS</th>
+                                <th>OS_FECH_TEC</th>
+                                <th>TEMP_FECH_TEC</th>
                             </tr>
                         </tfoot>
                     </table>

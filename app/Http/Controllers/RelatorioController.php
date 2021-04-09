@@ -17,7 +17,7 @@ class RelatorioController extends Controller
 
     public function __construct()
     {
-      $this->inicio = Carbon::now()->format('Y-m-d 00:00:00');
+      $this->inicio = Carbon::parse('2021-04-01')->format('Y-m-d 00:00:00');
       $this->fim = Carbon::now()->format('Y-m-d 23:59:59');
     }
 
@@ -265,6 +265,26 @@ class RelatorioController extends Controller
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
     }
 
+    public function sla(){
+      $inicio = $this->inicio;
+      $fim = $this->fim;  
+
+      $atendimentos = DB::connection('pgsql')->table('mk_atendimento as a')
+        ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
+        ->leftJoin('mk_os as os', 'at_os.cd_os','os.codos')
+        ->leftJoin('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
+        ->leftJoin('fr_usuario as u', 'os.operador_fech_tecnico', 'u.usr_codigo')
+        ->whereBetween('dt_hr_insert', [$inicio, $fim])
+        ->select('p.nome_razaosocial'
+            ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim'
+            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec'
+            ,'u.usr_nome'
+            )
+        ->get();
+
+      return view('relatorios.sla', compact('atendimentos'));
+    }
+    
     public function teste(){
       return view('relatorios.teste');
     }

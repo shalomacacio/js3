@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'relatorios'], function () {
+    Route::get('/sla',            'RelatorioController@sla')->name('relatorio.sla');
     Route::get('/servicos',       'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',       'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',      'RelatorioController@contratos')->name('relatorio.contratos');
@@ -59,8 +60,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/movimentacao',  'MkMovimentacaoCaixasController');
     
     Route::group(['prefix' => 'relatorios'], function () {
-      Route::get('/inadimplencias',          'RelatorioController@inadimplencias')->name('financeiro.inadimplencias');
-      Route::get('/renovacoes',          'RelatorioController@renovacoes')->name('financeiro.renovacoes');
+      Route::get('/inadimplencias', 'RelatorioController@inadimplencias')->name('financeiro.inadimplencias');
+      Route::get('/renovacoes',     'RelatorioController@renovacoes')->name('financeiro.renovacoes');
 
     });
   
