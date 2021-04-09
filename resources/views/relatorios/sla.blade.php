@@ -98,6 +98,7 @@
                                 <th>OS_FECH_TEC</th>
                                 <th>TEMP_FECH_TEC</th>
                                 <th>OS_ENC</th>
+                                <th>+24</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,7 +112,7 @@
                                         {{ \Carbon\Carbon::parse($a->dh_fim)->format('d/m/Y H:i:s') }}
                                       @endisset 
                                     </td>
-                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffForHumans($a->dh_fim, true, true )}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffInHours($a->dh_fim )}} </td>
                                     <td>{{$a->finalizado}}</td>
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
@@ -122,8 +123,15 @@
                                          {{ \Carbon\Carbon::parse($a->dt_hr_fechamento_tec)->format('d/m/Y H:i:s') }}
                                         @endisset 
                                     </td>
-                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffForHumans($a->dt_hr_fechamento_tec, true, true)}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec)}} </td>
                                     <td>{{$a->encerrado}}</td>
+                                    <td>
+                                        @if ( \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec ) > 24)
+                                            SIM
+                                        @else
+                                            NÃO
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             
@@ -143,6 +151,7 @@
                                 <th>OS_FECH_TEC</th>
                                 <th>TEMP_FECH_TEC</th>
                                 <th>OS_ENC</th>
+                                <th>+24</th>
                             </tr>
                         </tfoot>
                     </table>
