@@ -110,7 +110,7 @@
                                       @endisset 
                                     </td>
 
-                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffInHours($a->dh_fim)}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffForHumans($a->dh_fim)}} </td>
                                     
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
@@ -122,7 +122,7 @@
                                         @endisset 
                                     </td>
 
-                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec )}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffForHumans($a->dt_hr_fechamento_tec )}} </td>
                                 </tr>
                             @endforeach
                             
@@ -258,6 +258,5 @@
     });
 
 </script>
-
 
 @endsection
