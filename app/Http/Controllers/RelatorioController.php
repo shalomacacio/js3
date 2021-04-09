@@ -123,15 +123,25 @@ class RelatorioController extends Controller
      */
     public function contratos(Request $request)
     {
+      if(!$request->dt_inicio){
         $inicio = $this->inicio;
-        $fim = $this->fim;  
-        $situacao = "N";
+      } else {
+        $inicio = $request->dt_inicio;
+      }
 
-        if($request->situacao) {
-          $situacao = $request->situacao;
-        }
+      if(!$request->dt_fim){
+        $fim = $this->fim;
+      } else {
+        $fim = $request->dt_fim;
+      }
+
+      $situacao = "N";
+
+      if($request->situacao) {
+        $situacao = $request->situacao;
+      }
         
-        $result = DB::connection('pgsql')->table('mk_contratos as contrato')
+      $result = DB::connection('pgsql')->table('mk_contratos as contrato')
         ->join('mk_planos_acesso as plano', 'contrato.plano_acesso', 'plano.codplano')
         ->join('mk_pessoas as cliente', 'contrato.cliente', 'cliente.codpessoa')
         ->leftJoin('mk_revendas as revenda', 'cliente.cd_revenda', 'revenda.codrevenda')
@@ -139,10 +149,11 @@ class RelatorioController extends Controller
         ->leftJoin('mk_logradouros as logradouro', 'cliente.codlogradouro', 'logradouro.codlogradouro' )
         ->leftJoin('mk_bairros as bairro', 'cliente.codbairro', 'bairro.codbairro' )
         ->leftJoin('mk_cidades as cidade', 'cliente.codcidade', 'cidade.codcidade' )
-        ->where('cancelado', $situacao)
+        // ->where('cancelado', $situacao)
         ->where('suspenso', 'N')
         ->select(
-          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento', 'contrato.unidade_financeira'
+          'contrato.codcontrato', 'contrato.adesao','contrato.vlr_renovacao', 'contrato.dt_cancelamento'
+          ,'contrato.unidade_financeira', 'contrato.cancelado'
           ,'cliente.codpessoa','cliente.nome_razaosocial', 'cliente.inativo', 'cliente.numero'
           ,'cliente.contato','cliente.fone01', 'cliente.fone02'
           ,'revenda.nome_revenda as revenda'
@@ -154,12 +165,13 @@ class RelatorioController extends Controller
         )->get();
         
         $contratos = $result->sortBy('adesao');
+        
         if($request->dt_inicio) {
           
           $inicio = $request->dt_inicio;
           $fim = $request->dt_fim;
 
-          $contratos = $result->whereBetween('dt_cancelamento',[$inicio, $fim])->sortBy('adesao');
+          $contratos = $result->whereBetween('adesao',[$inicio, $fim])->sortBy('adesao');
         }
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
     }
