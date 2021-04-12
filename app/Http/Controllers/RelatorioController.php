@@ -250,7 +250,21 @@ class RelatorioController extends Controller
       return view('financeiro.relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 
-    public function renovacoes(){
+    public function renovacoes(Request $request){
+
+      // return dd($request);
+
+      if(!$request->dt_inicio){
+        $inicio = $this->inicio;
+      } else {
+        $inicio = $request->dt_inicio;
+      }
+
+      if(!$request->dt_fim){
+        $fim = $this->fim;
+      } else {
+        $fim = $request->dt_fim;
+      }
 
       $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as mccrd')
         // ->join('mk_contratos_controle_renovacao as ccr', 'mccrd.cd_renvoacao_auto', 'ccr.codcontratocontrenova')
@@ -259,8 +273,8 @@ class RelatorioController extends Controller
         ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
         ->where('mccrd.ocorrencia', 1)
         // ->whereRaw('vcto_final >= ( DATE(NOW()) - 30 )')
-        // ->whereDate('dt_renovacao', '>=' , '2021-03-01')
-        // ->whereDate('dt_renovacao', '<=' , '2021-04-01')
+        // ->whereDate('vcto_final', '>=' , $inicio )
+        // ->whereDate('vcto_final', '<=' , $fim )
         ->select( 'mccrd.cd_contrato', 'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
         // , 'cr.dt_renovacao' 
         ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02'
