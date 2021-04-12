@@ -234,6 +234,7 @@ class RelatorioController extends Controller
       'valor_total', 'cd_pessoa', DB::raw( 'DATE(NOW()) - data_vencimento  as dias'))
       ->get();
 
+      //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
       // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
       ->whereIn('cd_processo', [56,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
