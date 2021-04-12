@@ -77,7 +77,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4>CONTRATOS X RENOVAÇÕES </h4></center>
+        <center><h4> INADIMPLENCIAS  </h4></center>
         
         <div class="row">
             <div class="col-12 table-responsive">

@@ -167,10 +167,8 @@ class RelatorioController extends Controller
         $contratos = $result->sortBy('adesao');
         
         if($request->dt_inicio) {
-          
           $inicio = $request->dt_inicio;
           $fim = $request->dt_fim;
-
           $contratos = $result->whereBetween('adesao',[$inicio, $fim])->sortBy('adesao');
         }
         return view('relatorios.contratos', compact('contratos', 'inicio', 'fim', 'request'));
@@ -238,7 +236,7 @@ class RelatorioController extends Controller
 
       $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
       // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
-      ->whereIn('cd_processo', [121,122])
+      ->whereIn('cd_processo', [56,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
       ->where('finalizado', 'N')
       ->select('cliente_cadastrado')
       ->pluck('cliente_cadastrado')
