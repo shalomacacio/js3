@@ -15,7 +15,7 @@
           .card-header {
           padding: .4rem 1.25rem;
         }
-      </style>
+    </style>
 @endsection
 
 @section('content')
