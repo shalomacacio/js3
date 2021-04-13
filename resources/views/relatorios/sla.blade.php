@@ -120,11 +120,14 @@
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
                                     <td>{{$a->usr_nome}}</td>
-                                    <td>{{ \Carbon\Carbon::parse($a->abertura)->format('d/m/Y H:i:s') }}</td>
                                     <td>
-                                        @isset($a->abertura)
-                                         {{ \Carbon\Carbon::parse($a->fechamento)->format('d/m/Y H:i:s') }}
-                                        @endisset 
+                                      @isset($a->abertura)
+                                        {{ \Carbon\Carbon::parse($a->abertura)->format('d/m/Y H:i:s') }}</td>
+                                      @endisset 
+                                    <td>
+                                        
+                                         {{ $a->fechamento}}
+                                       
                                     </td>
                                     <td> {{ \Carbon\Carbon::parse($a->abertura)->diffInHours($a->fechamento)}} </td>
                                     <td>{{$a->encerrado}}</td>
