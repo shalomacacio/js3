@@ -120,16 +120,16 @@
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
                                     <td>{{$a->usr_nome}}</td>
-                                    <td>{{ \Carbon\Carbon::parse($a->dh_insert)->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($a->abertura)->format('d/m/Y H:i:s') }}</td>
                                     <td>
-                                        @isset($a->dt_hr_fechamento_tec)
-                                         {{ \Carbon\Carbon::parse($a->dt_hr_fechamento_tec)->format('d/m/Y H:i:s') }}
+                                        @isset($a->abertura)
+                                         {{ \Carbon\Carbon::parse($a->fechamento)->format('d/m/Y H:i:s') }}
                                         @endisset 
                                     </td>
-                                    <td> {{ \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec)}} </td>
+                                    <td> {{ \Carbon\Carbon::parse($a->abertura)->diffInHours($a->fechamento)}} </td>
                                     <td>{{$a->encerrado}}</td>
                                     <td>
-                                        @if ( \Carbon\Carbon::parse($a->dh_insert)->diffInHours($a->dt_hr_fechamento_tec ) > 24)
+                                        @if ( \Carbon\Carbon::parse($a->abertura)->diffInHours($a->fechamento ) > 24)
                                             SIM
                                         @else
                                             NÃO

@@ -313,7 +313,10 @@ class RelatorioController extends Controller
         ->whereBetween('dt_abertura', [$inicio, $fim])
         ->select('p.nome_razaosocial'
             ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim', 'a.finalizado'
-            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado'
+            // , DB::raw('CAST(DATE_FORMAT(CONCAT(os.data_fechamento," ", os.hora_fechamento,":00"), "%Y-%m%-%d %H:%i:%s") AS DATETIME)')
+            , DB::raw("CONCAT(os.data_abertura,' ' ,os.hora_abertura) as abertura")
+            , DB::raw("CONCAT(os.data_fechamento,' ' ,os.hora_fechamento) as fechamento")
+            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado', 'os.operador_fechamento', 'os.data_fechamento', 'os.hora_fechamento'
             ,'u.usr_nome'
             ,'tipo.descricao'
             )
