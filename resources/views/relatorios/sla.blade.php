@@ -122,7 +122,7 @@
                                     <td>{{$a->usr_nome}}</td>
                                     <td>{{ \Carbon\Carbon::parse($a->dh_insert)->format('d/m/Y H:i:s') }}</td>
                                     <td>
-                                        @isset($a->dh_fim)
+                                        @isset($a->dt_hr_fechamento_tec)
                                          {{ \Carbon\Carbon::parse($a->dt_hr_fechamento_tec)->format('d/m/Y H:i:s') }}
                                         @endisset 
                                     </td>
