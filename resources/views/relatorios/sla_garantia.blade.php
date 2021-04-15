@@ -94,7 +94,7 @@
                                     <td>{{ $a->codpessoa }}</td>
                                     <td>{{ Str::limit($a->nome_razaosocial, 40)  }}</td>   
                                     <td>{{ $a->tickets }}</td>
-                                    <td>ver </td>
+                                    <td><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
                                     <td>{{ $a->os }}</td>       
                                     <td><a href="javascript:void(0)" onClick="getClientOs( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
                        
@@ -144,20 +144,20 @@
     // DATA TABLES FILTERS ETC ...
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#example thead tr').clone(true).appendTo( '#example thead' );
-        $('#example thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" style="width: 100%"/>' );
+        // $('#example thead tr').clone(true).appendTo( '#example thead' );
+        // $('#example thead tr:eq(1) th').each( function (i) {
+        //     var title = $(this).text();
+        //     $(this).html( '<input type="text" style="width: 100%"/>' );
     
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                      .column(i)
-                      .search( this.value )
-                      .draw();
-                }
-            } );
-        });
+        //     $( 'input', this ).on( 'keyup change', function () {
+        //         if ( table.column(i).search() !== this.value ) {
+        //             table
+        //               .column(i)
+        //               .search( this.value )
+        //               .draw();
+        //         }
+        //     } );
+        // });
     
         var table = $('#example').DataTable( {
             processing: true,
@@ -285,16 +285,17 @@
         success: function(data) {
           // console.log(result.result[0]);
           $("#ostable tr").remove();
-          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>TIPO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
+          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>CLASSIFICACAOS</th><th>PROCESSO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
         for(var i=0; i < data.result.length ; i++)
           {
           $('#ostable').append(
           '<tr>'+
-            '<td>'+data.result[i]['codos']+'</td>'+
-            '<td>'+data.result[i]['abertura']+'</td>'+
-            '<td>'+data.result[i]['tipo']+'</td>'+
-            '<td>'+data.result[i]['data_fechamento']+'</td>'+
-            '<td>'+data.result[i]['class_enc']+'</td>'+
+            '<td>'+data.result[i]['codatendimento']+'</td>'+
+            '<td>'+data.result[i]['dt_abertura']+'</td>'+
+            '<td>'+data.result[i]['descricao']+'</td>'+
+            '<td>'+data.result[i]['nome_processo']+'</td>'+
+            '<td>'+data.result[i]['dt_finaliza']+'</td>'+
+            '<td>'+data.result[i]['classifenc']+'</td>'+
           '</tr>');
           }
           }

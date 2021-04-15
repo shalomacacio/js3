@@ -374,12 +374,25 @@ class RelatorioController extends Controller
     }
 
     public function ajaxClientAte(Request $request){
+      $cliente = $request->cliente;
+      $inicio = Carbon::parse($request->inicio)->format('Y-m-d');
+      $fim = Carbon::parse($request->fim)->format('Y-m-d');
+      
       $servicos = DB::connection('pgsql')->table('mk_atendimento as ate')
-                    ->where('ate.cliente', $request->cliente )
+                    ->join('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
+                    ->join('mk_ate_processos as processo', 'ate.cd_processo', 'processo.codprocesso')
+                    ->join('mk_atendimento_classificacao as classif', 'ate.classificacao_atendimento','classif.codatclass')
+                    ->join('mk_atendimento_classificacao as classifenc', 'ate.classificacao_encerramento','classifenc.codatclass' )
+                    ->where('ate.cliente_cadastrado', $cliente )
+                    ->whereBetween('ate.dt_abertura', [$fim, $inicio] )
+                    ->select('ate.codatendimento', 'ate.dt_abertura', 'ate.classificacao_encerramento', 'ate.dt_finaliza'
+                              , 'processo.nome_processo'
+                              ,'classif.descricao'
+                              ,'classifenc.descricao as classifenc')
                     ->get();
 
       return response()->json([
-        'result' => $request->cliente
+        'result' => $servicos
       ]);
     }
     
