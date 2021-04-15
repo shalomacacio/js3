@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entities\MkAtendimento;
 use App\Entities\MkContrato;
 use App\Entities\MkFatura;
+use App\Entities\MkPessoa;
 use App\Entities\Radacct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -231,7 +232,7 @@ class RelatorioController extends Controller
       ->where('f.valor_total', '>', 0)
       ->whereRaw('DATE(NOW()) - data_vencimento > ?', [6])
       ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02', 
-      'valor_total', 'cd_pessoa', DB::raw( 'DATE(NOW()) - data_vencimento  as dias'))
+      'descricao','valor_total', 'cd_pessoa', DB::raw( 'DATE(NOW()) - data_vencimento  as dias'))
       ->get();
 
       //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
@@ -323,6 +324,61 @@ class RelatorioController extends Controller
         ->get();
 
       return view('relatorios.sla', compact('atendimentos'));
+    }
+
+    public function slaGarantia(Request $request ){
+
+      if(!$request->dt_inicio){
+        $inicio = $this->inicio;
+      } else {
+        $inicio = $request->dt_inicio;
+      }
+
+      $fim = Carbon::parse($inicio)->subDays(30);
+
+      $result = DB::connection('pgsql')->table('mk_atendimento as a')
+        ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
+        ->join('mk_os as os', 'at_os.cd_os','os.codos')
+        ->join('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
+        ->whereBetween('dt_abertura', [$fim, $inicio] )
+        ->select('p.codpessoa','p.nome_razaosocial'
+            , DB::raw("COUNT(DISTINCT a.codatendimento) as tickets" )
+            , DB::raw("COUNT(os.codos) as os" )
+            )
+        ->groupBy('p.codpessoa','p.nome_razaosocial')
+        ->get();
+
+        $atendimentos = $result;
+
+      return view('relatorios.sla_garantia', compact('atendimentos', 'request', 'inicio', 'fim'));
+    }
+
+    public function ajaxClientOs(Request $request){
+      $inicio = Carbon::parse($request->inicio)->format('Y-m-d');
+      $fim = Carbon::parse($request->fim)->format('Y-m-d');
+      $cliente = $request->cliente;
+
+      $servicos = DB::connection('pgsql')->table('mk_os as os')
+                    ->join('mk_os_tipo as tipo', 'os.tipo_os', 'tipo.codostipo')
+                    ->where('os.cliente', $cliente )
+                    ->whereBetween('os.data_abertura', [ $fim ,$inicio] )
+                    ->select( 'os.codos','os.data_abertura as abertura', 'os.data_fechamento', 'tipo.descricao as tipo')
+                    ->get();
+      
+      return response()->json([
+        'result' => $servicos
+      ]);
+    }
+
+    public function ajaxClientAte(Request $request){
+      $servicos = DB::connection('pgsql')->table('mk_atendimento as ate')
+                    ->where('ate.cliente', $request->cliente )
+                    ->get();
+
+      return response()->json([
+        'result' => $request->cliente
+      ]);
+
     }
     
     public function teste(){

@@ -54,8 +54,8 @@ class MkEstoquesController extends Controller
 
     public function fiscalizar(Request $request){
 
-        $inicio = $this->inicio;
         $fim = $this->fim;
+        $inicio = $this->inicio;
         $dt_filtro = 'data_abertura';
     
         $tipos = $this->tipos();
@@ -64,7 +64,7 @@ class MkEstoquesController extends Controller
         $consultores = $this->funcionarios();
         $classificacoes = $this->classificacoes();
 
-        if ($request->dt_filtro == 1){
+        if ($request->dt_filtro == 1) {
           $dt_filtro = 'data_fechamento';
         }
         if($request->has('dt_inicio'))
@@ -94,13 +94,12 @@ class MkEstoquesController extends Controller
         ->whereBetween($dt_filtro, [$inicio, $fim])
         ->select(
           'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico', 'os.cdagendagrupo'
-          ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento'
+          ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento','os_itens.qnt'
           ,'cliente.codpessoa' ,'cliente.nome_razaosocial as cliente', 'cliente.inativo', 'cliente.complementoendereco'
           ,'tecnico.usr_nome as tecnico'
           ,'consultor.usr_nome as consultor'
           ,'contrato.vlr_renovacao as plano'
           ,'classificacao.classificacao'
-          ,'os_itens.qnt'
           ,'aceite.aceito', 'aceite.local_aceite'
         )->distinct('os.codos')
         ->get();

@@ -19,8 +19,7 @@
     .compensacao {
       margin-top: 15px;
     }
-</style>
-
+  </style>
 @endsection
 
 @section('content')
@@ -113,7 +112,6 @@
     </div>
   </div><!-- /.container-fluid -->
 </section>
-
 
 <section class="content">
   <div class="container-fluid">

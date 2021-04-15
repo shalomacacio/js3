@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'relatorios'], function () {
     Route::get('/sla',            'RelatorioController@sla')->name('relatorio.sla');
+    Route::get('/sla-garantia',   'RelatorioController@slaGarantia')->name('relatorio.slagarantia');
     Route::get('/servicos',       'RelatorioController@servicos')->name('relatorio.servicos');
     Route::get('/clientes',       'MkPessoasController@clientes')->name('relatorio.clientes');
     Route::get('/contratos',      'RelatorioController@contratos')->name('relatorio.contratos');
@@ -40,7 +41,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/contratos_os',   'RelatorioController@contratos_os')->name('relatorio.contratos_os');
     Route::get('/atendimentos',   'MkAtendimentosController@atendimentos')->name('relatorio.atendimentos');
     Route::get('/contratos/faturas','RelatorioController@contratos_faturas')->name('relatorio.contratos_faturas');
-    //teste
+    //teste 
+    Route::get('/ajaxClientOs',   'RelatorioController@ajaxClientOs')->name('relatorio.ajaxClientOs');
     Route::get('/teste','RelatorioController@teste')->name('relatorios.teste');
 
   });
