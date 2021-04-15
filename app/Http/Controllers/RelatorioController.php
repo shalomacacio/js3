@@ -335,15 +335,17 @@ class RelatorioController extends Controller
       }
 
       $fim = Carbon::parse($inicio)->subDays(30);
-
+      $fim60 = Carbon::parse($inicio)->subDays(60);
+      
       $result = DB::connection('pgsql')->table('mk_atendimento as a')
-        ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
+        ->leftJoin('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
         ->join('mk_os as os', 'at_os.cd_os','os.codos')
         ->join('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
-        ->whereBetween('dt_abertura', [$fim, $inicio] )
+        ->whereBetween('dt_abertura', [$fim, $inicio])
         ->select('p.codpessoa','p.nome_razaosocial'
             , DB::raw("COUNT(DISTINCT a.codatendimento) as tickets" )
             , DB::raw("COUNT(os.codos) as os" )
+
             )
         ->groupBy('p.codpessoa','p.nome_razaosocial')
         ->get();
@@ -379,16 +381,17 @@ class RelatorioController extends Controller
       $fim = Carbon::parse($request->fim)->format('Y-m-d');
       
       $servicos = DB::connection('pgsql')->table('mk_atendimento as ate')
-                    ->join('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
+                    ->leftJoin('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
                     ->join('mk_ate_processos as processo', 'ate.cd_processo', 'processo.codprocesso')
                     ->join('mk_atendimento_classificacao as classif', 'ate.classificacao_atendimento','classif.codatclass')
                     ->join('mk_atendimento_classificacao as classifenc', 'ate.classificacao_encerramento','classifenc.codatclass' )
                     ->where('ate.cliente_cadastrado', $cliente )
                     ->whereBetween('ate.dt_abertura', [$fim, $inicio] )
                     ->select('ate.codatendimento', 'ate.dt_abertura', 'ate.classificacao_encerramento', 'ate.dt_finaliza'
-                              , 'processo.nome_processo'
+                              ,'processo.nome_processo'
                               ,'classif.descricao'
                               ,'classifenc.descricao as classifenc')
+                    ->orderBy('dt_abertura')
                     ->get();
 
       return response()->json([

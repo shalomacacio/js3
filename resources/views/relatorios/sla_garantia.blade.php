@@ -84,8 +84,10 @@
                                 <th>CLIENTE</th>
                                 <th>TICKETS</th>
                                 <th>VER</th>
+                                <th>GARANTIA</th>
                                 <th>O.S</th>
                                 <th>VER</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +97,7 @@
                                     <td>{{ Str::limit($a->nome_razaosocial, 40)  }}</td>   
                                     <td>{{ $a->tickets }}</td>
                                     <td><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
+                                    <td> Garantia ATE </td>
                                     <td>{{ $a->os }}</td>       
                                     <td><a href="javascript:void(0)" onClick="getClientOs( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
                        
@@ -106,6 +109,7 @@
                               <th>CLIENTE</th>
                               <th>TICKETS</th>
                               <th>VER</th>
+                              <th>GARANTIA</th>
                               <th>O.S</th>
                               <th>VER</th>
                             </tr>
