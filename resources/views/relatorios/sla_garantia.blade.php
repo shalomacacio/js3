@@ -272,7 +272,7 @@
 
 
      // POPUP OS POR CLIENTE
-     function getClientAte(cliente, inicio){
+     function getClientAte(cliente){
       $.ajax({
         url: "{{ route('relatorio.ajaxClientAte') }}",
         type: "GET",
