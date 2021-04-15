@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/contratos/faturas','RelatorioController@contratos_faturas')->name('relatorio.contratos_faturas');
     //teste 
     Route::get('/ajaxClientOs',   'RelatorioController@ajaxClientOs')->name('relatorio.ajaxClientOs');
+    Route::get('/ajaxClientAte',   'RelatorioController@ajaxClientAte')->name('relatorio.ajaxClientAte');
     Route::get('/teste','RelatorioController@teste')->name('relatorios.teste');
 
   });

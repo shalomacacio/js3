@@ -360,9 +360,12 @@ class RelatorioController extends Controller
 
       $servicos = DB::connection('pgsql')->table('mk_os as os')
                     ->join('mk_os_tipo as tipo', 'os.tipo_os', 'tipo.codostipo')
+                    ->join('mk_os_classificacao_encerramento as class', 'os.classificacao_encerramento', 'class.codclassifenc')
                     ->where('os.cliente', $cliente )
                     ->whereBetween('os.data_abertura', [ $fim ,$inicio] )
-                    ->select( 'os.codos','os.data_abertura as abertura', 'os.data_fechamento', 'tipo.descricao as tipo')
+                    ->select( 'os.codos','os.data_abertura as abertura', 'os.data_fechamento'
+                    , 'tipo.descricao as tipo'
+                    ,'class.classificacao')
                     ->get();
       
       return response()->json([
@@ -378,7 +381,6 @@ class RelatorioController extends Controller
       return response()->json([
         'result' => $request->cliente
       ]);
-
     }
     
     public function teste(){

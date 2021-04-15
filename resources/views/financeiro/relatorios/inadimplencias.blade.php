@@ -176,7 +176,7 @@
             info:     true, //mostrando 1 de x paginas 
             bFilter: true, //campo pesquisa 
             ordering: true, // ordenação
-            pageLength: 100, //por pagina 
+            pageLength: 1000, //por pagina 
             language: {
                 search: "Pesquisar",
                 info: "Mostrando de _START_ até _END_ de _TOTAL_ registros",

@@ -9,11 +9,9 @@
               </button>
             </div>
             <div class="modal-body">
-                <table class="table-cliente table">
+                <table class="table-cliente table table-sm">
                   <thead id="ostable">
                   </thead>
-
-
                 </table>
             </div>
             <div class="modal-footer justify-content-between">

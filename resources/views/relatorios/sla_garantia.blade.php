@@ -240,7 +240,7 @@
       });
 
     // POPUP OS POR CLIENTE
-    function getClientOs(cliente, inicio){
+    function getClientOs(cliente){
       $.ajax({
         url: "{{ route('relatorio.ajaxClientOs') }}",
         type: "GET",
@@ -253,7 +253,7 @@
         success: function(data) {
           // console.log(result.result[0]);
           $("#ostable tr").remove();
-          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>TIPO</th><th>FECHAMENTO</th></tr>');
+          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>TIPO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
         for(var i=0; i < data.result.length ; i++)
           {
           $('#ostable').append(
@@ -262,6 +262,39 @@
             '<td>'+data.result[i]['abertura']+'</td>'+
             '<td>'+data.result[i]['tipo']+'</td>'+
             '<td>'+data.result[i]['data_fechamento']+'</td>'+
+            '<td>'+data.result[i]['class_enc']+'</td>'+
+          '</tr>');
+          }
+          }
+      });
+
+    }
+
+
+     // POPUP OS POR CLIENTE
+     function getClientAte(cliente, inicio){
+      $.ajax({
+        url: "{{ route('relatorio.ajaxClientAte') }}",
+        type: "GET",
+        dataType: 'json',
+        data: { 
+          cliente: cliente , 
+          inicio: "{{ $inicio }}",
+          fim: "{{ $fim }}"
+        },
+        success: function(data) {
+          // console.log(result.result[0]);
+          $("#ostable tr").remove();
+          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>TIPO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
+        for(var i=0; i < data.result.length ; i++)
+          {
+          $('#ostable').append(
+          '<tr>'+
+            '<td>'+data.result[i]['codos']+'</td>'+
+            '<td>'+data.result[i]['abertura']+'</td>'+
+            '<td>'+data.result[i]['tipo']+'</td>'+
+            '<td>'+data.result[i]['data_fechamento']+'</td>'+
+            '<td>'+data.result[i]['class_enc']+'</td>'+
           '</tr>');
           }
           }
