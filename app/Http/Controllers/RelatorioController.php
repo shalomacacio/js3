@@ -7,6 +7,7 @@ use App\Entities\MkContrato;
 use App\Entities\MkFatura;
 use App\Entities\MkPessoa;
 use App\Entities\Radacct;
+use Egulias\EmailValidator\Exception\AtextAfterCFWS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -252,8 +253,6 @@ class RelatorioController extends Controller
 
     public function renovacoes(Request $request){
 
-      // return dd($request);
-
       if(!$request->dt_inicio){
         $inicio = $this->inicio;
       } else {
@@ -267,28 +266,42 @@ class RelatorioController extends Controller
       }
 
       $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as mccrd')
-        // ->join('mk_contratos_controle_renovacao as ccr', 'mccrd.cd_renvoacao_auto', 'ccr.codcontratocontrenova')
-        // ->join('mk_contratos_renovacao as cr', 'mccrd.cd_contrato', 'cr.contrato')
-        ->join('mk_contratos as c', 'mccrd.cd_contrato', 'c.codcontrato') 
+        ->join('mk_contratos as c', 'mccrd.cd_contrato', 'c.codcontrato')
         ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
         ->where('mccrd.ocorrencia', 1)
-        // ->whereRaw('vcto_final >= ( DATE(NOW()) - 30 )')
-        // ->whereDate('vcto_final', '>=' , $inicio )
-        // ->whereDate('vcto_final', '<=' , $fim )
-        ->select( 'mccrd.cd_contrato', 'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
-        // , 'cr.dt_renovacao' 
-        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02'
-        ,'c.codcontrato', 'c.primeiro_vencimento')
+        // PRIMEIRA TENTATIVA 
+        // ->where(function ($query) {
+        //     $query->select( DB::raw( DB::connection('pgsql')->table('mk_atendimento as a')
+        //       ->where('cd_processo', [86])
+        //       ->where('dt_abertura', '>' ,'mccrd.vcto_final')
+        //       ->pluck('cliente_cadastrado')
+        //     ));
+        //   }
+        // )
+       // SEGUNDA TENTATIVA
+      //   ->whereNotExists( function ($query) {
+      //     $query->select( DB::raw('p.codpessoa'))
+      //     ->from('mk_atendimentos');
+      //   }
+      // )
+        ->select( 'mccrd.cd_contrato' ,'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
+        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'c.codcontrato', 'c.primeiro_vencimento')
         ->get();
+      // ->toSql();
 
-        $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
-        ->where('cd_processo', [86])
-        ->select('cliente_cadastrado')
-        ->pluck('cliente_cadastrado')
-        ->toArray();  
-      
+      // return dd($result);
+
       $renovacoes = $result;//->whereNotIN('codpessoa', $atendimentos);
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
+    }
+
+    public function ultimaData( $dt ){
+      $a = DB::connection('pgsql')->table('mk_atendimento')
+      ->where('cd_processo', [86])
+      ->where('a.dt_abertura','>', $dt )
+      ->pluck('dt_abertura')
+      ->first();
+      return $a;
     }
 
     public function sla(Request $request ){
@@ -345,7 +358,6 @@ class RelatorioController extends Controller
         ->select('p.codpessoa','p.nome_razaosocial'
             , DB::raw("COUNT(DISTINCT a.codatendimento) as tickets" )
             , DB::raw("COUNT(os.codos) as os" )
-
             )
         ->groupBy('p.codpessoa','p.nome_razaosocial')
         ->get();
