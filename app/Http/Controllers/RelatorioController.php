@@ -269,27 +269,10 @@ class RelatorioController extends Controller
         ->join('mk_contratos as c', 'mccrd.cd_contrato', 'c.codcontrato')
         ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
         ->where('mccrd.ocorrencia', 1)
-        // PRIMEIRA TENTATIVA 
-        // ->where(function ($query) {
-        //     $query->select( DB::raw( DB::connection('pgsql')->table('mk_atendimento as a')
-        //       ->where('cd_processo', [86])
-        //       ->where('dt_abertura', '>' ,'mccrd.vcto_final')
-        //       ->pluck('cliente_cadastrado')
-        //     ));
-        //   }
-        // )
-       // SEGUNDA TENTATIVA
-      //   ->whereNotExists( function ($query) {
-      //     $query->select( DB::raw('p.codpessoa'))
-      //     ->from('mk_atendimentos');
-      //   }
-      // )
         ->select( 'mccrd.cd_contrato' ,'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
         ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'c.codcontrato', 'c.primeiro_vencimento')
         ->get();
       // ->toSql();
-
-      // return dd($result);
 
       $renovacoes = $result;//->whereNotIN('codpessoa', $atendimentos);
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
@@ -393,7 +376,7 @@ class RelatorioController extends Controller
       $fim = Carbon::parse($request->fim)->format('Y-m-d');
       
       $servicos = DB::connection('pgsql')->table('mk_atendimento as ate')
-                    ->leftJoin('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
+                    ->join('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
                     ->join('mk_ate_processos as processo', 'ate.cd_processo', 'processo.codprocesso')
                     ->join('mk_atendimento_classificacao as classif', 'ate.classificacao_atendimento','classif.codatclass')
                     ->join('mk_atendimento_classificacao as classifenc', 'ate.classificacao_encerramento','classifenc.codatclass' )
