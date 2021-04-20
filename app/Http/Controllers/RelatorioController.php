@@ -271,9 +271,8 @@ class RelatorioController extends Controller
         ->join('mk_faturas as f', 'cf.cd_fatura', 'f.codfatura')
         ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
         ->where('ccrd.ocorrencia', 1)
-        ->where('f.liquidado', 'S')
-        ->whereRaw("date(ccrd.vcto_final - interval '11 months') = f.data_vencimento ")
-        
+        // ->where('f.liquidado', 'S')
+        ->whereRaw("DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento ")
         ->select( 'ccrd.cd_contrato' , DB::raw("date(ccrd.vcto_final - interval '11 months')as inicio")  ,'ccrd.vcto_final', 'ccrd.cd_renvoacao_auto', 'ccrd.vlr_renovacao'
         ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'cc.cd_contrato', 
         'f.data_vencimento', 'f.liquidado')
