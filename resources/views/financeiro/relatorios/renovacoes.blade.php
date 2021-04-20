@@ -48,10 +48,11 @@
                                 <th>CONTRATO</th>
                                 <th>CLIENTE</th>
                                 <th>TELEFONE</th>
-                                {{-- <th>CD_ATEND</th>--}}
                                 <th> VCTO_INI </th> 
                                 <th> VCTO_FINAL </th>
+                                <th> VCTO_FATURA </th>
                                 <th> VALOR </th>
+                                <th> LIQ </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,10 +62,11 @@
                             <td>{{ $r->cd_contrato }}</td>
                             <td>{{ $r->nome_razaosocial }}</td>
                             <td>{{ $r->fone01 }}@isset($r->fone02)|{{ $r->fone02 }}@endisset</td>
-                            {{--<td>{{ $r->codatendimento }}</td> --}}
-                            <td>{{ \Carbon\Carbon::parse($r->vcto_final)->subMonth(11)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($r->inicio)->format('d-m-Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($r->vcto_final )->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($r->data_vencimento )->format('d-m-Y') }}</td>
                             <td>{{ $r->vlr_renovacao }}</td>
+                            <td>{{ $r->liquidado }}</td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -74,10 +76,11 @@
                                 <th>CONTRATO</th>
                                 <th>CLIENTE</th>
                                 <th>TELEFONE</th>
-                                {{-- <th>CD_ATEND</th>--}}
                                 <th> VCTO_INI </th> 
                                 <th> VCTO_FINAL </th>
+                                <th> VCTO_FATURA </th>
                                 <th> VALOR </th>
+                                <th> LIQ </th>
                             </tr>
                         </tfoot>
                     </table>

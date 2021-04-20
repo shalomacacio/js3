@@ -265,16 +265,22 @@ class RelatorioController extends Controller
         $fim = $request->dt_fim;
       }
 
-      $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as mccrd')
-        ->join('mk_contratos as c', 'mccrd.cd_contrato', 'c.codcontrato')
-        ->join('mk_pessoas as p', 'c.cliente', 'p.codpessoa')
-        ->where('mccrd.ocorrencia', 1)
-        ->select( 'mccrd.cd_contrato' ,'mccrd.vcto_final', 'mccrd.cd_renvoacao_auto', 'mccrd.vlr_renovacao'
-        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'c.codcontrato', 'c.primeiro_vencimento')
+      $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as ccrd')
+        ->join('mk_contratos_contas as cc', 'ccrd.cd_contrato', 'cc.cd_contrato')
+        ->join('mk_contas_faturadas as cf', 'cc.cd_conta', 'cf.cd_conta')
+        ->join('mk_faturas as f', 'cf.cd_fatura', 'f.codfatura')
+        ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
+        ->where('ccrd.ocorrencia', 1)
+        ->where('f.liquidado', 'S')
+        ->whereRaw("date(ccrd.vcto_final - interval '11 months') = f.data_vencimento ")
+        
+        ->select( 'ccrd.cd_contrato' , DB::raw("date(ccrd.vcto_final - interval '11 months')as inicio")  ,'ccrd.vcto_final', 'ccrd.cd_renvoacao_auto', 'ccrd.vlr_renovacao'
+        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'cc.cd_contrato', 
+        'f.data_vencimento', 'f.liquidado')
         ->get();
       // ->toSql();
 
-      $renovacoes = $result;//->whereNotIN('codpessoa', $atendimentos);
+      $renovacoes = $result;
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
     }
 
@@ -357,7 +363,7 @@ class RelatorioController extends Controller
 
       $servicos = DB::connection('pgsql')->table('mk_os as os')
                     ->join('mk_os_tipo as tipo', 'os.tipo_os', 'tipo.codostipo')
-                    ->leftJoin('mk_os_classificacao_encerramento as class', 'os.classificacao_encerramento', 'class.codclassifenc')
+                    ->join('mk_os_classificacao_encerramento as class', 'os.classificacao_encerramento', 'class.codclassifenc')
                     ->where('os.cliente', $cliente )
                     ->whereBetween('os.data_abertura', [ $fim ,$inicio] )
                     ->select( 'os.codos','os.data_abertura as abertura', 'os.data_fechamento'
@@ -382,7 +388,7 @@ class RelatorioController extends Controller
                     ->join('mk_atendimento_classificacao as classifenc', 'ate.classificacao_encerramento','classifenc.codatclass' )
                     ->where('ate.cliente_cadastrado', $cliente )
                     ->whereBetween('ate.dt_abertura', [$fim, $inicio] )
-                    ->select('ate.codatendimento', 'ate.dt_abertura', 'ate.classificacao_encerramento', 'ate.dt_finaliza'
+                    ->select('ate.codatendimento', 'dt_abertura', 'ate.classificacao_encerramento', 'ate.dt_finaliza'
                               ,'processo.nome_processo'
                               ,'classif.descricao'
                               ,'classifenc.descricao as classifenc')
