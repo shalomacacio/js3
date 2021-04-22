@@ -201,15 +201,16 @@ class MkAtendimentosController extends Controller
                     ->leftjoin('mk_ate_processos as processo', 'atendimento.cd_processo', 'processo.codprocesso')
                     ->leftjoin('mk_ate_subprocessos as subprocesso', 'atendimento.cd_subprocesso', 'subprocesso.codsubprocesso')
                     ->leftjoin('mk_atendimento_classificacao as classificacao', 'atendimento.classificacao_atendimento', 'classificacao.codatclass')
+                    ->leftJoin('mk_contratos as cont', 'atendimento.cd_contrato', 'cont.codcontrato')
                     ->whereBetween('atendimento.dt_abertura', [$inicio, $fim])
-                    ->select(
-                    'atendimento.codatendimento','atendimento.dt_abertura', 'atendimento.operador_abertura', 
-                    'atendimento.como_foi_contato', 'atendimento.cd_processo', 'atendimento.cd_subprocesso',
-                    'atendimento.classificacao_atendimento','atendimento.dt_hr_insert','atendimento.dh_fim',
-                    'pessoa.nome_razaosocial as cliente', 
-                    'processo.nome_processo',
-                    'subprocesso.nome_subprocesso',
-                    'classificacao.descricao as classificacao'
+                    ->select('atendimento.codatendimento','atendimento.dt_abertura', 'atendimento.operador_abertura' 
+                    ,'atendimento.como_foi_contato', 'atendimento.cd_processo', 'atendimento.cd_subprocesso'
+                    ,'atendimento.classificacao_atendimento','atendimento.dt_hr_insert','atendimento.dh_fim'
+                    ,'pessoa.nome_razaosocial as cliente' 
+                    ,'processo.nome_processo'
+                    ,'subprocesso.nome_subprocesso'
+                    ,'classificacao.descricao as classificacao'
+                    ,'cont.codcontrato', 
                     )
                     ->get();
         //FILTROS
