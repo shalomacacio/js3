@@ -12,20 +12,21 @@
           th {
           font-size: 11px;
         }
-          .card-header {
+        .input-cuida{
+          margin: 0px 5px 0px 5px
+        }
+        .card-header {
           padding: .4rem 1.25rem;
         }
+
     </style>
 @endsection
 
 @section('content')
 
-{{-- <section class="content-header">
-
+ <section class="content-header">
     <div class="container-fluid">
-  
       <div class="row ">
-  
         <div class="col-sm-1">
           <h1>Filtros</h1>
         </div>
@@ -33,40 +34,40 @@
         <div class="col-sm-10">
           <form class="form-inline"  action="{{ route('financeiro.inadimplencias') }}"   method="GET">
             @csrf
+
+              {{-- <div class="form-group">
+                <div class="input-group input-group-md mb-3">
+                  <input type="text" class="form-control float-right input-cuida" name="dia" >
+                </div>
+              </div> 
+              --}}
+
               <div class="col-12 col-sm-12 col-md-4" >
                 <div class="compensacao"> </div>
                 <div class="form-group">
                   <div class="input-group input-group-md mb-3">
                     <div class="input-group-prepend">
-                      <button id="btn_filter" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        Selecione
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li class="dropdown-item" id="abertura">Abertura</li>
-                        <li class="dropdown-item" id="fechamento">Fechamento</li>
-                      </ul>
+                      <label> DIAS </label>
                     </div>
                     <!-- /btn-group -->
-                    <input type="text" class="form-control float-right" id="reservation">
+                    <input type="text" class="form-control float-right input-cuida" name="dia" >
                     <span class="input-group-append">
                       <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                     </span>
                   </div>
                 </div>
+                
               </div>
-  
-              <input type="hidden" name="dt_inicio" id="dt_inicio">
-              <input type="hidden" name="dt_fim" id="dt_fim"> 
+
           </form>
         </div>
   
       </div>
     </div><!-- /.container-fluid -->
-</section> --}}
+</section> 
 
 <section class="content">
     <div class="container-fluid">
-
         <div class="row">
             <div class="col-12">
               <h4>
@@ -77,7 +78,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4> INADIMPLENCIAS  </h4></center>
+        <center><h4> INADIMPLÊNCIAS  </h4></center>
         
         <div class="row">
             <div class="col-12 table-responsive">
@@ -93,6 +94,7 @@
                                 <th>VENCIMENTO</th>
                                 <th>DIAS</th>
                                 <th>VALOR</th>
+                                <th>COM ATEND</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,10 +105,9 @@
                             <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
-                            {{-- <td> {{  number_format($inad->valor_total , 2, ',', '.') }}</td> --}}
+                            <td> {{ $inad->atend }}</td>
                           </tr>
                           @endforeach
-        
                         </tbody>
                         <tfoot>
                             <tr>
@@ -115,6 +116,7 @@
                               <th>VENCIMENTO</th>
                               <th>DIAS</th>
                               <th>VALOR</th>
+                              <th>COM ATEND</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -142,7 +144,6 @@
 
 <script>
     $(document).ready(function() {
-
         // Setup - add a text input to each footer cell
         $('#example thead tr').clone(true).appendTo( '#example thead' );
         $('#example thead tr:eq(1) th').each( function (i) {
@@ -152,9 +153,9 @@
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
+                      .column(i)
+                      .search( this.value )
+                      .draw();
                 }
             } );
         });
@@ -164,13 +165,13 @@
             lengthChange: false,
             buttons: 
                     [ 
-                        'excel', 
-                        'csvHtml5',
-                        {
-                          extend: 'pdfHtml5',
-                          orientation: 'landscape',
-                          pageSize: 'LEGAL'
-                        }
+                      'excel', 
+                      'csvHtml5',
+                      {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                      }
                     ],
             paging:   true, //paginação
             info:     true, //mostrando 1 de x paginas 
@@ -193,7 +194,7 @@
         .appendTo( '#example_wrapper .col-md-6:eq(0)' );
     } );
 
-       // DATE RANGER
+    // DATE RANGER
     $(function() {
         moment.locale('pt-br');
         $('#reservation').daterangepicker({

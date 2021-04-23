@@ -224,6 +224,17 @@ class RelatorioController extends Controller
       $hoje = Carbon::now()->format('Y-m-d');
       $dia = $request->dia;
 
+      
+      //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      $result_atend = DB::connection('pgsql')->table('mk_atendimento')
+      // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
+      ->whereIn('cd_processo', [56,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      ->where('finalizado', 'N')
+      ->pluck('cliente_cadastrado')
+      ->toArray();
+
+      $atendimentos = implode(',' , $result_atend);
+
       $result = DB::connection('pgsql') ->table('mk_faturas as f')
       ->where('f.data_vencimento', '<' ,$hoje )
       ->join('mk_pessoas as p','f.cd_pessoa', 'p.codpessoa')
@@ -231,22 +242,22 @@ class RelatorioController extends Controller
       ->where('f.excluida','N')
       ->where('f.suspenso','N')
       ->where('f.valor_total', '>', 0)
-      ->whereRaw('DATE(NOW()) - data_vencimento > ?', [6])
-      ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02', 
-      'descricao','valor_total', 'cd_pessoa', DB::raw( 'DATE(NOW()) - data_vencimento  as dias'))
+      ->whereRaw('DATE(NOW()) - data_vencimento >= ?', [$dia])
+      ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02'
+      ,'descricao','valor_total', 'cd_pessoa'
+      , DB::raw( 'DATE(NOW()) - data_vencimento  as dias')
+      , DB::raw("(CASE WHEN p.codpessoa IN (".$atendimentos.") THEN 'SIM' ELSE 'NAO' END) as atend")
+      )
       ->get();
 
-      //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      $atendimentos = DB::connection('pgsql')->table('mk_atendimento')
-      // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
-      ->whereIn('cd_processo', [56,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      ->where('finalizado', 'N')
-      ->select('cliente_cadastrado')
-      ->pluck('cliente_cadastrado')
-      ->toArray();
+      // return dd($result);
+
 
       // SOMENTE QUEM NÃO TEM ATENDIMENTO ABERTO 
-      $inadimplencias = $result->whereNotIN('cd_pessoa', $atendimentos)->sortByDesc('data_vencimento');
+      // $inadimplencias = $result->whereNotIN('cd_pessoa', $atendimentos)->sortByDesc('data_vencimento');
+
+      // TODAS 
+      $inadimplencias = $result->sortByDesc('data_vencimento');
     
       return view('financeiro.relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
