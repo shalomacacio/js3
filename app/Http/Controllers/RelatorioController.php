@@ -238,12 +238,16 @@ class RelatorioController extends Controller
       $result = DB::connection('pgsql') ->table('mk_faturas as f')
       ->where('f.data_vencimento', '<' ,$hoje )
       ->join('mk_pessoas as p','f.cd_pessoa', 'p.codpessoa')
+      ->join('mk_logradouros as l','p.codlogradouro', 'l.codlogradouro')
+      ->join('mk_bairros as b','p.codbairro', 'b.codbairro')
       ->where('f.liquidado','N')
       ->where('f.excluida','N')
       ->where('f.suspenso','N')
       ->where('f.valor_total', '>', 0)
       ->whereRaw('DATE(NOW()) - data_vencimento >= ?', [$dia])
-      ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' ,'nome_razaosocial', 'fone01', 'fone02'
+      ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' 
+      ,'p.nome_razaosocial', 'p.fone01', 'p.fone02', 'p.numero'
+      ,'l.logradouro', 'b.bairro'
       ,'descricao','valor_total', 'cd_pessoa'
       , DB::raw( 'DATE(NOW()) - data_vencimento  as dias')
       , DB::raw("(CASE WHEN p.codpessoa IN (".$atendimentos.") THEN 'SIM' ELSE 'NAO' END) as atend")

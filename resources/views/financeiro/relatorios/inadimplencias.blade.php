@@ -91,6 +91,8 @@
                             <tr>
                                 <th>TELEFONE</th>
                                 <th style="width: 300px">CLIENTE</th>
+                                <th>ENDEREÇO</th>
+                                <th>BAIRRO</th>
                                 <th>VENCIMENTO</th>
                                 <th>DIAS</th>
                                 <th>VALOR</th>
@@ -102,6 +104,8 @@
                           <tr>
                             <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
                             <td>{{ $inad->nome_razaosocial }}</td>
+                            <td>{{ $inad->logradouro }} - {{ $inad->numero }} </td>
+                            <td>{{ $inad->bairro }}</td>
                             <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
@@ -113,6 +117,8 @@
                             <tr>
                               <th>TELEFONE</th>
                               <th>CLIENTE</th>
+                              <th>ENDEREÇO</th>
+                              <th>BAIRRO</th>
                               <th>VENCIMENTO</th>
                               <th>DIAS</th>
                               <th>VALOR</th>
