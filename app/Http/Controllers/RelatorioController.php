@@ -51,14 +51,14 @@ class RelatorioController extends Controller
         $dt_filtro = 'os.data_abertura';
     
         $tipos = $this->tipos();
-        $tecnicos = $this->funcionarios();
-        $consultores = $this->funcionarios();
+        // $tecnicos = $this->funcionarios();
+        // $consultores = $this->funcionarios();
         $classificacoes = $this->classificacoes();
 
         if ($request->dt_filtro == 1){
           $dt_filtro = 'os.data_fechamento';
         }
-
+        
         if($request->has('dt_inicio'))
         {
           $inicio = Carbon::parse($request->dt_inicio)->format('Y-m-d 00:00:00');
@@ -89,18 +89,20 @@ class RelatorioController extends Controller
           $servicos = $result
           ->whereIn('classificacao_encerramento', $classiFiltro );
         }
-        elseif($request->has('tecnicos'))
-          {
-            $tecFiltro = $request->tecnicos;
-            $servicos = $result
-              ->whereIn('operador_fech_tecnico', $tecFiltro )
-              ->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
-          } elseif ( $request->has('consultores')) {
-            $consultFiltro = $request->consultores;
-            $servicos = $result
-              ->whereIn('tecnico_responsavel', $consultFiltro )
-              ->sortBy('tecnico_responsavel')->sortBy('data_fechamento');
-          } elseif( $request->has('tipos')) {
+        // elseif($request->has('tecnicos'))
+        //   {
+        //     $tecFiltro = $request->tecnicos;
+        //     $servicos = $result
+        //       ->whereIn('operador_fech_tecnico', $tecFiltro )
+        //       ->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
+        //   } 
+        // elseif ( $request->has('consultores')) {
+        //     $consultFiltro = $request->consultores;
+        //     $servicos = $result
+        //       ->whereIn('tecnico_responsavel', $consultFiltro )
+        //       ->sortBy('tecnico_responsavel')->sortBy('data_fechamento');
+        //   } 
+        elseif( $request->has('tipos')) {
             $tipoFiltro = $request->tipos;
             $servicos = $result
               ->whereIn('tipo_os', $tipoFiltro )
@@ -115,7 +117,7 @@ class RelatorioController extends Controller
           ]);
         }
         
-        return view('relatorios.servicos', compact('servicos','tecnicos', 'consultores', 'tipos' , 'classificacoes' , 'inicio', 'fim'));
+        return view('relatorios.servicos', compact('servicos',  'tipos' , 'classificacoes' , 'inicio', 'fim'));
       }
 
     /**

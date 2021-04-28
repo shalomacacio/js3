@@ -48,7 +48,7 @@
             </div>
           </div>
 
-            <div class="col-12 col-sm-12 col-md-2" >
+            {{-- <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
               <div class="form-group">
                 <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
@@ -68,7 +68,7 @@
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
 
             <div class="col-12 col-sm-12 col-md-2" >
               <!-- select -->
