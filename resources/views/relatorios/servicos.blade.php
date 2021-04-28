@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
     <style>
         td {
@@ -127,7 +127,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4>RELATÓRIO DE SLA </h4></center>
+        <center><h4>RELATÓRIO DE SERVIÇOS </h4></center>
           
         <div class="row">
             <div class="col-12 table-responsive">
@@ -213,6 +213,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
+
 <script src="{{ asset('/vendor/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -308,6 +309,14 @@
             $('#dt_fim').val( end.format('YYYY-MM-DD'));
         });
     });
+
+  //Initialize Select2 Elements
+  $('.select2').select2()
+
+  //Initialize Select2 Elements
+  $('.select2bs4').select2({
+    theme: 'bootstrap4'
+  })
 
 </script>
 

@@ -17,7 +17,10 @@
     @yield('css')
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+
 </head>
+
+
 
 <body class="hold-transition login-page">
 
@@ -55,10 +58,11 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="col-8">
               <div class="icheck-primary">
-                <input type="checkbox" id="remember">
+                <input type="checkbox" id="remember" name="remember_token" @if (Cookie::get('remembered') == 'remembered') checked="checked" @endif>
                 <label for="remember">
                   Lembrar Senha
                 </label>
