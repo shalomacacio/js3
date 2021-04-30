@@ -36,7 +36,6 @@ class RelatorioController extends Controller
       ->select('codostipo','descricao')
       ->get();
       return $tipos;
-      
     }
 
     public function classificacoes(){
@@ -51,8 +50,6 @@ class RelatorioController extends Controller
         $dt_filtro = 'os.data_abertura';
     
         $tipos = $this->tipos();
-        // $tecnicos = $this->funcionarios();
-        // $consultores = $this->funcionarios();
         $classificacoes = $this->classificacoes();
 
         if ($request->dt_filtro == 1){
@@ -88,21 +85,7 @@ class RelatorioController extends Controller
           $classiFiltro = $request->classificacoes;
           $servicos = $result
           ->whereIn('classificacao_encerramento', $classiFiltro );
-        }
-        // elseif($request->has('tecnicos'))
-        //   {
-        //     $tecFiltro = $request->tecnicos;
-        //     $servicos = $result
-        //       ->whereIn('operador_fech_tecnico', $tecFiltro )
-        //       ->sortBy('operador_fech_tecnico')->sortBy('data_fechamento');
-        //   } 
-        // elseif ( $request->has('consultores')) {
-        //     $consultFiltro = $request->consultores;
-        //     $servicos = $result
-        //       ->whereIn('tecnico_responsavel', $consultFiltro )
-        //       ->sortBy('tecnico_responsavel')->sortBy('data_fechamento');
-        //   } 
-        elseif( $request->has('tipos')) {
+        }elseif( $request->has('tipos')) {
             $tipoFiltro = $request->tipos;
             $servicos = $result
               ->whereIn('tipo_os', $tipoFiltro )
@@ -226,45 +209,66 @@ class RelatorioController extends Controller
       $hoje = Carbon::now()->format('Y-m-d');
       $dia = $request->dia;
 
-      
       //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      $result_atend = DB::connection('pgsql')->table('mk_atendimento')
-      // ->whereNotNull('cd_processo') // FILTRAR ATENDIMENTOS  COM BUG 
-      ->whereIn('cd_processo', [56,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      ->where('finalizado', 'N')
-      ->pluck('cliente_cadastrado')
-      ->toArray();
+      $result = DB::connection('pgsql')->table('mk_atendimento')
+      ->whereIn('cd_processo', [29,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      ->select('cliente_cadastrado', 'cd_processo', 'finalizado')
+      ->get();
 
-      $atendimentos = implode(',' , $result_atend);
+      $result_canc = $result->whereIn('cd_processo', [121,122])->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
+      $result_cob = $result->whereIn('cd_processo', [29])->pluck('cliente_cadastrado')->toArray();
 
-      $result = DB::connection('pgsql') ->table('mk_faturas as f')
-      ->where('f.data_vencimento', '<' ,$hoje )
+      $cancelamentos = implode(',' , $result_canc);
+      $cobrancas = implode(',' , $result_cob);
+
+      // $result = DB::connection('pgsql')->select((
+      //     "select teste.cliente_cadastrado, teste.dt_abertura, teste.descricao as classificacao, teste.info_cliente ,
+      //             f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
+      //             ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone02, p.numero
+      //             ,l.logradouro, b.bairro
+      //             ,( DATE(NOW()) - f.data_vencimento) as dias
+      //             ,(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend
+      //           from mk_faturas as f  
+      //           join mk_pessoas as p on f.cd_pessoa  = p.codpessoa
+      //           join mk_logradouros as l on p.codlogradouro = l.codlogradouro
+      //           join mk_bairros as b on p.codbairro =b.codbairro
+      //           cross join lateral( select a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
+      //           from mk_atendimento as a 
+      //           join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
+      //         where a.cd_processo = 29  
+      //         and a.cliente_cadastrado = p.codpessoa 
+      //           order by a.dt_abertura desc 
+      //       limit 1 ) teste 
+      //     where f.data_vencimento < ?
+      //     and f.liquidado = 'N'
+      //     and f.excluida = 'N' 
+      //     and f.suspenso = 'N'
+      //     and (DATE(NOW()) - data_vencimento >= ?)"          
+      // ), [$hoje, $dia]);
+
+      $result = DB::connection('pgsql')->table('mk_faturas as f')
+      ->where('f.data_vencimento','<', $hoje )
       ->join('mk_pessoas as p','f.cd_pessoa', 'p.codpessoa')
       ->join('mk_logradouros as l','p.codlogradouro', 'l.codlogradouro')
       ->join('mk_bairros as b','p.codbairro', 'b.codbairro')
       ->where('f.liquidado','N')
-      ->where('f.excluida','N')
-      ->where('f.suspenso','N')
+      ->where('f.excluida', 'N')
+      ->where('f.suspenso', 'N')
       ->where('f.valor_total', '>', 0)
-      ->whereRaw('DATE(NOW()) - data_vencimento >= ?', [$dia])
+      ->whereRaw('DATE(NOW()) - data_vencimento >= ? ', [$dia])
       ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' 
-      ,'p.nome_razaosocial', 'p.fone01', 'p.fone02', 'p.numero'
+      , 'p.codpessoa' ,'p.nome_razaosocial', 'p.fone01', 'p.fone02', 'p.numero'
       ,'l.logradouro', 'b.bairro'
       ,'descricao','valor_total', 'cd_pessoa'
       , DB::raw( 'DATE(NOW()) - data_vencimento  as dias')
-      , DB::raw("(CASE WHEN p.codpessoa IN (".$atendimentos.") THEN 'SIM' ELSE 'NAO' END) as atend")
+      , DB::raw("(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend")
       )
       ->get();
 
       // return dd($result);
 
-
-      // SOMENTE QUEM NÃO TEM ATENDIMENTO ABERTO 
-      // $inadimplencias = $result->whereNotIN('cd_pessoa', $atendimentos)->sortByDesc('data_vencimento');
-
       // TODAS 
-      $inadimplencias = $result->sortByDesc('data_vencimento');
-    
+      $inadimplencias = $result;
       return view('financeiro.relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 

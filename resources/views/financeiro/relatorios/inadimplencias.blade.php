@@ -97,6 +97,8 @@
                                 <th>DIAS</th>
                                 <th>VALOR</th>
                                 <th>COM ATEND</th>
+                                <th>CLASS ENC</th>
+                                <th>INFO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,6 +112,8 @@
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
                             <td> {{ $inad->atend }}</td>
+                            <td> @isset( $inad->classificacao ) {{ $inad->classificacao }} @endisset </td>
+                            <td> @isset( $inad->info_cliente )  {{ $inad->info_cliente }} @endisset </td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -123,6 +127,8 @@
                               <th>DIAS</th>
                               <th>VALOR</th>
                               <th>COM ATEND</th>
+                              <th>CLASS ENC</th>
+                              <th>INFO</th>
                             </tr>
                         </tfoot>
                     </table>

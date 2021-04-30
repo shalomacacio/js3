@@ -12,12 +12,20 @@
         td {
           font-size: 9px;
         }
-          th {
+        th {
           font-size: 11px;
         }
-          .card-header {
+        .card-header {
           padding: .4rem 1.25rem;
         }
+        .input-group-cuida{
+          margin: 12px 5px 0px 5px;
+        }
+        .input-cuida{
+          margin: 0px 5px 0px 5px;
+          /* width: 52% !important; */
+        }
+
       </style>
 @endsection
 
@@ -81,7 +89,7 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-12 col-md-4" >
+            <div class="col-12 col-sm-12 col-md-6" >
               <div class="compensacao"> </div>
               <div class="form-group">
                 <div class="input-group input-group-md mb-3">
@@ -95,7 +103,7 @@
                     </ul>
                   </div>
                   <!-- /btn-group -->
-                  <input type="text" class="form-control float-right" id="reservation">
+                  <input type="text" class="form-control float-right input-cuida" id="reservation">
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                   </span>
@@ -317,6 +325,16 @@
   $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
+
+  $('#abertura').click(function(e) {
+    $('#btn_filter').text("Abertura");
+    $('#dt_filtro').val(0);
+  });
+
+  $('#fechamento').click(function(e) {
+    $('#btn_filter').text("Fechamento");
+    $('#dt_filtro').val(1);
+  });
 
 </script>
 
