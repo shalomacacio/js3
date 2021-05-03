@@ -90,7 +90,7 @@
                         <thead>
                             <tr>
                                 <th>TELEFONE</th>
-                                <th style="width: 300px">CLIENTE</th>
+                                <th>CLIENTE</th>
                                 <th>ENDEREÇO</th>
                                 <th>BAIRRO</th>
                                 <th>VENCIMENTO</th>
@@ -98,7 +98,6 @@
                                 <th>VALOR</th>
                                 <th>COM ATEND</th>
                                 <th>CLASS ENC</th>
-                                <th>INFO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,8 +111,7 @@
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
                             <td> {{ $inad->atend }}</td>
-                            <td> @isset( $inad->classificacao ) {{ $inad->classificacao }} @endisset </td>
-                            <td> @isset( $inad->info_cliente )  {{ $inad->info_cliente }} @endisset </td>
+                            <td  @isset( $inad->info_cliente ) title="{{ $inad->info_cliente  }}" @endisset > @isset( $inad->classificacao ) {{ $inad->classificacao }} @endisset </td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -128,7 +126,6 @@
                               <th>VALOR</th>
                               <th>COM ATEND</th>
                               <th>CLASS ENC</th>
-                              <th>INFO</th>
                             </tr>
                         </tfoot>
                     </table>

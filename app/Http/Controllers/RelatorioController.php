@@ -216,11 +216,8 @@ class RelatorioController extends Controller
       ->get();
 
       $result_canc = $result->whereIn('cd_processo', [121,122])->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
-      $result_cob = $result->whereIn('cd_processo', [29])->pluck('cliente_cadastrado')->toArray();
-
       $cancelamentos = implode(',' , $result_canc);
-      $cobrancas = implode(',' , $result_cob);
-
+  
       $result = DB::connection('pgsql')->select((
           "select atendimentos.cliente_cadastrado, atendimentos.dt_abertura, atendimentos.descricao as classificacao, atendimentos.info_cliente ,
                   f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
@@ -233,38 +230,17 @@ class RelatorioController extends Controller
                 join mk_logradouros as l on p.codlogradouro = l.codlogradouro
                 join mk_bairros as b on p.codbairro =b.codbairro
                 left join lateral( select a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
-                from mk_atendimento as a 
-                join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
-                where a.cd_processo = 29
-                order by a.dt_abertura desc 
-                limit 1 ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
+                                    from mk_atendimento as a 
+                                    join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
+                                    where a.cd_processo = 29
+                                    order by a.dt_abertura desc 
+                                  ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
           where f.data_vencimento < ?
           and f.liquidado = 'N'
           and f.excluida = 'N' 
           and f.suspenso = 'N'
           and (DATE(NOW()) - data_vencimento >= ?)"          
       ), [$hoje, $dia]);
-
-      // $result = DB::connection('pgsql')->table('mk_faturas as f')
-      // ->where('f.data_vencimento','<', $hoje )
-      // ->join('mk_pessoas as p','f.cd_pessoa', 'p.codpessoa')
-      // ->join('mk_logradouros as l','p.codlogradouro', 'l.codlogradouro')
-      // ->join('mk_bairros as b','p.codbairro', 'b.codbairro')
-      // ->where('f.liquidado','N')
-      // ->where('f.excluida', 'N')
-      // ->where('f.suspenso', 'N')
-      // ->where('f.valor_total', '>', 0)
-      // ->whereRaw('DATE(NOW()) - data_vencimento >= ? ', [$dia])
-      // ->select('f.codfatura', 'f.data_vencimento', 'dt_ref_inicial' 
-      // , 'p.codpessoa' ,'p.nome_razaosocial', 'p.fone01', 'p.fone02', 'p.numero'
-      // ,'l.logradouro', 'b.bairro'
-      // ,'descricao','valor_total', 'cd_pessoa'
-      // , DB::raw( 'DATE(NOW()) - data_vencimento  as dias')
-      // , DB::raw("(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend")
-      // )
-      // ->get();
-
-      // return dd($result);
 
       // TODAS 
       $inadimplencias = $result;
