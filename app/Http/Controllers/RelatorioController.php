@@ -219,7 +219,8 @@ class RelatorioController extends Controller
       $cancelamentos = implode(',' , $result_canc);
   
       $result = DB::connection('pgsql')->select((
-          "select atendimentos.cliente_cadastrado, atendimentos.dt_abertura, atendimentos.descricao as classificacao, atendimentos.info_cliente ,
+          "select distinct 
+                  atendimentos.cliente_cadastrado, atendimentos.descricao as classificacao, atendimentos.info_cliente ,
                   f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
                   ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone02, p.numero
                   ,l.logradouro, b.bairro
@@ -229,11 +230,11 @@ class RelatorioController extends Controller
                 join mk_pessoas as p on f.cd_pessoa  = p.codpessoa
                 join mk_logradouros as l on p.codlogradouro = l.codlogradouro
                 join mk_bairros as b on p.codbairro =b.codbairro
-                left join lateral( select a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
+                left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
                                     from mk_atendimento as a 
                                     join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
-                                    where a.cd_processo = 29
-                                    order by a.dt_abertura desc 
+                                    where a.cd_processo in (29)
+                                    group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
                                   ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
           where f.data_vencimento < ?
           and f.liquidado = 'N'
@@ -394,6 +395,44 @@ class RelatorioController extends Controller
       return response()->json([
         'result' => $servicos
       ]);
+    }
+
+    public function receitas( Request $request){
+
+      
+      $inicio = Carbon::now()->format('d-m-Y');
+      $fim = Carbon::now()->format('d-m-Y');
+
+      if( $request->dt_inicio){
+        $inicio = $request->dt_inicio;
+      }
+      if( $request->dt_fim){
+        $fim = $request->dt_fim;;
+      }
+
+      $parametro = null;
+      $valor = null;
+
+      // if( $request->parametro == 0){
+      //   $parametro = 'data_liquidacao'
+      // }
+
+      $result = DB::connection('pgsql')->table('mk_faturas as f')
+        ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
+        ->join('mk_contas_faturadas as cf', 'f.codfatura', 'cf.cd_fatura')
+        ->join('mk_plano_contas as pc', 'cf.cd_conta', 'pc.codconta')
+        ->whereBetween('f.data_vencimento', [ $inicio, $fim ])
+        // ->where($parametro, $valor)
+        ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
+        'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao', ''
+        ,'p.nome_razaosocial', 'p.codcidade'
+        ,'pc.unidade_financeira' )
+      ->get();
+
+      $receitas = $result;
+
+
+      return view('financeiro.relatorios.receitas', compact('receitas'));
     }
     
     public function teste(){

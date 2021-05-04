@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'relatorios'], function () {
       Route::get('/inadimplencias', 'RelatorioController@inadimplencias')->name('financeiro.inadimplencias');
       Route::get('/renovacoes',     'RelatorioController@renovacoes')->name('financeiro.renovacoes');
+      Route::get('/receitas',     'RelatorioController@receitas')->name('financeiro.receitas');
     });
   
   });

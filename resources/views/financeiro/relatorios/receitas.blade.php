@@ -24,50 +24,55 @@
 
 @section('content')
 
- <section class="content-header">
+
+<section class="content-header">
+
     <div class="container-fluid">
+  
       <div class="row ">
+  
         <div class="col-sm-1">
           <h1>Filtros</h1>
         </div>
   
         <div class="col-sm-10">
-          <form class="form-inline"  action="{{ route('financeiro.inadimplencias') }}"   method="GET">
+          <form class="form-inline"  action="{{ route('financeiro.receitas') }}"   method="GET">
             @csrf
-
-              {{-- <div class="form-group">
-                <div class="input-group input-group-md mb-3">
-                  <input type="text" class="form-control float-right input-cuida" name="dia" >
-                </div>
-              </div> 
-              --}}
-
               <div class="col-12 col-sm-12 col-md-4" >
                 <div class="compensacao"> </div>
                 <div class="form-group">
                   <div class="input-group input-group-md mb-3">
                     <div class="input-group-prepend">
-                      <label> DIAS </label>
+                      <button id="btn_filter" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        Selecione
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li class="dropdown-item" id="abertura">Abertura</li>
+                        <li class="dropdown-item" id="fechamento">Fechamento</li>
+                      </ul>
                     </div>
                     <!-- /btn-group -->
-                    <input type="text" class="form-control float-right input-cuida" name="dia" >
+                    <input type="text" class="form-control float-right" id="reservation">
                     <span class="input-group-append">
                       <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                     </span>
                   </div>
                 </div>
-                
               </div>
-
+  
+              <input type="hidden" name="dt_inicio" id="dt_inicio">
+              <input type="hidden" name="dt_fim" id="dt_fim"> 
           </form>
         </div>
   
       </div>
     </div><!-- /.container-fluid -->
-</section> 
+</section>
+
 
 <section class="content">
     <div class="container-fluid">
+
         <div class="row">
             <div class="col-12">
               <h4>
@@ -78,8 +83,8 @@
             <!-- /.col -->
         </div>
 
-        <center><h4> INADIMPLÊNCIAS  </h4></center>
-        
+        <center><h4> RECEITAS </h4></center>
+          
         <div class="row">
             <div class="col-12 table-responsive">
                 <div class="col-12">
@@ -89,43 +94,57 @@
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>TELEFONE</th>
-                                <th>CLIENTE</th>
-                                <th>ENDEREÇO</th>
-                                <th>BAIRRO</th>
-                                <th>VENCIMENTO</th>
-                                <th>DIAS</th>
-                                <th>VALOR</th>
-                                <th>CAN ABERTO</th>
-                                <th>STATUS COB</th>
+                                <th>Fatura</th>
+                                <th>Cliente</th>
+                                <th>Cidade</th>
+                                <th>Vencimento</th>
+                                <th>Liquidado</th>
+                                <th>Vlr Liq</th>
+                                <th>Usr Liq</th>
+                                <th>Dt Liq</th>
+                                <th>Und Fin</th>
+                                <th>Descricao</th>
+                                <th>Tipo</th>
+                                <th>Tipo PG Liq</th>
+                                <th>Suspenso</th>
                             </tr>
                         </thead>
                         <tbody>
-                          @foreach($inadimplencias as $inad)
-                          <tr>
-                            <td>{{$inad->fone01}}@isset($inad->fone02)|{{$inad->fone02}}@endisset</td>
-                            <td>{{ $inad->nome_razaosocial }}</td>
-                            <td>{{ $inad->logradouro }} - {{ $inad->numero }} </td>
-                            <td>{{ $inad->bairro }}</td>
-                            <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
-                            <td>{{ $inad->dias }}</td>
-                            <td> {{ $inad->valor_total }}</td>
-                            <td> {{ $inad->atend }}</td>
-                            <td  @isset( $inad->info_cliente ) title="{{ $inad->info_cliente  }}" @endisset > @isset( $inad->classificacao ) {{ $inad->classificacao }} @endisset </td>
-                          </tr>
-                          @endforeach
+                            @foreach ($receitas as $receita )
+                            <tr>
+                                <td> {{ $receita->codfatura }} </td>
+                                <td> {{ $receita->nome_razaosocial }} </td>
+                                <td> {{ $receita->codcidade }} </td>
+                                <td> {{ $receita->data_vencimento }} </td>
+                                <td> {{ $receita->liquidado }} </td>
+                                <td> {{ $receita->vlr_liquidacao }} </td> 
+                                <td> {{ $receita->usuario_liquidacao }} </td> 
+                                <td> {{ \Carbon\Carbon::parse($receita->data_liquidacao)->format('d-m-Y') }} </td> 
+                                <td> {{ $receita->unidade_financeira }} </td> 
+                                <td> {{ $receita->descricao }} </td> 
+                                <td> {{ $receita->tipo }} </td>  
+                                <td> {{ $receita->forma_pgto_liquidacao }} </td>  
+                                <td> {{ $receita->suspenso }} </td>  
+                                
+                            </tr>
+                            @endforeach
+                   
                         </tbody>
                         <tfoot>
                             <tr>
-                              <th>TELEFONE</th>
-                              <th>CLIENTE</th>
-                              <th>ENDEREÇO</th>
-                              <th>BAIRRO</th>
-                              <th>VENCIMENTO</th>
-                              <th>DIAS</th>
-                              <th>VALOR</th>
-                              <th>CAN ABERTO</th>
-                              <th>STATUS COB</th>
+                                <th>Fatura</th>
+                                <th>Cliente</th>
+                                <th>Cidade</th>
+                                <th>Vencimento</th>
+                                <th>Liquidado</th>
+                                <th>Vlr Liq</th>
+                                <th>Usr Liq</th>
+                                <th>Dt Liq</th>
+                                <th>Und Fin</th>
+                                <th>Descricao</th>
+                                <th>Tipo</th>
+                                <th>Tipo PG Liq</th>
+                                <th>Suspenso</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -151,8 +170,10 @@
 <script src="{{ asset('/vendor/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
+
 <script>
     $(document).ready(function() {
+
         // Setup - add a text input to each footer cell
         $('#example thead tr').clone(true).appendTo( '#example thead' );
         $('#example thead tr:eq(1) th').each( function (i) {
@@ -162,9 +183,9 @@
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
-                      .column(i)
-                      .search( this.value )
-                      .draw();
+                        .column(i)
+                        .search( this.value )
+                        .draw();
                 }
             } );
         });
@@ -172,21 +193,20 @@
         var table = $('#example').DataTable( {
             processing: true,
             lengthChange: false,
-            buttons: 
-                    [ 
-                      'excel', 
-                      'csvHtml5',
-                      {
-                        extend: 'pdfHtml5',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
-                      }
+            buttons: [ 
+                        'excel', 
+                        'csvHtml5',
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL'
+                        }
                     ],
-            paging:   true, //paginação
+            paging:   false, //paginação
             info:     true, //mostrando 1 de x paginas 
             bFilter: true, //campo pesquisa 
             ordering: true, // ordenação
-            pageLength: 1000, //por pagina 
+            pageLength: 100, //por pagina 
             language: {
                 search: "Pesquisar",
                 info: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -203,8 +223,9 @@
         .appendTo( '#example_wrapper .col-md-6:eq(0)' );
     } );
 
-    // DATE RANGER
-    $(function() {
+     // DATE RANGER
+
+     $(function() {
         moment.locale('pt-br');
         $('#reservation').daterangepicker({
             opens: 'right',
@@ -241,16 +262,5 @@
             $('#dt_fim').val( end.format('YYYY-MM-DD'));
         });
     });
-
-    $('#abertura').click(function(e) {
-      $('#btn_filter').text("Abertura");
-      $('#dt_filtro').val(0);
-    });
-
-    $('#fechamento').click(function(e) {
-      $('#btn_filter').text("Fechamento");
-      $('#dt_filtro').val(1);
-    });
-
 </script>
 @endsection
