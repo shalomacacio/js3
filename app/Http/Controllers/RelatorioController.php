@@ -419,11 +419,13 @@ class RelatorioController extends Controller
         ->join('mk_cidades as cid', 'p.codcidade', 'cid.codcidade')
         ->join('mk_contas_faturadas as cf', 'f.codfatura', 'cf.cd_fatura')
         ->join('mk_plano_contas as pc', 'cf.cd_conta', 'pc.codconta')
+        ->join('mk_unidade_financeia as uf', 'pc.unidade_financeira', 'uf.nomenclatura')
         ->whereBetween($dt_parametro , [$inicio, $fim ])
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
         'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
         ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade'
-        ,'pc.unidade_financeira' )
+        ,'pc.unidade_financeira'
+        ,'uf.descricao as unidade' )
       ->get();
 
       $receitas = $result;

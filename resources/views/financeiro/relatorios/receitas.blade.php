@@ -122,7 +122,7 @@
                                       {{ \Carbon\Carbon::parse($receita->data_liquidacao)->format('d-m-Y') }}
                                      @endisset  
                                 </td> 
-                                <td> {{ $receita->unidade_financeira }} </td> 
+                                <td> {{ $receita->unidade }} </td> 
                                 <td> {{ $receita->descricao }} </td> 
                                 <td> {{ $receita->tipo }} </td>  
                                 <td> {{ $receita->forma_pgto_liquidacao }} </td>  
