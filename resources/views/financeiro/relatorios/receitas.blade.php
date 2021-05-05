@@ -18,7 +18,6 @@
         .card-header {
           padding: .4rem 1.25rem;
         }
-
     </style>
 @endsection
 
@@ -28,7 +27,6 @@
 <section class="content-header">
 
     <div class="container-fluid">
-  
       <div class="row ">
   
         <div class="col-sm-1">
@@ -47,8 +45,8 @@
                         Selecione
                       </button>
                       <ul class="dropdown-menu">
-                        <li class="dropdown-item" id="abertura">Abertura</li>
-                        <li class="dropdown-item" id="fechamento">Fechamento</li>
+                        <li class="dropdown-item" id="vencimento">Vencimento</li>
+                        <li class="dropdown-item" id="liquidacao">Liquidação</li>
                       </ul>
                     </div>
                     <!-- /btn-group -->
@@ -60,8 +58,9 @@
                 </div>
               </div>
   
-              <input type="hidden" name="dt_inicio" id="dt_inicio">
-              <input type="hidden" name="dt_fim" id="dt_fim"> 
+              <input type="hidden" name="dt_inicio"   id="dt_inicio">
+              <input type="hidden" name="dt_fim"      id="dt_fim"> 
+              <input type="hidden" name="dt_filtro"  id="dt_filtro"> 
           </form>
         </div>
   
@@ -114,21 +113,22 @@
                             <tr>
                                 <td> {{ $receita->codfatura }} </td>
                                 <td> {{ $receita->nome_razaosocial }} </td>
-                                <td> {{ $receita->codcidade }} </td>
+                                <td> {{ $receita->cidade }} </td>
                                 <td> {{ $receita->data_vencimento }} </td>
                                 <td> {{ $receita->liquidado }} </td>
                                 <td> {{ $receita->vlr_liquidacao }} </td> 
                                 <td> {{ $receita->usuario_liquidacao }} </td> 
-                                <td> {{ \Carbon\Carbon::parse($receita->data_liquidacao)->format('d-m-Y') }} </td> 
+                                <td> @isset($receita->data_liquidacao)
+                                      {{ \Carbon\Carbon::parse($receita->data_liquidacao)->format('d-m-Y') }}
+                                     @endisset  
+                                </td> 
                                 <td> {{ $receita->unidade_financeira }} </td> 
                                 <td> {{ $receita->descricao }} </td> 
                                 <td> {{ $receita->tipo }} </td>  
                                 <td> {{ $receita->forma_pgto_liquidacao }} </td>  
                                 <td> {{ $receita->suspenso }} </td>  
-                                
                             </tr>
                             @endforeach
-                   
                         </tbody>
                         <tfoot>
                             <tr>
@@ -170,15 +170,14 @@
 <script src="{{ asset('/vendor/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
-
 <script>
     $(document).ready(function() {
-
         // Setup - add a text input to each footer cell
         $('#example thead tr').clone(true).appendTo( '#example thead' );
         $('#example thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" style="width: 100%"/>' );
+            $(this).html( '<input type="text"  style="width: 100%"/>' );
+            // $(this).html( '<input type="text" style="width: 100%" placeholder="Search '+title+'" />' );
     
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
@@ -223,9 +222,8 @@
         .appendTo( '#example_wrapper .col-md-6:eq(0)' );
     } );
 
-     // DATE RANGER
-
-     $(function() {
+    // DATE RANGER
+    $(function() {
         moment.locale('pt-br');
         $('#reservation').daterangepicker({
             opens: 'right',
@@ -261,6 +259,16 @@
             $('#dt_inicio').val( start.format('YYYY-MM-DD'));
             $('#dt_fim').val( end.format('YYYY-MM-DD'));
         });
+    });
+
+    $('#vencimento').click(function(e) {
+      $('#btn_filter').text("Vencimento");
+      $('#dt_filtro').val(0);
+    });
+
+    $('#liquidacao').click(function(e) {
+      $('#btn_filter').text("Liquidação");
+      $('#dt_filtro').val(1);
     });
 </script>
 @endsection

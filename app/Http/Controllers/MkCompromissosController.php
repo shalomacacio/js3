@@ -78,6 +78,18 @@ class MkCompromissosController extends Controller
           'mk_compromissos.codcompromisso', 'mk_compromissos.cd_funcionario','cd_integracao');
       })->all(); 
 
+      // $result = DB::connection('pgsql')->table('mk_compromissos as c')
+      //   ->join('mk_compromisso_pessoa as cp', 'c.codcompromisso',  'cp.codcompromisso')
+      //   ->join('mk_os as os', 'c.cd_integracao','os.codos')
+      //   ->join('mk_os_tipo as tipo', 'os.tipo_os','tipo.codostipo')
+      //   ->join('mk_pessoas as tec', 'cp.cdpessoa',  'tec.codpessoa')
+      //   ->join('mk_pessoas as cli', 'c.cliente', 'cli.codpessoa')
+      //   ->leftJoin('mk_conexoes as con', 'os.conexao_associada', 'con.codconexao')
+      //   ->whereBetween('c.com_inicio',[$inicio, $fim])
+      // ->select('c.com_inicio','c.codcompromisso', 'cli.nome_razaosocial', 'cli.nome_razaosocial' )
+      // ->get();
+      // return dd($result);
+
       $grupos = MkAgendaGrupo::all();
       $compromissos = $result;
 
@@ -86,7 +98,9 @@ class MkCompromissosController extends Controller
         $mkCompromissos = $compromissos->groupBy('nome_razaosocial'); 
       } else {
         $mkCompromissos = $result->groupBy('nome_razaosocial'); 
-      } if (request()->wantsJson()) {
+      } 
+      
+      if (request()->wantsJson()) {
         return response()->json([
           'data' => $mkCompromissos,
         ]);

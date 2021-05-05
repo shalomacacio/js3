@@ -399,39 +399,34 @@ class RelatorioController extends Controller
 
     public function receitas( Request $request){
 
-      
-      $inicio = Carbon::now()->format('d-m-Y');
-      $fim = Carbon::now()->format('d-m-Y');
+      // return dd( $request );
+
+      $inicio = null;
+      $fim = null;
+      $dt_parametro = 'f.data_vencimento';
 
       if( $request->dt_inicio){
         $inicio = $request->dt_inicio;
-      }
-      if( $request->dt_fim){
-        $fim = $request->dt_fim;;
+        $fim = $request->dt_fim;
       }
 
-      $parametro = null;
-      $valor = null;
-
-      // if( $request->parametro == 0){
-      //   $parametro = 'data_liquidacao'
-      // }
+      if( $request->dt_filtro == 1){
+        $dt_parametro = 'f.data_liquidacao';
+      }
 
       $result = DB::connection('pgsql')->table('mk_faturas as f')
         ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
+        ->join('mk_cidades as cid', 'p.codcidade', 'cid.codcidade')
         ->join('mk_contas_faturadas as cf', 'f.codfatura', 'cf.cd_fatura')
         ->join('mk_plano_contas as pc', 'cf.cd_conta', 'pc.codconta')
-        ->whereBetween('f.data_vencimento', [ $inicio, $fim ])
-        // ->where($parametro, $valor)
+        ->whereBetween($dt_parametro , [$inicio, $fim ])
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
-        'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao', ''
-        ,'p.nome_razaosocial', 'p.codcidade'
+        'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
+        ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade'
         ,'pc.unidade_financeira' )
       ->get();
 
       $receitas = $result;
-
-
       return view('financeiro.relatorios.receitas', compact('receitas'));
     }
     

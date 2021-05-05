@@ -65,7 +65,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($compromissos as $compromisso)
+                @foreach ($compromissos->sortBy('com_inicio') as $compromisso)
                 
                 <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->getCollor($compromisso->os->ultimo_status_app_mk) }}" >
                   <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
