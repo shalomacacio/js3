@@ -159,6 +159,7 @@
                               <th>STATUS</th>
                               <th>INATIVO</th>
                               <th>ACEITE</th>
+                              <th>MAC</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,6 +182,7 @@
                             <td>{{ $servico->classificacao }}</td>
                             <td>{{ $servico->inativo }}</td>
                             <td>{{ $servico->contrato_eletronico }}</td>
+                            <td>{{ $servico->mac }}</td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -199,6 +201,7 @@
                               <th>STATUS</th>
                               <th>INATIVO</th>
                               <th>ACEITE</th>
+                              <th>MAC</th>
                             </tr>
                         </tfoot>
                     </table>

@@ -49,8 +49,8 @@
                                 <th>CLIENTE</th>
                                 <th>TELEFONE</th>
                                 <th> VCTO_INI </th> 
-                                <th> VCTO_FINAL </th>
-                                <th> VCTO_FATURA </th>
+                                {{-- <th> VCTO_FINAL </th> --}}
+                                {{-- <th> VCTO_FATURA </th> --}}
                                 <th> VALOR </th>
                                 <th> LIQ </th>
                             </tr>
@@ -63,8 +63,8 @@
                             <td>{{ $r->nome_razaosocial }}</td>
                             <td>{{ $r->fone01 }}@isset($r->fone02)|{{ $r->fone02 }}@endisset</td>
                             <td>{{ \Carbon\Carbon::parse($r->inicio)->format('d-m-Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($r->vcto_final )->format('d-m-Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($r->data_vencimento )->format('d-m-Y') }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($r->vcto_final )->format('d-m-Y') }}</td> --}}
+                            {{-- <td>{{ \Carbon\Carbon::parse($r->data_vencimento )->format('d-m-Y') }}</td> --}}
                             <td>{{ $r->vlr_renovacao }}</td>
                             <td>{{ $r->liquidado }}</td>
                           </tr>
@@ -77,8 +77,8 @@
                                 <th>CLIENTE</th>
                                 <th>TELEFONE</th>
                                 <th> VCTO_INI </th> 
-                                <th> VCTO_FINAL </th>
-                                <th> VCTO_FATURA </th>
+                                {{-- <th> VCTO_FINAL </th> --}}
+                                {{-- <th> VCTO_FATURA </th> --}}
                                 <th> VALOR </th>
                                 <th> LIQ </th>
                             </tr>
