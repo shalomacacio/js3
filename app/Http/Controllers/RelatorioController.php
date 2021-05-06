@@ -63,22 +63,24 @@ class RelatorioController extends Controller
         }
     
         $result = DB::connection('pgsql')->table('mk_os as os')
-          ->join('mk_pessoas as cliente', 'os.cliente', 'cliente.codpessoa')
+          ->join('mk_pessoas as cli', 'os.cliente', 'cli.codpessoa')
           ->leftJoin('mk_os_tipo as os_tipo', 'os.tipo_os', 'os_tipo.codostipo')
-          ->leftJoin('mk_contratos as contrato', 'os.cd_contrato', 'contrato.codcontrato')
-          ->leftJoin('mk_os_classificacao_encerramento  as classificacao', 'os.classificacao_encerramento', 'classificacao.codclassifenc')
-          ->leftJoin('fr_usuario as tecnico', 'os.operador_fech_tecnico', 'tecnico.usr_codigo')
-          ->leftJoin('fr_usuario as consultor', 'os.tecnico_responsavel', 'consultor.usr_codigo')
+          ->leftJoin('mk_contratos as cont', 'os.cd_contrato', 'cont.codcontrato')
+          ->leftJoin('mk_conexoes as conex', 'os.conexao_associada', 'conex.codconexao')
+          ->leftJoin('mk_os_classificacao_encerramento  as cla', 'os.classificacao_encerramento', 'cla.codclassifenc')
+          ->leftJoin('fr_usuario as tec', 'os.operador_fech_tecnico', 'tec.usr_codigo')
+          ->leftJoin('fr_usuario as cons', 'os.tecnico_responsavel', 'cons.usr_codigo')
           // ->whereIn('os.classificacao_encerramento', $classiFiltro) // NÃO DESCOMENTAR
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
             'os.data_abertura','os.data_fechamento', 'os.codos', 'os.tipo_os' , 'os_tipo.descricao as servico'
             ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento', 'os.servico_prestado'
-            ,'cliente.nome_razaosocial as cliente', 'cliente.inativo'
-            ,'tecnico.usr_nome as tecnico'
-            ,'consultor.usr_nome as consultor'
-            ,'contrato.vlr_renovacao as plano', 'contrato.codcontrato', 'contrato_eletronico'
-            ,'classificacao.classificacao'
+            ,'cli.nome_razaosocial as cliente', 'cli.inativo'
+            ,'tec.usr_nome as tecnico'
+            ,'cons.usr_nome as consultor'
+            ,'cont.vlr_renovacao as plano', 'cont.codcontrato', 'cont.contrato_eletronico'
+            ,'cla.classificacao'
+            ,'conex.mac_address as mac'
           )->get();
         //FILTROS
         if ($request->has('classificacoes') ){

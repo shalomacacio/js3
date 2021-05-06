@@ -173,6 +173,7 @@
                   <th>Status</th>
                   <th>Inativo</th>
                   <th>Aceito</th>
+                  <th>Mac</th>
                   <th align="center">Ações</th>
                 </tr>
                 </thead>
@@ -201,6 +202,7 @@
                   <td>{{ $servico->classificacao }}</td>
                   <td>{{ $servico->inativo }}</td>
                   <td>{{ $servico->aceito  }}</td>
+                  <td>{{ $servico->mac  }}</td>
                   <td>
                     @isset($servico->qnt)
                       <a href="javascript:void(0)" onClick="getEstoque({{ $servico->codos }})"  data-toggle="modal" data-target="#modal-estoque" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>
@@ -210,7 +212,6 @@
                       <a title="{{ $servico->complementoendereco }}" href="https://www.google.com/search?q={{ Str::before( $servico->complementoendereco, '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a>
                     @endif 
                   </td>
-                  
                 </tr>
                 @endforeach
                 </tbody>
