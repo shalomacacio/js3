@@ -251,7 +251,6 @@ class RelatorioController extends Controller
     }
 
     public function renovacoes(Request $request){
-
       if(!$request->dt_inicio){
         $inicio = $this->inicio;
       } else {
@@ -264,37 +263,42 @@ class RelatorioController extends Controller
         $fim = $request->dt_fim;
       }
 
-      $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as ccrd')
-        ->join('mk_contratos_contas as cc', 'ccrd.cd_contrato', 'cc.cd_contrato')
-        ->join('mk_contas_faturadas as cf', 'cc.cd_conta', 'cf.cd_conta')
-        ->join('mk_faturas as f', 'cf.cd_fatura', 'f.codfatura')
-        ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
-        ->where('ccrd.ocorrencia', 1)
-        ->whereRaw("DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento ")
-        ->select( 'ccrd.cd_contrato' , DB::raw("date(ccrd.vcto_final - interval '11 months')as inicio")  
-        ,'ccrd.vcto_final', 'ccrd.cd_renvoacao_auto', 'ccrd.vlr_renovacao'
-        ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'cc.cd_contrato', 
-        'f.data_vencimento', 'f.liquidado')
-        ->get();
+      // $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as ccrd')
+      //   ->join('mk_contratos_contas as cc', 'ccrd.cd_contrato', 'cc.cd_contrato')
+      //   ->join('mk_contas_faturadas as cf', 'cc.cd_conta', 'cf.cd_conta')
+      //   ->join('mk_faturas as f', 'cf.cd_fatura', 'f.codfatura')
+      //   ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
+      //   ->where('ccrd.ocorrencia', 1)
+      //   ->whereRaw("DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento ")
+      //   ->select( 'ccrd.cd_contrato' , DB::raw("date(ccrd.vcto_final - interval '11 months')as inicio")  
+      //   ,'ccrd.vcto_final', 'ccrd.cd_renvoacao_auto', 'ccrd.vlr_renovacao'
+      //   ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'cc.cd_contrato', 
+      //   'f.data_vencimento', 'f.liquidado')
+      //   ->get();
       // ->toSql();
 
-    //   $result = DB::connection('pgsql')->select((
-    //     "select *
-    //           from mk_contratos_controle_renovacao_detalhe as ccrd 
-    //           join mk_contratos_contas as cc on ccrd.cd_contrato = cc.cd_contrato
-    //           join mk_contas_faturadas as cf on cc.cd_conta = cf.cf.cd_conta
-    //           join mk_faturas as f on cf.cd_fatura = f.codfatura
-    //           join mk_pessoas as p on f.cd_pessoa = p.codpessoa
+      $result = DB::connection('pgsql')->select((
+        "select ccrd.cd_contrato,  date(ccrd.vcto_final - interval '11 months')as inicio
+          ,ccrd.vcto_final, ccrd.cd_renvoacao_auto, ccrd.vlr_renovacao
+          ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone01, p.fone02 ,cc.cd_contrato
+          ,f.data_vencimento, f.liquidado
+          ,atendimentos.descricao, atendimentos.info_cliente
+            from mk_contratos_controle_renovacao_detalhe as ccrd 
+            join mk_contratos_contas as cc on ccrd.cd_contrato = cc.cd_contrato
+            join mk_contas_faturadas as cf on cc.cd_conta = cf.cd_conta
+            join mk_faturas as f on cf.cd_fatura = f.codfatura
+            join mk_pessoas as p on f.cd_pessoa = p.codpessoa
+            left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
+                                  from mk_atendimento as a 
+                                  join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
+                                  where a.cd_processo in (29)
+                                  group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
+                                ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
+        where ccrd.ocorrencia = 1
+        and DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento  "      
+    ));
 
-    //           left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
-    //                               from mk_atendimento as a 
-    //                               join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
-    //                               where a.cd_processo in (29)
-    //                               group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
-    //                             ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
-    //     where ccrd.ocorrencia = 1
-    //     and (ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento "      
-    // ));
+    // return dd($result);
 
       $renovacoes = $result;
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));

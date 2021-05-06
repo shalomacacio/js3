@@ -53,6 +53,7 @@
                                 {{-- <th> VCTO_FATURA </th> --}}
                                 <th> VALOR </th>
                                 <th> LIQ </th>
+                                <th> STATUS COB </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,6 +68,7 @@
                             {{-- <td>{{ \Carbon\Carbon::parse($r->data_vencimento )->format('d-m-Y') }}</td> --}}
                             <td>{{ $r->vlr_renovacao }}</td>
                             <td>{{ $r->liquidado }}</td>
+                            <td title="{{ $r->info_cliente }}">{{ $r->descricao }}</td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -81,6 +83,7 @@
                                 {{-- <th> VCTO_FATURA </th> --}}
                                 <th> VALOR </th>
                                 <th> LIQ </th>
+                                <th> STATUS COB </th>
                             </tr>
                         </tfoot>
                     </table>
