@@ -235,7 +235,7 @@ class RelatorioController extends Controller
                 left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
                                     from mk_atendimento as a 
                                     join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
-                                    where a.cd_processo in (29)
+                                    where a.cd_processo in (132)
                                     group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
                                   ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
           where f.data_vencimento < ?
@@ -286,7 +286,7 @@ class RelatorioController extends Controller
             left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
                                   from mk_atendimento as a 
                                   join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
-                                  where a.cd_processo in (29)
+                                  where a.cd_processo in (132)
                                   group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
                                 ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
         where ccrd.ocorrencia = 1
