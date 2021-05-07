@@ -352,7 +352,6 @@ class RelatorioController extends Controller
       }
 
       $fim = Carbon::parse($inicio)->subDays(30);
-      $fim60 = Carbon::parse($inicio)->subDays(60);
       
       $result = DB::connection('pgsql')->table('mk_atendimento as a')
         ->leftJoin('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
@@ -360,13 +359,44 @@ class RelatorioController extends Controller
         ->join('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
         ->whereBetween('dt_abertura', [$fim, $inicio])
         ->select('p.codpessoa','p.nome_razaosocial'
-            , DB::raw("COUNT(DISTINCT a.codatendimento) as tickets" )
+            , DB::raw("COUNT(a.codatendimento) as tickets" )
             , DB::raw("COUNT(os.codos) as os" )
             )
         ->groupBy('p.codpessoa','p.nome_razaosocial')
         ->get();
 
+
+      // $result = DB::connection('pgsql')->select((
+      //             "select a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza
+      //               ,p.codpessoa, p.nome_razaosocial
+      //               ,proc.nome_processo
+      //              -- ,ate.cliente_cadastrado
+      //               ,COUNT(a.codatendimento) as tickets
+      //               ,COUNT(os.codos) as os
+      //             from mk_atendimento as a 
+      //               join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
+      //               join mk_os as os on at_os.cd_os = os.codos
+      //               join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
+      //               join mk_ate_processos as proc on a.cd_processo = proc.codprocesso
+      //               left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura)
+      //                                   from mk_atendimento as a 
+      //                                   where a.cliente_cadastrado = p.codpessoa
+      //                                   group by a.cliente_cadastrado 
+      //                                 ) ate on p.codpessoa = ate.cliente_cadastrado
+                                      
+      //             where a.dt_abertura between ? and ? 
+      //             group by a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza, p.codpessoa, p.nome_razaosocial,proc.nome_processo"
+      //           ),[$fim , $inicio ]);
+
+      // return dd($result);
+
         $atendimentos = $result;
+
+        if (request()->wantsJson()) {
+          return response()->json([
+            'result'   => $atendimentos
+          ]);
+        }
 
       return view('relatorios.sla_garantia', compact('atendimentos', 'request', 'inicio', 'fim'));
     }
@@ -439,6 +469,7 @@ class RelatorioController extends Controller
         ->join('mk_plano_contas as pc', 'cf.cd_conta', 'pc.codconta')
         ->join('mk_unidade_financeia as uf', 'pc.unidade_financeira', 'uf.nomenclatura')
         ->whereBetween($dt_parametro , [$inicio, $fim ])
+        ->where('f.tipo','R')
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
         'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
         ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade'

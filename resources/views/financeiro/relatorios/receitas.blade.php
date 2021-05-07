@@ -103,7 +103,7 @@
                                 <th>Dt Liq</th>
                                 <th>Und Fin</th>
                                 <th>Descricao</th>
-                                <th>Tipo</th>
+                                {{-- <th>Tipo</th> --}}
                                 <th>Tipo PG Liq</th>
                                 <th>Suspenso</th>
                             </tr>
@@ -124,7 +124,7 @@
                                 </td> 
                                 <td> {{ $receita->unidade }} </td> 
                                 <td> {{ $receita->descricao }} </td> 
-                                <td> {{ $receita->tipo }} </td>  
+                                {{-- <td> {{ $receita->tipo }} </td>   --}}
                                 <td> {{ $receita->forma_pgto_liquidacao }} </td>  
                                 <td> {{ $receita->suspenso }} </td>  
                             </tr>
@@ -142,7 +142,7 @@
                                 <th>Dt Liq</th>
                                 <th>Und Fin</th>
                                 <th>Descricao</th>
-                                <th>Tipo</th>
+                                {{-- <th>Tipo</th> --}}
                                 <th>Tipo PG Liq</th>
                                 <th>Suspenso</th>
                             </tr>

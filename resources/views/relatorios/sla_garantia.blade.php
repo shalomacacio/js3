@@ -77,7 +77,7 @@
                     <br>
                     <br>
                     <br>
-                    <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
+                    <table id="example" class="table table-striped table-sm " style="width:100%">
                         <thead>
                             <tr>
                                 <th>COD</th>
@@ -96,11 +96,10 @@
                                     <td>{{ $a->codpessoa }}</td>
                                     <td>{{ Str::limit($a->nome_razaosocial, 40)  }}</td>   
                                     <td>{{ $a->tickets }}</td>
-                                    <td><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
+                                    <td style="text-align: center; !important"><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
                                     {{-- <td> # </td> --}}
                                     <td>{{ $a->os }}</td>       
                                     <td><a href="javascript:void(0)" onClick="getClientOs( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
-                       
                                 </tr>
                             @endforeach
                         </tbody>
