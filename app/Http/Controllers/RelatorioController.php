@@ -213,7 +213,7 @@ class RelatorioController extends Controller
 
       //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
       $result = DB::connection('pgsql')->table('mk_atendimento')
-      ->whereIn('cd_processo', [29,121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      ->whereIn('cd_processo', [121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
       ->select('cliente_cadastrado', 'cd_processo', 'finalizado')
       ->get();
 
@@ -262,20 +262,14 @@ class RelatorioController extends Controller
       } else {
         $fim = $request->dt_fim;
       }
+      //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      $result = DB::connection('pgsql')->table('mk_atendimento')
+      ->whereIn('cd_processo', [121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
+      ->select('cliente_cadastrado', 'cd_processo', 'finalizado')
+      ->get();
 
-      // $result = DB::connection('pgsql')->table('mk_contratos_controle_renovacao_detalhe as ccrd')
-      //   ->join('mk_contratos_contas as cc', 'ccrd.cd_contrato', 'cc.cd_contrato')
-      //   ->join('mk_contas_faturadas as cf', 'cc.cd_conta', 'cf.cd_conta')
-      //   ->join('mk_faturas as f', 'cf.cd_fatura', 'f.codfatura')
-      //   ->join('mk_pessoas as p', 'f.cd_pessoa', 'p.codpessoa')
-      //   ->where('ccrd.ocorrencia', 1)
-      //   ->whereRaw("DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento ")
-      //   ->select( 'ccrd.cd_contrato' , DB::raw("date(ccrd.vcto_final - interval '11 months')as inicio")  
-      //   ,'ccrd.vcto_final', 'ccrd.cd_renvoacao_auto', 'ccrd.vlr_renovacao'
-      //   ,'p.codpessoa', 'p.nome_razaosocial', 'p.fone01', 'p.fone01', 'p.fone02' ,'cc.cd_contrato', 
-      //   'f.data_vencimento', 'f.liquidado')
-      //   ->get();
-      // ->toSql();
+      $result_canc = $result->whereIn('cd_processo', [121,122])->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
+      $cancelamentos = implode(',' , $result_canc);
 
       $result = DB::connection('pgsql')->select((
         "select ccrd.cd_contrato,  date(ccrd.vcto_final - interval '11 months')as inicio
@@ -283,6 +277,7 @@ class RelatorioController extends Controller
           ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone01, p.fone02 ,cc.cd_contrato
           ,f.data_vencimento, f.liquidado
           ,atendimentos.descricao, atendimentos.info_cliente
+          ,(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend
             from mk_contratos_controle_renovacao_detalhe as ccrd 
             join mk_contratos_contas as cc on ccrd.cd_contrato = cc.cd_contrato
             join mk_contas_faturadas as cf on cc.cd_conta = cf.cd_conta
