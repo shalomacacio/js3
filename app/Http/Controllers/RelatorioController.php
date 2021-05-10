@@ -222,8 +222,8 @@ class RelatorioController extends Controller
   
       $result = DB::connection('pgsql')->select((
           "select distinct 
-                  atendimentos.cliente_cadastrado, atendimentos.descricao as classificacao, atendimentos.info_cliente ,
-                  f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
+                  atendimentos.cliente_cadastrado, atendimentos.descricao as classificacao, atendimentos.info_cliente
+                  ,f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
                   ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone02, p.numero
                   ,l.logradouro, b.bairro
                   ,( DATE(NOW()) - f.data_vencimento) as dias
@@ -268,14 +268,14 @@ class RelatorioController extends Controller
       ->select('cliente_cadastrado', 'cd_processo', 'finalizado')
       ->get();
 
-      $result_canc = $result->whereIn('cd_processo', [121,122])->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
+      $result_canc = $result->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
       $cancelamentos = implode(',' , $result_canc);
 
       $result = DB::connection('pgsql')->select((
         "select ccrd.cd_contrato,  date(ccrd.vcto_final - interval '11 months')as inicio
           ,ccrd.vcto_final, ccrd.cd_renvoacao_auto, ccrd.vlr_renovacao
           ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone01, p.fone02 ,cc.cd_contrato
-          ,f.data_vencimento, f.liquidado
+          ,f.data_vencimento, f.liquidado, DATE( f.data_vencimento -30 ) as teste
           ,atendimentos.descricao, atendimentos.info_cliente
           ,(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend
             from mk_contratos_controle_renovacao_detalhe as ccrd 
@@ -290,11 +290,11 @@ class RelatorioController extends Controller
                                   group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
                                 ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
         where ccrd.ocorrencia = 1
-        and DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento  "      
+        and DATE(ccrd.vcto_final - INTERVAL '11 MONTHS') = f.data_vencimento  
+        and f.data_vencimento between  DATE( NOW() - interval '30 days' ) AND DATE( NOW() + interval '30 days' )"      
     ));
 
     // return dd($result);
-
       $renovacoes = $result;
         return view('financeiro.relatorios.renovacoes', compact('renovacoes'));
     }
@@ -370,22 +370,23 @@ class RelatorioController extends Controller
       //             "select a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza
       //               ,p.codpessoa, p.nome_razaosocial
       //               ,proc.nome_processo
-      //              -- ,ate.cliente_cadastrado
       //               ,COUNT(a.codatendimento) as tickets
       //               ,COUNT(os.codos) as os
+      //               ,ate.cliente_cadastrado
       //             from mk_atendimento as a 
       //               join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
       //               join mk_os as os on at_os.cd_os = os.codos
       //               join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
       //               join mk_ate_processos as proc on a.cd_processo = proc.codprocesso
-      //               left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura)
+      //               left join lateral( select a.cliente_cadastrado, a.codatendimento,  MAX(a.dt_abertura)
       //                                   from mk_atendimento as a 
       //                                   where a.cliente_cadastrado = p.codpessoa
-      //                                   group by a.cliente_cadastrado 
+      //                                   group by a.cliente_cadastrado , a.codatendimento
+      //                                   limit 1
       //                                 ) ate on p.codpessoa = ate.cliente_cadastrado
                                       
       //             where a.dt_abertura between ? and ? 
-      //             group by a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza, p.codpessoa, p.nome_razaosocial,proc.nome_processo"
+      //             group by a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza, p.codpessoa, p.nome_razaosocial,proc.nome_processo, ate.cliente_cadastrado"
       //           ),[$fim , $inicio ]);
 
       // return dd($result);
@@ -447,8 +448,6 @@ class RelatorioController extends Controller
 
     public function receitas( Request $request){
 
-      // return dd( $request );
-
       $inicio = null;
       $fim = null;
       $dt_parametro = 'f.data_vencimento';
@@ -468,16 +467,19 @@ class RelatorioController extends Controller
         ->join('mk_contas_faturadas as cf', 'f.codfatura', 'cf.cd_fatura')
         ->join('mk_plano_contas as pc', 'cf.cd_conta', 'pc.codconta')
         ->join('mk_unidade_financeia as uf', 'pc.unidade_financeira', 'uf.nomenclatura')
+        ->leftJoin('mk_contratos as c', 'pc.codvinculado', 'c.codcontrato')
+        ->leftJoin('mk_planos_acesso as pa', 'c.plano_acesso', 'pa.codplano')
         ->whereBetween($dt_parametro , [$inicio, $fim ])
         ->where('f.tipo','R')
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
         'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
         ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade'
-        ,'pc.unidade_financeira'
-        ,'uf.descricao as unidade' )
+        ,'pc.unidade_financeira', 'pc.codconta', 'pc.valor_original'
+        ,'uf.descricao as unidade'
+        ,'c.codcontrato', 'pa.descricao as plano')
       ->get();
 
-      $receitas = $result;
+      $receitas = $result->sortBy('nome_razaosocial');
       return view('financeiro.relatorios.receitas', compact('receitas'));
     }
     

@@ -94,9 +94,13 @@
                         <thead>
                             <tr>
                                 <th>Fatura</th>
+                                <th>Contrato</th>
+                                <th>Conta</th>
                                 <th>Cliente</th>
+                                <th>Plano</th>
                                 <th>Cidade</th>
                                 <th>Vencimento</th>
+                                <th>Vlr Orig</th>
                                 <th>Liquidado</th>
                                 <th>Vlr Liq</th>
                                 <th>Usr Liq</th>
@@ -112,9 +116,13 @@
                             @foreach ($receitas as $receita )
                             <tr>
                                 <td> {{ $receita->codfatura }} </td>
+                                <td> {{ $receita->codcontrato }} </td>
+                                <td> {{ $receita->codconta }} </td>
                                 <td> {{ $receita->nome_razaosocial }} </td>
+                                <td> {{ $receita->plano }} </td>
                                 <td> {{ $receita->cidade }} </td>
                                 <td> {{ $receita->data_vencimento }} </td>
+                                <td> {{ $receita->valor_original }} </td>
                                 <td> {{ $receita->liquidado }} </td>
                                 <td> {{ $receita->vlr_liquidacao }} </td> 
                                 <td> {{ $receita->usuario_liquidacao }} </td> 
@@ -133,9 +141,13 @@
                         <tfoot>
                             <tr>
                                 <th>Fatura</th>
+                                <th>Contrato</th>
+                                <th>Conta</th>
                                 <th>Cliente</th>
+                                <th>Plano</th>
                                 <th>Cidade</th>
                                 <th>Vencimento</th>
+                                <th>Vlr Orig</th>
                                 <th>Liquidado</th>
                                 <th>Vlr Liq</th>
                                 <th>Usr Liq</th>
