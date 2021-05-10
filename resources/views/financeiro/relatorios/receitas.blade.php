@@ -118,8 +118,8 @@
                                 <td> {{ $receita->codfatura }} </td>
                                 <td> {{ $receita->codcontrato }} </td>
                                 <td> {{ $receita->codconta }} </td>
-                                <td> {{ $receita->nome_razaosocial }} </td>
-                                <td> {{ $receita->plano }} </td>
+                                <td> {{ Str::limit($receita->nome_razaosocial, 30) }} </td>
+                                <td> {{ Str::limit($receita->plano, 26) }} </td>
                                 <td> {{ $receita->cidade }} </td>
                                 <td> {{ $receita->data_vencimento }} </td>
                                 <td> {{ $receita->valor_original }} </td>
