@@ -93,6 +93,7 @@
                                 <th>CLIENTE</th>
                                 <th>ENDEREÇO</th>
                                 <th>BAIRRO</th>
+                                <th>UNIDADE</th>
                                 <th>VENCIMENTO</th>
                                 <th>DIAS</th>
                                 <th>VALOR</th>
@@ -107,6 +108,7 @@
                             <td>{{ $inad->nome_razaosocial }}</td>
                             <td>{{ $inad->logradouro }} - {{ $inad->numero }} </td>
                             <td>{{ $inad->bairro }}</td>
+                            <td>{{ $inad->unidade }} </td>
                             <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
@@ -121,6 +123,7 @@
                               <th>CLIENTE</th>
                               <th>ENDEREÇO</th>
                               <th>BAIRRO</th>
+                              <th>UNIDADE</th>
                               <th>VENCIMENTO</th>
                               <th>DIAS</th>
                               <th>VALOR</th>

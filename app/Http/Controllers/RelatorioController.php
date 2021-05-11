@@ -223,15 +223,19 @@ class RelatorioController extends Controller
       $result = DB::connection('pgsql')->select((
           "select distinct 
                   atendimentos.cliente_cadastrado, atendimentos.descricao as classificacao, atendimentos.info_cliente
-                  ,f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.data_vencimento, f.valor_total
+                  ,f.codfatura, f.data_vencimento, f.dt_ref_inicial, f.valor_total 
                   ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone02, p.numero
                   ,l.logradouro, b.bairro
                   ,( DATE(NOW()) - f.data_vencimento) as dias
                   ,(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend
+                  ,uf.descricao as unidade
                 from mk_faturas as f  
                 join mk_pessoas as p on f.cd_pessoa  = p.codpessoa
                 join mk_logradouros as l on p.codlogradouro = l.codlogradouro
                 join mk_bairros as b on p.codbairro =b.codbairro
+                join mk_contas_faturadas as cf on f.codfatura = cf.cd_fatura 
+                join mk_plano_contas as pc on cf.cd_conta = pc.codconta
+                join mk_unidade_financeia uf on pc.unidade_financeira = uf.nomenclatura  
                 left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
                                     from mk_atendimento as a 
                                     join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
@@ -240,9 +244,9 @@ class RelatorioController extends Controller
                                   ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
           where f.data_vencimento < ?
           and f.liquidado = 'N'
-          and f.excluida = 'N' 
-          and f.suspenso = 'N'
-          and (DATE(NOW()) - data_vencimento >= ?)"          
+          and f.excluida  = 'N' 
+          and f.suspenso  = 'N'
+          and (DATE(NOW()) - f.data_vencimento >= ?)"          
       ), [$hoje, $dia]);
 
       // TODAS 
