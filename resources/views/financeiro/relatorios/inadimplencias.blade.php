@@ -112,7 +112,7 @@
                             <td>{{ \Carbon\Carbon::parse($inad->data_vencimento)->format('d/m/Y')}}</td>
                             <td>{{ $inad->dias }}</td>
                             <td> {{ $inad->valor_total }}</td>
-                            <td> {{ $inad->atend }}</td>
+                            <td> {{ $inad->nome_processo }}</td>
                             <td  @isset( $inad->info_cliente ) title="{{ $inad->info_cliente  }}" @endisset > @isset( $inad->classificacao ) {{ $inad->classificacao }} @endisset </td>
                           </tr>
                           @endforeach

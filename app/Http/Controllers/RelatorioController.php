@@ -227,8 +227,8 @@ class RelatorioController extends Controller
                   ,p.codpessoa, p.nome_razaosocial, p.fone01, p.fone02, p.numero
                   ,l.logradouro, b.bairro
                   ,( DATE(NOW()) - f.data_vencimento) as dias
-                  ,(CASE WHEN p.codpessoa IN (".$cancelamentos.") THEN 'SIM' ELSE 'NAO' END) as atend
                   ,uf.descricao as unidade
+                  ,canc.nome_processo
                 from mk_faturas as f  
                 join mk_pessoas as p on f.cd_pessoa  = p.codpessoa
                 join mk_logradouros as l on p.codlogradouro = l.codlogradouro
@@ -236,12 +236,18 @@ class RelatorioController extends Controller
                 join mk_contas_faturadas as cf on f.codfatura = cf.cd_fatura 
                 join mk_plano_contas as pc on cf.cd_conta = pc.codconta
                 join mk_unidade_financeia uf on pc.unidade_financeira = uf.nomenclatura  
-                left join lateral( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
+                left join ( select a.cliente_cadastrado, MAX(a.dt_abertura), ac.descricao , a.info_cliente
                                     from mk_atendimento as a 
                                     join mk_atendimento_classificacao ac on a.classificacao_encerramento = ac.codatclass 
                                     where a.cd_processo in (132)
                                     group by a.cliente_cadastrado, a.dt_abertura, ac.descricao , a.info_cliente
                                   ) atendimentos on p.codpessoa = atendimentos.cliente_cadastrado
+                left join ( select b.cliente_cadastrado, b.cd_processo, b.finalizado, proc.nome_processo 
+                                  from mk_atendimento as b 
+                                  join mk_ate_processos as proc on b.cd_processo = proc.codprocesso
+                                  where b.cd_processo in (121,122)
+                                  and b.finalizado = 'N'
+                                ) canc on p.codpessoa = canc.cliente_cadastrado
           where f.data_vencimento < ?
           and f.liquidado = 'N'
           and f.excluida  = 'N' 
