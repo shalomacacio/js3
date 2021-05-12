@@ -210,15 +210,6 @@ class RelatorioController extends Controller
     {
       $hoje = Carbon::now()->format('Y-m-d');
       $dia = $request->dia;
-
-      //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      $result = DB::connection('pgsql')->table('mk_atendimento')
-      ->whereIn('cd_processo', [121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
-      ->select('cliente_cadastrado', 'cd_processo', 'finalizado')
-      ->get();
-
-      $result_canc = $result->whereIn('cd_processo', [121,122])->where('finalizado', 'N')->pluck('cliente_cadastrado')->toArray();
-      $cancelamentos = implode(',' , $result_canc);
   
       $result = DB::connection('pgsql')->select((
           "select distinct 
@@ -260,7 +251,7 @@ class RelatorioController extends Controller
       return view('financeiro.relatorios.inadimplencias', compact('inadimplencias', 'dia'));
     }
 
-    public function renovacoes(Request $request){
+    public function renovacoes(Request $request) {
       if(!$request->dt_inicio){
         $inicio = $this->inicio;
       } else {
