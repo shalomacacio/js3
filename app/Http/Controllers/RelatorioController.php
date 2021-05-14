@@ -243,7 +243,7 @@ class RelatorioController extends Controller
           and f.liquidado = 'N'
           and f.excluida  = 'N' 
           and f.suspenso  = 'N'
-          and (DATE(NOW()) - f.data_vencimento >= ?)"          
+          and (DATE(NOW()) - f.data_vencimento >= ? )"          
       ), [$hoje, $dia]);
 
       // TODAS 
@@ -354,41 +354,17 @@ class RelatorioController extends Controller
 
       $fim = Carbon::parse($inicio)->subDays(30);
       
-      $result = DB::connection('pgsql')->table('mk_atendimento as a')
-        ->leftJoin('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
-        ->join('mk_os as os', 'at_os.cd_os','os.codos')
-        ->join('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
-        ->whereBetween('dt_abertura', [$fim, $inicio])
-        ->select('p.codpessoa','p.nome_razaosocial'
-            , DB::raw("COUNT(a.codatendimento) as tickets" )
-            , DB::raw("COUNT(os.codos) as os" )
-            )
-        ->groupBy('p.codpessoa','p.nome_razaosocial')
-        ->get();
-
-
-      // $result = DB::connection('pgsql')->select((
-      //             "select a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza
-      //               ,p.codpessoa, p.nome_razaosocial
-      //               ,proc.nome_processo
-      //               ,COUNT(a.codatendimento) as tickets
-      //               ,COUNT(os.codos) as os
-      //               ,ate.cliente_cadastrado
-      //             from mk_atendimento as a 
-      //               join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
-      //               join mk_os as os on at_os.cd_os = os.codos
-      //               join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
-      //               join mk_ate_processos as proc on a.cd_processo = proc.codprocesso
-      //               left join lateral( select a.cliente_cadastrado, a.codatendimento,  MAX(a.dt_abertura)
-      //                                   from mk_atendimento as a 
-      //                                   where a.cliente_cadastrado = p.codpessoa
-      //                                   group by a.cliente_cadastrado , a.codatendimento
-      //                                   limit 1
-      //                                 ) ate on p.codpessoa = ate.cliente_cadastrado
-                                      
-      //             where a.dt_abertura between ? and ? 
-      //             group by a.codatendimento, a.dt_abertura, a.classificacao_encerramento, a.dt_finaliza, p.codpessoa, p.nome_razaosocial,proc.nome_processo, ate.cliente_cadastrado"
-      //           ),[$fim , $inicio ]);
+      $result = DB::connection('pgsql')->select((
+        "select p.codpessoa, p.nome_razaosocial
+          ,COUNT(a.codatendimento) as tickets
+          ,COUNT(os.codos) as os
+            from mk_atendimento as a 
+            join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
+            join mk_os as os on at_os.cd_os = os.codos
+            join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
+        where a.dt_abertura between ? and ? 
+        group by p.codpessoa, p.nome_razaosocial"      
+      ),[$fim , $inicio ]);
 
       // return dd($result);
 
@@ -428,19 +404,18 @@ class RelatorioController extends Controller
       $inicio = Carbon::parse($request->inicio)->format('Y-m-d');
       $fim = Carbon::parse($request->fim)->format('Y-m-d');
       
-      $servicos = DB::connection('pgsql')->table('mk_atendimento as ate')
-                    ->join('mk_ate_os as at_os', 'ate.codatendimento', 'at_os.cd_atendimento')
-                    ->join('mk_ate_processos as processo', 'ate.cd_processo', 'processo.codprocesso')
-                    ->join('mk_atendimento_classificacao as classif', 'ate.classificacao_atendimento','classif.codatclass')
-                    ->join('mk_atendimento_classificacao as classifenc', 'ate.classificacao_encerramento','classifenc.codatclass' )
-                    ->where('ate.cliente_cadastrado', $cliente )
-                    ->whereBetween('ate.dt_abertura', [$fim, $inicio] )
-                    ->select('ate.codatendimento', 'dt_abertura', 'ate.classificacao_encerramento', 'ate.dt_finaliza'
-                              ,'processo.nome_processo'
-                              ,'classif.descricao'
-                              ,'classifenc.descricao as classifenc')
-                    ->orderBy('dt_abertura')
-                    ->get();
+      $servicos = DB::connection('pgsql')->select((
+        "select a.codatendimento, a.dt_abertura, enc.descricao as classifenc, a.dt_finaliza, ap.nome_processo, ac.descricao
+          from mk_atendimento as a 
+            left join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
+            left join mk_ate_processos as ap on a.cd_processo = ap.codprocesso
+            left join mk_atendimento_classificacao as ac on a.classificacao_atendimento = ac.codatclass
+            left join mk_atendimento_classificacao as enc on a.classificacao_encerramento = enc.codatclass
+            join mk_os as os on at_os.cd_os = os.codos
+            join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
+        where a.dt_abertura between ? and ? 
+        and a.cliente_cadastrado = ?"      
+      ),[$fim , $inicio, $cliente ]);
 
       return response()->json([
         'result' => $servicos
