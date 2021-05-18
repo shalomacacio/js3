@@ -32,36 +32,78 @@
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Cod</th>
-                                <th>Cliente</th>
-                                <th>Sexo</th>
-                                <th>Idade</th>
-                                <th>Endereço</th>
-                                <th>Telefone</th>
-                                <th>CPF</th>
+                                <td>codigo</td>
+                                <td>sigla</td>
+                                <td>descricao</td>
+                                <td>tipo</td>
+                                <td>id_tipo</td>
+                                <td>valor</td>
+                                <td>local_de_uso</td>
+                                <td>ip</td>
+                                <td>obs</td>
+                                <td>label</td>
+                                <td>hash_qrcode</td>
+                                <td>data_editado</td>
+                                <td>tipo_atendimento</td>
+                                <td>divisor</td>
+                                <td>saidas</td>
+                                <td>entradas</td>
+                                <td>id_integracao</td>
+                                <td>agrupar_portas_tipo</td>
+                                <td>modo_projeto</td>
+                                <td>instalado_em</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>04</td>
-                                <td>Fulano</td>
-                                <td>M</td>
-                                <td>24</td>
-                                <td>Rua Juvenilia Mavignier Virgem</td>
-                                <td>55 85 987047679</td>
-                                <td> 256.256.256.87</td>
-                            </tr>
+                            {{-- {{ $equipamentos }} --}}
+                            @foreach ($equipamentos as $equip )
+                                <tr>
+                                    <td>{{ $equip->codigo }}</td>
+                                    <td>{{ $equip->sigla }}</td>
+                                    <td>{{ $equip->descricao }}</td>
+                                    <td>@foreach ($equip->tipo as $tipo) {{$tipo }}  @endforeach</td>
+                                    <td>{{ $equip->id_tipo }}</td>
+                                    <td>{{ $equip->valor }}</td>
+                                    <td>{{ $equip->local_de_uso}}</td>
+                                    <td>{{ $equip->ip}}</td>
+                                    <td>{{ $equip->obs}}</td>
+                                    <td>{{ $equip->label}}</td>
+                                    <td>{{ $equip->hash_qrcode}}</td>
+                                    <td>{{ $equip->data_editado}}</td>
+                                    <td>{{ $equip->tipo_atendimento}}</td>
+                                    <td>{{ $equip->divisor}}</td>
+                                    <td>{{ $equip->saidas}}</td>
+                                    <td>{{ $equip->entradas}}</td>
+                                    <td>{{ $equip->id_integracao}}</td>
+                                    <td>{{ $equip->agrupar_portas_tipo}}</td>
+                                    <td>{{ $equip->modo_projeto}}</td>
+                                    <td>@foreach ($equip->instalado_em as $dt_inst) {{$dt_inst }}  @endforeach</td>
+                                    
+                                </tr>
+                            @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Cod</th>
-                                <th>Cliente</th>
-                                <th>Sexo</th>
-                                <th>Idade</th>
-                                <th>Endereço</th>
-                                <th>Telefone</th>
-                                <th>CPF</th>
-                            </tr>
+                                <td>codigo</td>
+                                <td>sigla</td>
+                                <td>descricao</td>
+                                <td>tipo</td>
+                                <td>id_tipo</td>
+                                <td>valor</td>
+                                <td>local_de_uso</td>
+                                <td>ip</td>
+                                <td>obs</td>
+                                <td>label</td>
+                                <td>hash_qrcode</td>
+                                <td>data_editado</td>
+                                <td>tipo_atendimento</td>
+                                <td>divisor</td>
+                                <td>saidas</td>
+                                <td>entradas</td>
+                                <td>id_integracao</td>
+                                <td>agrupar_portas_tipo</td>
+                                <td>modo_projeto</td>
+                                <td>instalado_em</td>
                         </tfoot>
                     </table>
                 </div>
@@ -124,10 +166,10 @@
                 search: "Pesquisar",
                 info: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
                 paginate: {
-                "next": "Próximo",
-                "previous": "Anterior",
-                "first": "Primeiro",
-                "last": "Último"
+                "next</td>": "Próximo",
+                "previous</td>": "Anterior",
+                "first</td>": "Primeiro",
+                "last</td>": "Último"
                 },
             }
         });

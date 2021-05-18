@@ -5,28 +5,25 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.css') }}">
-    <style>
+    {{-- <style>
         td {
           font-size: 9px;
         }
           th {
           font-size: 11px;
         }
-        .input-cuida{
-          margin: 0px 5px 0px 5px
-        }
-        .card-header {
+          .card-header {
           padding: .4rem 1.25rem;
         }
-    </style>
+      </style> --}}
 @endsection
 
 @section('content')
 
-
 <section class="content-header">
 
     <div class="container-fluid">
+  
       <div class="row ">
   
         <div class="col-sm-1">
@@ -34,23 +31,15 @@
         </div>
   
         <div class="col-sm-10">
-          <form class="form-inline"  action="{{ route('financeiro.receitas') }}"   method="GET">
+          <form class="form-inline"  action="{{ route('relatorio.slagarantia') }}"   method="GET">
             @csrf
               <div class="col-12 col-sm-12 col-md-4" >
                 <div class="compensacao"> </div>
                 <div class="form-group">
                   <div class="input-group input-group-md mb-3">
-                    <div class="input-group-prepend">
-                      <button id="btn_filter" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        Selecione
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li class="dropdown-item" id="vencimento">Vencimento</li>
-                        <li class="dropdown-item" id="liquidacao">Liquidação</li>
-                      </ul>
-                    </div>
+                    <label>Período:  </label>
                     <!-- /btn-group -->
-                    <input type="text" class="form-control float-right" id="reservation">
+                    <input type="date" class="form-control float-right" name="dt_inicio" value="{{ \Carbon\Carbon::parse($request->dt_inicio)->format('Y-m-d') }}">
                     <span class="input-group-append">
                       <button type="submit" class="btn btn-info btn-flat">Cuida!</button>
                     </span>
@@ -58,16 +47,14 @@
                 </div>
               </div>
   
-              <input type="hidden" name="dt_inicio"   id="dt_inicio">
-              <input type="hidden" name="dt_fim"      id="dt_fim"> 
-              <input type="hidden" name="dt_filtro"  id="dt_filtro"> 
+              {{-- <input type="hidden" name="dt_inicio" id="dt_inicio"> --}}
+              <input type="hidden" name="dt_fim" id="dt_fim"> 
           </form>
         </div>
   
       </div>
     </div><!-- /.container-fluid -->
 </section>
-
 
 <section class="content">
     <div class="container-fluid">
@@ -82,7 +69,7 @@
             <!-- /.col -->
         </div>
 
-        <center><h4> RECEITAS </h4></center>
+        <center><h4>RELATÓRIO DE SLA GARANTIA</h4></center>
           
         <div class="row">
             <div class="col-12 table-responsive">
@@ -90,73 +77,39 @@
                     <br>
                     <br>
                     <br>
-                    <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
+                    <table id="example" class="table table-striped table-sm " style="width:100%">
                         <thead>
                             <tr>
-                                <th>Fatura</th>
-                                <th>Contrato</th>
-                                <th>Conta</th>
-                                <th>Cliente</th>
-                                <th>Plano</th>
-                                <th>Cidade</th>
-                                <th>Vencimento</th>
-                                <th>Vlr Orig</th>
-                                <th>Liquidado</th>
-                                <th>Vlr Liq</th>
-                                <th>Usr Liq</th>
-                                <th>Dt Liq</th>
-                                <th>Und Fin</th>
-                                <th>Descricao</th>
-                                {{-- <th>Tipo</th> --}}
-                                <th>Tipo PG Liq</th>
-                                <th>Suspenso</th>
+                                <th>COD</th>
+                                <th>CLIENTE</th>
+                                <th>TICKETS</th>
+                                <th>VER</th>
+                                {{-- <th>GARANTIA</th> --}}
+                                <th>O.S</th>
+                                <th>VER</th>   
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($receitas as $receita )
-                            <tr>
-                                <td> {{ $receita->codfatura }} </td>
-                                <td> {{ $receita->codcontrato }} </td>
-                                <td> {{ $receita->codconta }} </td>
-                                <td> {{ Str::limit($receita->nome_razaosocial, 30) }} </td>
-                                <td> {{ Str::limit($receita->plano, 26) }} </td>
-                                <td> {{ $receita->cidade }} </td>
-                                <td> {{ $receita->data_vencimento }} </td>
-                                <td> {{ $receita->valor_original }} </td>
-                                <td> {{ $receita->liquidado }} </td>
-                                <td> {{ $receita->vlr_liquidacao }} </td> 
-                                <td> {{ $receita->usuario_liquidacao }} </td> 
-                                <td> @isset($receita->data_liquidacao)
-                                      {{ \Carbon\Carbon::parse($receita->data_liquidacao)->format('d-m-Y') }}
-                                     @endisset  
-                                </td> 
-                                <td> {{ $receita->unidade }} </td> 
-                                <td> {{ $receita->descricao }} </td> 
-                                {{-- <td> {{ $receita->tipo }} </td>   --}}
-                                <td> {{ $receita->forma_pgto_liquidacao }} </td>  
-                                <td> {{ $receita->suspenso }} </td>  
-                            </tr>
+                            @foreach ($atendimentos as $a )
+                                <tr>
+                                    <td>{{ $a->codpessoa }}</td>
+                                    <td>{{ Str::limit($a->nome_razaosocial, 40)  }}</td>   
+                                    <td>{{ $a->tickets }}</td>
+                                    <td style="text-align: center; !important"><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
+                                    {{-- <td> # </td> --}}
+                                    <td>{{ $a->os }}</td>       
+                                    <td><a href="javascript:void(0)" onClick="getClientOs( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
+                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Fatura</th>
-                                <th>Contrato</th>
-                                <th>Conta</th>
-                                <th>Cliente</th>
-                                <th>Plano</th>
-                                <th>Cidade</th>
-                                <th>Vencimento</th>
-                                <th>Vlr Orig</th>
-                                <th>Liquidado</th>
-                                <th>Vlr Liq</th>
-                                <th>Usr Liq</th>
-                                <th>Dt Liq</th>
-                                <th>Und Fin</th>
-                                <th>Descricao</th>
-                                {{-- <th>Tipo</th> --}}
-                                <th>Tipo PG Liq</th>
-                                <th>Suspenso</th>
+                              <th>CLIENTE</th>
+                              <th>TICKETS</th>
+                              <th>VER</th>
+                              {{-- <th>GARANTIA</th> --}}
+                              <th>O.S</th>
+                              <th>VER</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -165,6 +118,8 @@
         </div>
     </div>
 </section>
+@include('relatorios.modal')
+
 @endsection
 
 @section('javascript')
@@ -183,23 +138,28 @@
 <script src="{{ asset('/vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
 <script>
+    //
+    function showModal(){
+      $('#modal-cliente').modal('focus')
+    }
+
+    // DATA TABLES FILTERS ETC ...
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
-        $('#example tfoot tr').clone(true).appendTo( '#example tfoot' );
-        $('#example tfoot tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text"  style="width: 100%"/>' );
-            // $(this).html( '<input type="text" style="width: 100%" placeholder="Search '+title+'" />' );
+        // $('#example thead tr').clone(true).appendTo( '#example thead' );
+        // $('#example thead tr:eq(1) th').each( function (i) {
+        //     var title = $(this).text();
+        //     $(this).html( '<input type="text" style="width: 100%"/>' );
     
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        });
+        //     $( 'input', this ).on( 'keyup change', function () {
+        //         if ( table.column(i).search() !== this.value ) {
+        //             table
+        //               .column(i)
+        //               .search( this.value )
+        //               .draw();
+        //         }
+        //     } );
+        // });
     
         var table = $('#example').DataTable( {
             processing: true,
@@ -235,6 +195,7 @@
     } );
 
     // DATE RANGER
+
     $(function() {
         moment.locale('pt-br');
         $('#reservation').daterangepicker({
@@ -268,19 +229,85 @@
         },
         function(start, end, label) {
             // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-            $('#dt_inicio').val( start.format('YYYY-MM-DD'));
+            // $('#dt_inicio').val( start.format('YYYY-MM-DD'));
             $('#dt_fim').val( end.format('YYYY-MM-DD'));
         });
     });
 
-    $('#vencimento').click(function(e) {
-      $('#btn_filter').text("Vencimento");
-      $('#dt_filtro').val(0);
-    });
+    //CONFIGURANÇÃO TOKEN PARA USO DO AJAX 
+    $.ajaxSetup({
+          headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
 
-    $('#liquidacao').click(function(e) {
-      $('#btn_filter').text("Liquidação");
-      $('#dt_filtro').val(1);
-    });
+  // POPUP OS POR CLIENTE
+    function getClientOs(cliente){
+      $.ajax({
+        url: "{{ route('relatorio.ajaxClientOs') }}",
+        type: "GET",
+        dataType: 'json',
+        data: { 
+          cliente: cliente , 
+          inicio: "{{ $inicio }}",
+          fim: "{{ $fim }}"
+        },
+        success: function(data) {
+          // console.log(result.result[0]);
+          $("#ostable tr").remove();
+          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>TIPO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
+        for(var i=0; i < data.result.length ; i++)
+          {
+          $('#ostable').append(
+          '<tr>'+
+            '<td>'+data.result[i]['codos']+'</td>'+
+            '<td>'+data.result[i]['abertura']+'</td>'+
+            '<td>'+data.result[i]['tipo']+'</td>'+
+            '<td>'+data.result[i]['data_fechamento']+'</td>'+
+            '<td>'+data.result[i]['class_enc']+'</td>'+
+          '</tr>');
+          }
+          }
+      });
+    }
+
+
+     // POPUP OS POR CLIENTE
+     function getClientAte(cliente){
+      $.ajax({
+        url: "{{ route('relatorio.ajaxClientAte') }}",
+        type: "GET",
+        dataType: 'json',
+        data: { 
+          cliente: cliente , 
+          inicio: "{{ $inicio }}",
+          fim: "{{ $fim }}"
+        },
+        success: function(data) {
+          // console.log(result.result[0]);
+          $("#ostable tr").remove();
+          $('#ostable').append('<tr><th>COD</th><th>ABERTURA</th><th>CLASSIFICACAOS</th><th>PROCESSO</th><th>FECHAMENTO</th><th>CLASS_ENC</th></tr>');
+        for(var i=0; i < data.result.length ; i++)
+          {
+          $('#ostable').append(
+          '<tr>'+
+            '<td>'+data.result[i]['codatendimento']+'</td>'+
+            '<td>'+data.result[i]['dt_abertura']+'</td>'+
+            '<td>'+data.result[i]['descricao']+'</td>'+
+            '<td>'+data.result[i]['nome_processo']+'</td>'+
+            '<td>'+data.result[i]['dt_finaliza']+'</td>'+
+            '<td>'+data.result[i]['classifenc']+'</td>'+
+          '</tr>');
+          }
+          }
+      });
+
+    }
+
+
+
+
+
 </script>
+
 @endsection

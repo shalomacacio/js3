@@ -76,9 +76,17 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'api'], function () {
+    //WEB SERVICES MK_SOLUTION
     Route::get('/tokenAuth',  'MkApisController@getTokenAuth')->name('tokenAuth');
     Route::get('/dbMigracao', 'MkApisController@dbMigracao')->name('dbMigracao');
-    // Route::get('/teste',      'MkApisController@teste')->name('teste');
+    
+    //API GEOGRID 
+    Route::get('geogrid/teste', 'GeogridController@testeApi');
+    Route::get('geogrid/equipamentos', 'GeogridController@equipamentos');
+    Route::get('geogrid/canc-port', 'GeogridController@cancelarReservaPorta');
+    Route::get('geogrid/res-port', 'GeogridController@reservarPorta');
+    Route::get('geogrid/clientes/cadastrar', 'GeogridController@clientesCadastrar');
+
   });
 
   //WebServices

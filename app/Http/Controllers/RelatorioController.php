@@ -363,10 +363,8 @@ class RelatorioController extends Controller
             join mk_os as os on at_os.cd_os = os.codos
             join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
         where a.dt_abertura between ? and ? 
-        group by p.codpessoa, p.nome_razaosocial"      
+        group by p.codpessoa, p.nome_razaosocial"
       ),[$fim , $inicio ]);
-
-      // return dd($result);
 
         $atendimentos = $result;
 
