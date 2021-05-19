@@ -3,9 +3,8 @@
 @section('content')
 
 <section class="content-header">
-
   <div class="container-fluid">
-
+    
     <div class="row ">
 
       <div class="col-sm-1">
@@ -38,8 +37,7 @@
   </div><!-- /.container-fluid -->
 </section>
 
-
-
+<section class="content">
   <div class="card">
 
     <div class="card-header">
@@ -64,7 +62,7 @@
           @foreach ($atendimentos as $a )
           <tr>
               <td>{{ $a->codpessoa }}</td>
-              <td>{{ Str::limit($a->nome_razaosocial, 40) }}</td>   
+              <td>{{ $a->nome_razaosocial }}</td>   
               <td><center>{{ $a->tickets }}</center></td>
               <td style="text-align: center; !important"><a href="javascript:void(0)" onClick="getClientAte( '{{ $a->codpessoa}}', '{{ $inicio}}' )"  data-toggle="modal" data-target="#modal" class="btn btn-xs btn-default float-right"><i class="fas fa-list"></i> </a> </td>
               {{-- <td> # </td> --}}
@@ -75,20 +73,21 @@
         </tbody>
       </table>
     </div>
-    <!-- /.card-body -->
+  
   </div>
+</section>
+
 @endsection
 @include('relatorios.modal')
 
 
 
 <script>
-  //
-  function showModal(){
-    $('#modal-cliente').modal('focus')
-  }
-
-  
+    //MODAL-CLIENTE
+    function showModal(){
+      $('#modal-cliente').modal('focus')
+    }
+    
     //CONFIGURANÇÃO TOKEN PARA USO DO AJAX 
     $.ajaxSetup({
           headers: {

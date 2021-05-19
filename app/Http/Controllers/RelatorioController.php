@@ -323,23 +323,43 @@ class RelatorioController extends Controller
         $fim = $request->dt_fim;
       }
 
-      $atendimentos = DB::connection('pgsql')->table('mk_atendimento as a')
-        ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
-        ->leftJoin('mk_os as os', 'at_os.cd_os','os.codos')
-        ->leftJoin('mk_os_tipo as tipo', 'os.tipo_os','tipo.codostipo')
-        ->leftJoin('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
-        ->leftJoin('fr_usuario as u', 'os.operador_fech_tecnico', 'u.usr_codigo')
-        ->whereBetween('dt_abertura', [$inicio, $fim])
-        ->select('p.nome_razaosocial'
-            ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim', 'a.finalizado'
-            // , DB::raw('CAST(DATE_FORMAT(CONCAT(os.data_fechamento," ", os.hora_fechamento,":00"), "%Y-%m%-%d %H:%i:%s") AS DATETIME)')
-            , DB::raw("CONCAT(os.data_abertura,' ' ,os.hora_abertura) as abertura")
-            , DB::raw("CONCAT(os.data_fechamento,' ' ,os.hora_fechamento) as fechamento")
-            ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado', 'os.operador_fechamento'
-            ,'u.usr_nome'
-            ,'tipo.descricao'
-            )
-        ->get();
+      $result = DB::connection('pgsql')->select((
+        "select 
+             p.nome_razaosocial
+            ,a.codatendimento, a.dt_hr_insert, a.dh_fim, a.finalizado
+            ,os.codos, os.dh_insert, os.dt_hr_fechamento_tec, os.encerrado, os.operador_fechamento
+            ,u.usr_nome
+            ,tipo.descricao
+            ,CONCAT(os.data_fechamento,' ',os.hora_fechamento) as fechamento
+            ,CONCAT(os.data_abertura,' ',os.hora_abertura) as abertura
+          from mk_atendimento as a 
+          join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
+          left join mk_os as os on at_os.cd_os = os.codos
+          left join mk_os_tipo as tipo on os.tipo_os = tipo.codostipo
+          left join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
+          left join fr_usuario as u on os.operador_fech_tecnico = u.usr_codigo
+        where a.dt_abertura between ? and ?"
+      ),[ $inicio, $fim ]);
+
+
+      // $result = DB::connection('pgsql')->table('mk_atendimento as a')
+      //   ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
+      //   ->leftJoin('mk_os as os', 'at_os.cd_os','os.codos')
+      //   ->leftJoin('mk_os_tipo as tipo', 'os.tipo_os','tipo.codostipo')
+      //   ->leftJoin('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
+      //   ->leftJoin('fr_usuario as u', 'os.operador_fech_tecnico', 'u.usr_codigo')
+      //   ->whereBetween('dt_abertura', [$inicio, $fim])
+      //   ->select('p.nome_razaosocial'
+      //       ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim', 'a.finalizado'
+      //       , DB::raw("CONCAT(os.data_abertura,' ' ,os.hora_abertura) as abertura")
+      //       , DB::raw("CONCAT(os.data_fechamento,' ' ,os.hora_fechamento) as fechamento")
+      //       ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado', 'os.operador_fechamento'
+      //       ,'u.usr_nome'
+      //       ,'tipo.descricao'
+      //       )
+      //   ->get();
+
+      $atendimentos = $result;
 
       return view('relatorios.sla', compact('atendimentos'));
     }
@@ -358,11 +378,13 @@ class RelatorioController extends Controller
         "select p.codpessoa, p.nome_razaosocial
           ,COUNT(a.codatendimento) as tickets
           ,COUNT(os.codos) as os
+          
             from mk_atendimento as a 
-            join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
-            join mk_os as os on at_os.cd_os = os.codos
+            left join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
+            left join mk_os as os on at_os.cd_os = os.codos
             join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
-        where a.dt_abertura between ? and ? 
+        where a.cd_processo is not null
+        and a.dt_abertura between ? and ? 
         group by p.codpessoa, p.nome_razaosocial"
       ),[$fim , $inicio ]);
 
@@ -409,9 +431,10 @@ class RelatorioController extends Controller
             left join mk_ate_processos as ap on a.cd_processo = ap.codprocesso
             left join mk_atendimento_classificacao as ac on a.classificacao_atendimento = ac.codatclass
             left join mk_atendimento_classificacao as enc on a.classificacao_encerramento = enc.codatclass
-            join mk_os as os on at_os.cd_os = os.codos
+            left join mk_os as os on at_os.cd_os = os.codos
             join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
-        where a.dt_abertura between ? and ? 
+        where a.cd_processo is not null
+        and a.dt_abertura between ? and ? 
         and a.cliente_cadastrado = ?"      
       ),[$fim , $inicio, $cliente ]);
 

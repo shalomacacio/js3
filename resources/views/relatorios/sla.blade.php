@@ -116,7 +116,7 @@
                                       @endisset
                                     </td>
                                     <td> {{ \Carbon\Carbon::parse($a->dt_hr_insert)->diffInHours($a->dh_fim )}} </td>
-                                    <td>{{$a->finalizado}}</td>
+                                    <td> {{$a->finalizado}}</td>
                                     <td>{{$a->codos}}</td>
                                     <td>{{$a->descricao}}</td>
                                     <td>{{$a->usr_nome}}</td>
