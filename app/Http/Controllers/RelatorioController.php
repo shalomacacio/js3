@@ -378,11 +378,11 @@ class RelatorioController extends Controller
         "select p.codpessoa, p.nome_razaosocial
           ,COUNT(a.codatendimento) as tickets
           ,COUNT(os.codos) as os
-          
             from mk_atendimento as a 
             left join mk_ate_os as at_os on a.codatendimento = at_os.cd_atendimento
             left join mk_os as os on at_os.cd_os = os.codos
             join mk_pessoas as p on a.cliente_cadastrado = p.codpessoa
+            left join (  )
         where a.cd_processo is not null
         and a.dt_abertura between ? and ? 
         group by p.codpessoa, p.nome_razaosocial"
@@ -470,7 +470,7 @@ class RelatorioController extends Controller
         ->where('f.tipo','R')
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
         'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
-        ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade'
+        ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade' 
         ,'pc.unidade_financeira', 'pc.codconta', 'pc.valor_original'
         ,'uf.descricao as unidade'
         ,'c.codcontrato', 'pa.descricao as plano')
@@ -478,6 +478,42 @@ class RelatorioController extends Controller
 
       $receitas = $result->sortBy('nome_razaosocial');
       return view('financeiro.relatorios.receitas', compact('receitas'));
+    }
+
+    public function movCaixa (Request $request){
+      $inicio = null;
+      $fim = null;
+      $dt_parametro = 'f.data_vencimento';
+
+      if( $request->dt_inicio){
+        $inicio = $request->dt_inicio;
+        $fim = $request->dt_fim;
+      }
+
+      if( $request->dt_filtro == 1){
+        $dt_parametro = 'f.data_liquidacao';
+      }
+
+      $result = DB::connection('pgsql')->select((
+        "select p.nome_razaosocial
+         ,mc.codmovcaixa, mc.valor 
+         ,f.codfatura , f.suspenso, f.liquidado , f.forma_pgto_liquidacao, f.vlr_liquidacao
+         ,f.data_liquidacao, f.usuario_liquidacao, f.data_vencimento
+         ,cid.cidade 
+         ,pc.codconta, pc.codvinculado ,pc.descricao_conta, pc.unidade_financeira as unidadefin, pc.valor_original 
+         ,uf.descricao as unidade
+        from mk_movimentacao_caixa as mc
+          left join mk_faturas as f on mc.cd_fatura = f.codfatura
+          left join mk_pessoas as p on mc.credor_devedor = p.codpessoa
+          left join mk_cidades as cid on p.codcidade = cid.codcidade
+          left join mk_contas_faturadas as cf on f.codfatura = cf.cd_fatura
+          left join mk_plano_contas as pc on cf.cd_conta = pc.codconta
+          left join mk_unidade_financeia as uf on pc.unidade_financeira =  uf.nomenclatura
+        where mc.data between ? and ?"   
+      ),[ $inicio, $fim ]);
+    
+      $movimentacoes = $result;
+      return view('financeiro.relatorios.mov-caixa', compact('movimentacoes'));
     }
     
     public function teste(){
