@@ -151,7 +151,13 @@
               <li class="nav-item">
                 <a href="{{ route('estoque.fiscalizar')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
-                  <p>O.S X ÍTENS</p>
+                  <p>O.S X ÍTENS</p> 
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('estoque.movEstoque')}}" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>MOV ESTOQUE</p> 
                 </a>
               </li>
             </ul>
