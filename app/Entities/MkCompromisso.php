@@ -8,6 +8,7 @@
   use Illuminate\Database\Eloquent\Model;
   use Prettus\Repository\Contracts\Transformable;
   use Prettus\Repository\Traits\TransformableTrait;
+  use App\Entities\Geogrid;
 
 /**
  * Class MkCompromisso.
@@ -38,6 +39,7 @@ class MkCompromisso extends Model implements Transformable
     //   $funcionario = MkPessoa::where('codpessoa', $value)->first();
     //   return $funcionario->codpessoa."-".$funcionario->nome_razaosocial;
     // }
+    
     public function gettipoOsAttribute($value) {
       $result =  MkOs::find($value);
       return $value;

@@ -83,11 +83,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dbMigracao', 'MkApisController@dbMigracao')->name('dbMigracao');
     
     //API GEOGRID 
-    Route::get('geogrid/teste', 'GeogridController@testeApi');
-    Route::get('geogrid/equipamentos', 'GeogridController@equipamentos');
-    Route::get('geogrid/canc-port', 'GeogridController@cancelarReservaPorta');
-    Route::get('geogrid/res-port', 'GeogridController@reservarPorta');
-    Route::get('geogrid/clientes/cadastrar', 'GeogridController@clientesCadastrar');
+    Route::get('geogrid', 'GeogridsController@geogrid');
+    Route::get('geogrid/teste', 'GeogridsController@testeApi');
+    Route::get('geogrid/equipamentos', 'GeogridsController@equipamentos');
+    Route::get('geogrid/canc-port', 'GeogridsController@cancelarReservaPorta');
+    Route::post('geogrid/res-port', 'GeogridsController@reservarPorta')->name('geogrid.reservar');
+    Route::get('geogrid/clientes/cadastrar', 'GeogridsController@clientesCadastrar');
+
 
   });
 

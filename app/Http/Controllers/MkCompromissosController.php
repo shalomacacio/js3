@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Geogrid;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -106,9 +107,12 @@ class MkCompromissosController extends Controller
         ]);
       }
 
+      $geogrid = new Geogrid();
+      $equipamentos = $geogrid->equipamentos;
+
       $total = $compromissos->count();
       $concluidos = $compromissos->whereNotNull('dt_hr_fechamento_tec')->count();
-      return view('mkCompromissos.agenda', compact('mkCompromissos','grupos', 'request', 'total', 'concluidos'));
+      return view('mkCompromissos.agenda', compact('mkCompromissos','grupos', 'equipamentos', 'request', 'total', 'concluidos'));
     }
     
 }

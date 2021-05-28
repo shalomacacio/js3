@@ -90,6 +90,8 @@
                     @if($compromisso->complemento )
                     <a title="{{Str::before($compromisso->complemento , '/') }}" href="https://www.google.com/search?q={{Str::before($compromisso->complemento , '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a> 
                     @endif
+                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-default float-right"><i class="fas fa-map-marked-alt"></i> </a>  
+
                   </td>
                   {{-- <td> 
                     @isset($compromisso->os-> )
@@ -110,6 +112,7 @@
     <!-- /.row -->
   </div><!-- /.container-fluid -->
   @include('mkCompromissos.modal')
+  @include('mkCompromissos.modalGeogrid')
 </section>
 <!-- /.content -->
 
@@ -145,6 +148,10 @@ function getEstoque(codigo){
 
   function showModal(){
     $('#modal-default').modal('focus')
+  }
+
+  function showModal(){
+    $('#myModal').modal('focus')
   }
 
   function status(tipo){

@@ -59,6 +59,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkFaturaRepository::class, \App\Repositories\MkFaturaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkContaRepository::class, \App\Repositories\MkContaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkPlanoContaRepository::class, \App\Repositories\MkPlanoContaRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\GeogridRepository::class, \App\Repositories\GeogridRepositoryEloquent::class);
         //:end-bindings:
     }
 }

@@ -3,25 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
+use App\Http\Requests\GeogridCreateRequest;
+use App\Http\Requests\GeogridUpdateRequest;
+use App\Repositories\GeogridRepository;
+use App\Validators\GeogridValidator;
 use Ixudra\Curl\Facades\Curl;
 use App\Entities\MkPessoa;
+use Illuminate\Support\Arr;
 
-use function PHPSTORM_META\type;
-
-class GeogridController extends Controller
+/**
+ * Class GeogridsController.
+ *
+ * @package namespace App\Http\Controllers;
+ */
+class GeogridsController extends Controller
 {
     protected $path;
     protected $key;
     protected $url;
+
     
-    public function __construct(MkPessoa $cliente){
+    
+    public function __construct(){
         $this->path = env('GEOGRID_PATH');
         $this->key = env('GEOGRID_TOKEN');
         $this->url = $this->path.'/api/v2/?exec='.$this->key;
     }
 
-    public function testeApi($endpoint='/fichaEquipamento/cancelarReservaPorta'){
-        return dd($this->url.$endpoint);
+    public function geogrid(){
+        return view('geogrid.index');
+    }
+
+    public function testeApi($endpoint='/fichaCaixa/consultar'){
+        $response = Curl::to($this->url.$endpoint)
+        ->post();
     }
 
     public function clientesCadastrar($endpoint='/clientes/cadastrar', $integrador=45800 ){
@@ -38,7 +57,12 @@ class GeogridController extends Controller
         return dd($response);
     }
 
-    public function reservarPorta($endpoint='/fichaEquipamento/reservarPorta', $codigo, $porta){
+    public function reservarPorta(Request $request){
+    
+        $endpoint='/fichaEquipamento/reservarPorta';
+         $codigo = $request->codigo; 
+         $porta =$request->porta; 
+         $cliente = $request->cliente;
 
         $response = Curl::to($this->url.$endpoint)
         ->withData( array( 
@@ -47,7 +71,13 @@ class GeogridController extends Controller
                         ) 
                   )
         ->post();
+
+        $this->anotacao($codigo, $porta, $cliente);
+
+        return redirect()->back()->with('message', $response);
     }
+
+
 
     public function reservarPortaCliente($endpoint='/fichaEquipamento/reservarPortaCliente', $codigo, $porta, $cliente, $integrador){
         
@@ -60,6 +90,8 @@ class GeogridController extends Controller
                         ) 
                   )
         ->post();
+
+        
     }
 
     public function cancelarReservaPorta($endpoint='/fichaEquipamento/cancelarReservaPorta'){
@@ -79,19 +111,27 @@ class GeogridController extends Controller
         ->asJson()
         ->get();
         $equipamentos = $response->registros;
-        return view('geogrid.teste', compact('equipamentos'));
+
+        // $filtered = Arr::where($equipamentos, function ($value, $key) {
+        //     return $value->id_tipo == 5786;
+        // });
+
+        // $equipamentos = $filtered;
+
+        return view('geogrids.teste', compact('equipamentos'));
     }
 
-    public function anotacao($endpoint='/fichaEquipamento/fazerAnotacao'){
+    public function anotacao($codigo, $porta, $texto){
+        $endpoint='/fichaEquipamento/fazerAnotacao';
+
         $response = Curl::to($this->url.$endpoint)
         ->withData( array(  
-                            'codigo' => 'NRM_DIV101', 
-                            'porta' => 1, 
+                            'codigo' => $codigo, 
+                            'porta' => $porta, 
                             'direcao' => 's', 
-                            'texto' => 'texto teste'
+                            'texto' => $texto
                         ) 
                     )
         ->post();
     }
-
 }
