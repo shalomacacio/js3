@@ -95,6 +95,9 @@
                             <tr>
                                 <th>Mov</th>
                                 <th>Data</th>
+                                <th>Cliente</th>
+                                <th>O.S</th>
+                                <th>Tipo O.S</th>
                                 <th>Tipo Mov</th>
                                 <th>Produto Cod </th>
                                 <th>Produto </th>
@@ -108,6 +111,9 @@
                             <tr>
                                 <td> {{ $mov->codestoquev3 }} </td> 
                                 <td> {{ \Carbon\Carbon::parse($mov->dh)->format('d-m-Y') }} </td>  
+                                <td> {{ $mov->nome_razaosocial }} </td> 
+                                <td> {{ $mov->cd_os }} </td> 
+                                <td> {{ $mov->ostipo }} </td> 
                                 <td> 
                                   @if( $mov->tipo == 1 ) 
                                     Entrada
@@ -130,6 +136,9 @@
                             <tr>
                               <th>Mov</th>
                               <th>Data</th>
+                              <th>Cliente</th>
+                              <th>O.S</th>
+                              <th>Tipo O.S</th>
                               <th>Tipo Mov</th>
                               <th>Produto Cod </th>
                               <th>Produto </th>

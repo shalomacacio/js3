@@ -191,13 +191,16 @@ class MkEstoquesController extends Controller
       $result = DB::connection('pgsql')->select((
         "
         select  
-          ev3.codestoquev3, ev3.dh, ev3.tipo, i.cd_item, e.descricao_produto, orig.descricao_setor as orig, dest.descricao_setor as dest, i.qtde
-            from public.mk_estoque_v3 as ev3
+          ev3.codestoquev3, ev3.dh, p.nome_razaosocial, ev3.cd_os, t.descricao as ostipo,   ev3.tipo, i.cd_item, e.descricao_produto, orig.descricao_setor as orig, dest.descricao_setor as dest, i.qtde
+          from public.mk_estoque_v3 as ev3
             left join public.mk_estoque_v3_itens as i on ev3.codestoquev3 = i.cd_master
             left join mk_estoque as e on i.cd_item = e.codestoque
             left join mk_estoque_setores as orig on ev3.cd_setor_origem = orig.codestsetores 
             left join mk_estoque_setores as dest on ev3.cd_setor_destino = dest.codestsetores 
-        where ev3.dh between ?  and ?
+            left join mk_os as os on ev3.cd_os = os.codos
+            left join mk_os_tipo as t on os.tipo_os = t.codostipo 
+            left join mk_pessoas as p on ev3.cd_pessoa = p.codpessoa
+        where ev3.dh between ? and ?
         order by ev3.dh desc     
         "
       ), [$inicio, $fim]);
