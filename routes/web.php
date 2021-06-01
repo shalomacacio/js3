@@ -90,7 +90,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('geogrid/res-port', 'GeogridsController@reservarPorta')->name('geogrid.reservar');
     Route::get('geogrid/clientes/cadastrar', 'GeogridsController@clientesCadastrar');
 
-
   });
 
   //WebServices

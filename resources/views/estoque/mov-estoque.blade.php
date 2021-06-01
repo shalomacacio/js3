@@ -106,14 +106,23 @@
                         <tbody>
                             @foreach ($movimentacoes as $mov )
                             <tr>
-                                <td> {{ $mov->codestmaster }} </td> 
-                                <td> {{ \Carbon\Carbon::parse($mov->data_hora)->format('d-m-Y') }} </td>  
-                                <td> {{ $mov->tipo_movimento }}  </td> 
-                                <td> {{ $mov->codestoque }}  </td> 
+                                <td> {{ $mov->codestoquev3 }} </td> 
+                                <td> {{ \Carbon\Carbon::parse($mov->dh)->format('d-m-Y') }} </td>  
+                                <td> 
+                                  @if( $mov->tipo == 1 ) 
+                                    Entrada
+                                  @elseif ($mov->tipo == 2)
+                                    Saida
+                                  @elseif ($mov->tipo == 3)
+                                    Transferência
+                                  @endif
+                                
+                                </td> 
+                                <td> {{ $mov->cd_item }}  </td> 
                                 <td> {{ $mov->descricao_produto }}  </td> 
-                                <td> {{ $mov->descricao_setor }}  </td> 
-                                <td> {{ $mov->destino }}  </td>  
-                                <td> {{ $mov->qnt }}  </td> 
+                                <td> {{ $mov->orig }}  </td> 
+                                <td> {{ $mov->dest }}  </td>  
+                                <td> {{ $mov->qtde }}  </td> 
                             </tr>
                             @endforeach
                         </tbody>

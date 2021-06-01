@@ -108,12 +108,12 @@
                   <p>Inadimplências</p>
                 </a>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="{{ route('financeiro.movCaixa')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Movimetação Caixa</p>
                 </a>
-              </li>
+              </li> --}}
               <li class="nav-item">
                 <a href="{{ route('financeiro.receitas')}}" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>

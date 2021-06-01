@@ -155,26 +155,57 @@ class MkEstoquesController extends Controller
       ]);
     }
 
+    // public function movEstoque( Request $request ){
+    //   $fim = $this->fim;
+    //   $inicio = $this->inicio;
+
+    //   $result = DB::connection('pgsql')->select((
+    //     "
+        // select em.codestmaster, em.data_hora, em.tipo_movimento 
+        //   , es.descricao_setor, dest.descricao_setor as destino
+        //   , e.codestoque, e.descricao_produto
+        //   , em2.qnt
+        // from mk_estoque_master as em
+        // left join mk_estoque_movimentacao2 as em2 on em.codestmaster = em2.cd_mestre
+        // left join mk_estoque as e on em2.item = e.codestoque
+        // left join mk_estoque_setores es on em.cd_setor = es.codestsetores 
+        // left join mk_estoque_setores dest on em.cd_setor_destino = dest.codestsetores   
+        // where e.codestoque is not null
+    //     "   
+    //   ));
+
+    //   $movimentacoes = $result;
+    //   return view('estoque.mov-estoque', compact('movimentacoes'));
+    // }
+
+
     public function movEstoque( Request $request ){
       $fim = $this->fim;
       $inicio = $this->inicio;
 
+      if($request->dt_inicio && $request->dt_fim){
+        $inicio = $request->dt_inicio;
+        $fim = $request->dt_fim;
+      }
+
       $result = DB::connection('pgsql')->select((
         "
-        select em.codestmaster, em.data_hora, em.tipo_movimento 
-          , es.descricao_setor, dest.descricao_setor as destino
-          , e.codestoque, e.descricao_produto
-          , em2.qnt
-        from mk_estoque_master as em
-        left join mk_estoque_movimentacao2 as em2 on em.codestmaster = em2.cd_mestre
-        left join mk_estoque as e on em2.item = e.codestoque
-        left join mk_estoque_setores es on em.cd_setor = es.codestsetores 
-        left join mk_estoque_setores dest on em.cd_setor_destino = dest.codestsetores   
-        where e.codestoque is not null
-        "   
-      ));
+        select  
+          ev3.codestoquev3, ev3.dh, ev3.tipo, i.cd_item, e.descricao_produto, orig.descricao_setor as orig, dest.descricao_setor as dest, i.qtde
+            from public.mk_estoque_v3 as ev3
+            left join public.mk_estoque_v3_itens as i on ev3.codestoquev3 = i.cd_master
+            left join mk_estoque as e on i.cd_item = e.codestoque
+            left join mk_estoque_setores as orig on ev3.cd_setor_origem = orig.codestsetores 
+            left join mk_estoque_setores as dest on ev3.cd_setor_destino = dest.codestsetores 
+        where ev3.dh between ?  and ?
+        order by ev3.dh desc     
+        "
+      ), [$inicio, $fim]);
+
+      $result = $result;
 
       $movimentacoes = $result;
       return view('estoque.mov-estoque', compact('movimentacoes'));
     }
+
 }
