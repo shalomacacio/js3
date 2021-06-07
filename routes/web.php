@@ -45,7 +45,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/ajaxClientOs',   'RelatorioController@ajaxClientOs')->name('relatorio.ajaxClientOs');
     Route::get('/ajaxClientAte',   'RelatorioController@ajaxClientAte')->name('relatorio.ajaxClientAte');
     Route::get('/teste','RelatorioController@teste')->name('relatorios.teste');
-
   });
 
   Route::group(['prefix' => 'estoque'], function () {
@@ -57,8 +56,11 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'financeiro'], function () {
     Route::get('/cancelamentos',      'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
-    Route::get('/contratos',          'RelatorioController@contratos')->name('contratos');
+    Route::get('/cobranca',           'FinanceiroRelatoriosController@cobranca')->name('financeiro.cobranca');
+    Route::get('/cobranca/sms',       'FinanceiroRelatoriosController@cobrancaSMS')->name('financeiro.cobrancaSMS');
     Route::get('/ajaxCliente',        'FinanceiroController@ajaxCliente')->name('ajaxCliente');
+
+    Route::get('/contratos',          'RelatorioController@contratos')->name('contratos');
     Route::get('/autocomplete',       'FinanceiroController@autocomplete')->name('autocomplete');
     Route::get('/dashboard',          'MkMovimentacaoBancariasController@dashboard')->name('fin.dashboard');
     Route::resource('/movimentacao',  'MkMovimentacaoCaixasController');
@@ -69,7 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('/receitas',     'RelatorioController@receitas')->name('financeiro.receitas');
       Route::get('/mov-caixa',     'RelatorioController@movCaixa')->name('financeiro.movCaixa');
     });
-  
+
   });
 
   Route::group(['prefix' => 'dashboard'], function () {
@@ -89,6 +91,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('geogrid/canc-port', 'GeogridsController@cancelarReservaPorta');
     Route::post('geogrid/res-port', 'GeogridsController@reservarPorta')->name('geogrid.reservar');
     Route::get('geogrid/clientes/cadastrar', 'GeogridsController@clientesCadastrar');
+
+    //API MKM 
+    Route::get('/sms/enviar', 'SMSController@enviar')->name('smsm.enviar');
 
   });
 

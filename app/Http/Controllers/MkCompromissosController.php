@@ -114,5 +114,9 @@ class MkCompromissosController extends Controller
       $concluidos = $compromissos->whereNotNull('dt_hr_fechamento_tec')->count();
       return view('mkCompromissos.agenda', compact('mkCompromissos','grupos', 'equipamentos', 'request', 'total', 'concluidos'));
     }
+
+    public function getGeogrid(){
+
+    }
     
 }

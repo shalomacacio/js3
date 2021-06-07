@@ -60,6 +60,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\MkContaRepository::class, \App\Repositories\MkContaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\MkPlanoContaRepository::class, \App\Repositories\MkPlanoContaRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\GeogridRepository::class, \App\Repositories\GeogridRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\SMSRepository::class, \App\Repositories\SMSRepositoryEloquent::class);
         //:end-bindings:
     }
 }

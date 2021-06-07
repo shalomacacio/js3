@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\MkFatura;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Entities\SMS;
+
 
 /**
  * Class FinanceiroRelatoriosController.
@@ -54,6 +57,73 @@ class FinanceiroRelatoriosController extends Controller
         }
 
       return $pessoas;
+    }
+
+    public function cobranca(Request $request) {
+
+      switch ($request->tipo_cobranca) {
+        case '1':
+          $tipo = Carbon::now()->add(2, 'day')->format('Y-m-d');
+          break;
+        case '2':
+          $tipo = Carbon::now()->format('Y-m-d');
+          break;
+        case '3':
+          $tipo = Carbon::now()->sub(5, 'day')->format('Y-m-d');
+          break;
+        default:
+          $tipo = Carbon::now()->format('Y-m-d');
+          break;
+      }
+
+      $result = DB::connection('pgsql')->select((
+        "
+        select f.codfatura, p.nome_razaosocial, p.fone01, p.fone02 , f.data_vencimento, f.valor_total, f.cd_faturamento
+            from mk_faturas as f  
+                join mk_pessoas as p on f.cd_pessoa  = p.codpessoa 
+            where f.liquidado = 'N'
+            and f.suspenso = 'N'
+            and f.tipo <> 'P'
+            and f.valor_total > 1
+            and f.data_vencimento = ?
+        "      
+      ), [ $tipo ]); 
+
+      $cobrancas = $result;
+      return view('financeiro.relatorios.cobranca', compact('cobrancas', 'request'));
+    }
+
+    public function cobrancaSMS(Request $request){
+      
+      $faturas = $request->faturas;
+      $sms = new SMS();
+
+      foreach ($faturas as $codfatura) {
+
+        $fatura = MkFatura::find($codfatura);
+        $valor = number_format($fatura->valor_total, 2, ',', '.');
+        $vencimento = Carbon::parse($fatura->data_vencimento)->format('d-m-Y');
+        $telefone =  $fatura->cliente->fone01;
+
+        switch ($request->tipo) {
+          case '1':
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .", Passando para lembrar que a sua fatura no valor de R$ ".$valor." vencerá no dia ".$vencimento;
+            break;
+          case '2':
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para lembrar que a sua fatura no valor de R$ ".$valor." vence hoje!  ";
+            break;
+          case '3':
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para informar que a sua fatura no valor de R$: ".$valor."  está vencida a cinco dias. O bloqueio está agendado para amanhã !  ";
+            break;
+          default:
+            $mensagem = "Jnet: Conectando você ao mundo  ";
+            break;
+        }
+      }
+      //$return = $sms->send($mensagem, $telefone);
+      // echo $mensagem."<br />";
+        
+      return redirect()->back()->with(['message'=> "Mensagen enviada"]);
     }
 
 }

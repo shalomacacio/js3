@@ -341,24 +341,6 @@ class RelatorioController extends Controller
         where a.dt_abertura between ? and ?"
       ),[ $inicio, $fim ]);
 
-
-      // $result = DB::connection('pgsql')->table('mk_atendimento as a')
-      //   ->join('mk_ate_os as at_os', 'a.codatendimento', 'at_os.cd_atendimento')
-      //   ->leftJoin('mk_os as os', 'at_os.cd_os','os.codos')
-      //   ->leftJoin('mk_os_tipo as tipo', 'os.tipo_os','tipo.codostipo')
-      //   ->leftJoin('mk_pessoas as p', 'a.cliente_cadastrado', 'p.codpessoa')
-      //   ->leftJoin('fr_usuario as u', 'os.operador_fech_tecnico', 'u.usr_codigo')
-      //   ->whereBetween('dt_abertura', [$inicio, $fim])
-      //   ->select('p.nome_razaosocial'
-      //       ,'a.codatendimento', 'a.dt_hr_insert', 'a.dh_fim', 'a.finalizado'
-      //       , DB::raw("CONCAT(os.data_abertura,' ' ,os.hora_abertura) as abertura")
-      //       , DB::raw("CONCAT(os.data_fechamento,' ' ,os.hora_fechamento) as fechamento")
-      //       ,'os.codos', 'os.dh_insert', 'os.dt_hr_fechamento_tec', 'os.encerrado', 'os.operador_fechamento'
-      //       ,'u.usr_nome'
-      //       ,'tipo.descricao'
-      //       )
-      //   ->get();
-
       $atendimentos = $result;
 
       return view('relatorios.sla', compact('atendimentos'));

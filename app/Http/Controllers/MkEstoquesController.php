@@ -151,33 +151,8 @@ class MkEstoquesController extends Controller
       $os = MkOs::find($request->codos);
       return response()->json([
         'endereco' => $os->logradouro->logradouro.' '.$os->num_endereco.' '.$os->logradouro->bairro->bairro,
-        // 'status' => $os->conexao->analiseauth
       ]);
     }
-
-    // public function movEstoque( Request $request ){
-    //   $fim = $this->fim;
-    //   $inicio = $this->inicio;
-
-    //   $result = DB::connection('pgsql')->select((
-    //     "
-        // select em.codestmaster, em.data_hora, em.tipo_movimento 
-        //   , es.descricao_setor, dest.descricao_setor as destino
-        //   , e.codestoque, e.descricao_produto
-        //   , em2.qnt
-        // from mk_estoque_master as em
-        // left join mk_estoque_movimentacao2 as em2 on em.codestmaster = em2.cd_mestre
-        // left join mk_estoque as e on em2.item = e.codestoque
-        // left join mk_estoque_setores es on em.cd_setor = es.codestsetores 
-        // left join mk_estoque_setores dest on em.cd_setor_destino = dest.codestsetores   
-        // where e.codestoque is not null
-    //     "   
-    //   ));
-
-    //   $movimentacoes = $result;
-    //   return view('estoque.mov-estoque', compact('movimentacoes'));
-    // }
-
 
     public function movEstoque( Request $request ){
       $fim = $this->fim;

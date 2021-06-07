@@ -25,4 +25,8 @@ class MkFatura extends Model implements Transformable
     protected $primaryKey = 'codfatura';
     protected $fillable = [];
 
+    public function cliente(){
+        return $this->belongsTo('App\Entities\MkPessoa', 'cd_pessoa', 'codpessoa');
+    }
+
 }
