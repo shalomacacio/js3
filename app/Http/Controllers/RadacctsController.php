@@ -50,7 +50,8 @@ class RadacctsController extends Controller
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         // $radaccts = $this->repository->all();
-        $radaccts = $this->repository->where('nasportidname', '502-93-POP-ADELIA')->first();
+        $radaccts = $this->repository
+        ->where('nasportidname', '502-93-POP-ADELIA')->first();
         return $radaccts->conexao->cliente->nome_razaosocial;
 
         if (request()->wantsJson()) {

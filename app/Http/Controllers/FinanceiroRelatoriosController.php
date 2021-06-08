@@ -84,6 +84,7 @@ class FinanceiroRelatoriosController extends Controller
             where f.liquidado = 'N'
             and f.suspenso = 'N'
             and f.tipo <> 'P'
+            and f.tipo_cobranca = 1
             and f.valor_total > 1
             and f.data_vencimento = ?
         "      
@@ -107,23 +108,24 @@ class FinanceiroRelatoriosController extends Controller
 
         switch ($request->tipo) {
           case '1':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .", Passando para lembrar que a sua fatura no valor de R$ ".$valor." vencerá no dia ".$vencimento;
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .", Passando para lembrar que a sua fatura no valor de R$ ".$valor." vencerá no dia ".$vencimento. "Desconsiderar, caso já tenha efetuado o pagamento.";
             break;
           case '2':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para lembrar que a sua fatura no valor de R$ ".$valor." vence hoje!  ";
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para lembrar que a sua fatura no valor de R$ ".$valor." vence hoje! Caso já tenha efetuado o pagamento, desconsiderar esta mensagem.";  
             break;
           case '3':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para informar que a sua fatura no valor de R$: ".$valor."  está vencida a cinco dias. O bloqueio está agendado para amanhã !  ";
+            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .". Não identificamos o pagamento da sua fatura com vencimento para ".$vencimento. ". Para facilitar e evitar o bloqueio de amanhã, segue a linha digitável do boleto atualizado:".$fatura->ld_cobranca;
             break;
           default:
             $mensagem = "Jnet: Conectando você ao mundo  ";
             break;
         }
+        echo $mensagem."<br />";
       }
-      //$return = $sms->send($mensagem, $telefone);
-      // echo $mensagem."<br />";
+      // $return = $sms->send($mensagem, $telefone);
+     
         
-      return redirect()->back()->with(['message'=> "Mensagen enviada"]);
+      // return redirect()->back()->with(['message'=> "Mensagen enviada"]);
     }
 
 }

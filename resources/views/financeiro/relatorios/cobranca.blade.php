@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-
+ @include('layouts.admin-partials.alerts')
  <section class="content-header">
     <div class="container-fluid">
       <div class="row ">
@@ -90,7 +90,7 @@
                     <br>
                     <br>
                     <br>
-                    <form action="{{ route('financeiro.cobrancaSMS')}}" method="GET">
+                    <form action="{{ route('financeiro.cobrancaSMS')}}" method="POST">
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>
@@ -177,12 +177,6 @@
                         extend: 'pdfHtml5',
                         orientation: 'landscape',
                         pageSize: 'LEGAL'
-                      },
-                      {
-                        text: 'SMS',
-                        action: (e, dt, node, config) =>{
-                          alert( 'Button activated' );
-                        }
                       }
                     ],
             paging:   true, //paginação

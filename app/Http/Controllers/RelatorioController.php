@@ -200,7 +200,7 @@ class RelatorioController extends Controller
     }
 
     public function radacct(){
-      $radaccts = Radacct::whereIn('nasportid',[3167309, 3166710])
+      $radaccts = Radacct::whereIn('nasportid',[3167309, 3166710, 3162613])
       ->select('username')
       ->get();
       return view('relatorios.radacct', compact('radaccts'));
