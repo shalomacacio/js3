@@ -60,7 +60,7 @@
                   <th>SERVIÇO</th>
                   <th>APP</th>
                   <th>STATUS</th>
-                  <th>ONLINE</th>
+                  {{-- <th>ONLINE</th> --}}
                   <th>AÇÕES</th>
                 </tr>
               </thead>
@@ -79,10 +79,10 @@
                   <td style="font-size: 9px"> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
                   <td style="font-size: 9px" title="{{ $compromisso->os->mobileAtuStatus($compromisso->os->codos)}} "> @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->servico_prestado}}"  > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
-                  <td style="font-size: 9px" align="center" > 
+                  {{-- <td style="font-size: 9px" align="center" > 
                     @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
                     @empty($compromisso->os->conexao->analiseauth) <span style="color: rgb(250, 62, 28);"><span class="fa fa-user "></span></span> @endempty
-                  </td>
+                  </td> --}}
                   <td align="center">
                     @if($compromisso->os->itens->count() > 0)
                     <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>  
