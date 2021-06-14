@@ -125,7 +125,7 @@
                         </tfoot>
                     </table>
                     <input type="hidden" name="tipo" value="{{ $request->tipo_cobranca}}" />
-                    <button  class="btn btn-danger btn-flat">  Enviar SMS!</button> 
+                    <button  class="btn btn-danger btn-flat" onclick="return confirm('Enviar SMS?')">  Enviar SMS!</button> 
                   </form>
                 </div>
             </div>

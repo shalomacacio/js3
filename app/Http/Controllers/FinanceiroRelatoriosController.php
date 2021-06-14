@@ -73,7 +73,7 @@ class FinanceiroRelatoriosController extends Controller
           $tipo = Carbon::now()->sub(5, 'day')->format('Y-m-d');
           break;
         default:
-          $tipo = Carbon::now()->format('Y-m-d');
+          $tipo = null;
           break;
       }
 
@@ -97,12 +97,10 @@ class FinanceiroRelatoriosController extends Controller
     }
 
     public function cobrancaSMS(Request $request){
-      
       $faturas = $request->faturas;
       $sms = new SMS();
 
       foreach ($faturas as $codfatura) {
-
         $fatura = MkFatura::find($codfatura);
         $valor = number_format($fatura->valor_total, 2, ',', '.');
         $vencimento = Carbon::parse($fatura->data_vencimento)->format('d/m');
@@ -123,12 +121,9 @@ class FinanceiroRelatoriosController extends Controller
             $mensagem = "Jnet: Conectando você ao mundo";
             break;
         }
-        // echo $mensagem."<br />";
       }
       $result = $sms->send($mensagem, $telefone);
-      return dd ($result);
-        
-      // return redirect()->back()->with(['message'=> "Mensagen enviada"]);
+      return redirect()->back()->with(['message'=> $result->count()+" Mensagens enviadas"]);
     }
 
 }
