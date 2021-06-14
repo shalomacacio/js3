@@ -5,21 +5,28 @@
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
-<style>
-    td {
-      font-size: 9px;
-    }
-    th {
-      font-size: 11px;
-    }
-    .card-header {
-      padding: .4rem 1.25rem;
-    }
 
-    .compensacao {
-      margin-top: 15px;
-    }
-  </style>
+<style>
+  td {
+    font-size: 8px;
+    padding: .1rem 0.25rem !important;
+  }
+  th {
+    font-size: 11px;
+    padding: .1rem 0.25rem !important;
+  }
+  .card-header {
+    padding: .1rem 0.25rem !important;
+  }
+  .card-title {
+    font-size: 12px !important; 
+    padding: .3rem .25rem;
+  }
+  .compensacao {
+    margin-top: 15px;
+  }
+</style>
+
 @endsection
 
 @section('content')
@@ -37,7 +44,7 @@
         <div class="card card-info">
 
           <div class="card-header">
-            <h3 class="card-title">{{ $comps }}</h3>
+            <h3 class="card-title ">{{ $comps }}</h3>
             <div class="card-tools">
               <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">{{ $compromissos->whereNotNull('dt_hr_fechamento_tec')->count() }}/{{ $compromissos->count() }}</span>
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -70,7 +77,7 @@
                 <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->getCollor($compromisso->os->ultimo_status_app_mk) }}" >
                   <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
                   <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
-                    {{ $compromisso->cliente}}
+                    {{ Str::limit($compromisso->cliente, 30)}}
                   </td>
                   <td style="font-size: 9px"
                     @isset( $compromisso->os->logradouro)  title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}" @endisset >

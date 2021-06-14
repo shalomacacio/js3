@@ -91,6 +91,7 @@
                     <br>
                     <br>
                     <form action="{{ route('financeiro.cobrancaSMS')}}" method="POST">
+                      @csrf
                     <table id="example" class="table table-striped table-sm  display nowrap" style="width:100%">
                         <thead>
                             <tr>

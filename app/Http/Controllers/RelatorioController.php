@@ -263,6 +263,7 @@ class RelatorioController extends Controller
       } else {
         $fim = $request->dt_fim;
       }
+
       //ATENDIEMNTOS ABERTOS DE RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 
       $result = DB::connection('pgsql')->table('mk_atendimento')
       ->whereIn('cd_processo', [121,122]) //RETENÇÃO N USAR, CAN PEDIDO, CAN INADIMPLENCIA 

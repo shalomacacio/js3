@@ -8,15 +8,18 @@
 <style>
     td {
       font-size: 8px;
+      padding: .1rem 0.25rem !important;
     }
     th {
       font-size: 11px;
+      padding: .1rem 0.25rem !important;
     }
     .card-header {
-      padding: .4rem 1.25rem;
+      padding: .1rem 0.25rem !important;
     }
-    .card-title-font {
-      font-size: 8px !important; 
+    .card-title {
+      font-size: 12px !important; 
+      padding: .3rem .25rem;
     }
     .compensacao {
       margin-top: 15px;
@@ -39,7 +42,7 @@
         <div class="card card-info">
 
           <div class="card-header">
-            <h3 class="card-title ">{{ $comps }}</h3>
+            <h3 class="card-title">{{ $comps }}</h3>
             <div class="card-tools">
               <span data-toggle="tooltip" title="3 New Messages" class="badge bg-primary">{{ $compromissos->whereNotNull('dt_hr_fechamento_tec')->count() }}/{{ $compromissos->count() }}</span>
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -60,8 +63,8 @@
                   <th>CLIENTE</th>
                   <th>BAIRRO</th>
                   <th>SERVIÇO</th>
-                  <th>APP</th>
-                  <th>STATUS</th>
+                  <th> MOBILE</th>
+                  <th>CLASSIF</th>
                   {{-- <th>ONLINE</th> --}}
                   <th>AÇÕES</th>
                 </tr>
@@ -69,38 +72,16 @@
               <tbody>
                 @foreach ($compromissos as $compromisso)
                 
-                <tr id="{{ $compromisso->codcompromisso }}" class="{{ $compromisso->getCollor($compromisso->os->ultimo_status_app_mk) }}" >
-                  <td style="font-size: 9px">{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}} - {{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
-                  <td style="font-size: 9px" title="O.S:{{ $compromisso->os->codos}} Cli:{{ $compromisso->os->cliente}} ">
-                    {{ $compromisso->cliente}}
-                  </td>
-                  <td style="font-size: 9px"
-                    @isset( $compromisso->os->logradouro)  title="{{ $compromisso->os->logradouro->logradouro }} {{ $compromisso->os->num_endereco }}" @endisset >
-                    @isset( $compromisso->os->logradouro) {{ $compromisso->os->logradouro->bairro->bairro }} @endisset
-                  </td>
-                  <td style="font-size: 9px"> {!! \Illuminate\Support\Str::after($compromisso->os->osTipo->descricao , ')')  !!} </td>
-                  <td style="font-size: 9px" title="{{ $compromisso->os->mobileAtuStatus($compromisso->os->codos)}} "> @isset($compromisso->os->ultimo_status_app_mk_tx)<span class="badge {{ $compromisso->os->ultimo_status_app_mk }}"> {{ $compromisso->os->ultimo_status_app_mk_tx }}</span>@endisset</td>
-                  <td style="font-size: 9px" title="O.S:{{ $compromisso->os->servico_prestado}}"  > @isset($compromisso->os->classEncerramento->classificacao) {{ $compromisso->os->classEncerramento->classificacao }}@endisset  </td>
-                  {{-- <td style="font-size: 9px" align="center" > 
-                    @isset($compromisso->os->conexao->analiseauth) <span style="color: rgb(102, 255, 0);"><span class="fa fa-user "></span></span> @endisset
-                    @empty($compromisso->os->conexao->analiseauth) <span style="color: rgb(250, 62, 28);"><span class="fa fa-user "></span></span> @endempty
-                  </td> --}}
-                  <td align="center">
-                    @if($compromisso->os->itens->count() > 0)
-                    <a href="javascript:void(0)" onClick="getEstoque({{ $compromisso->os->codos}})"  data-toggle="modal" data-target="#modal-default" class="btn btn-xs btn-default float-right"><i class="fas fa-warehouse"></i> </a>  
-                    @endif
-                    @if($compromisso->complemento )
-                    <a title="{{Str::before($compromisso->complemento , '/') }}" href="https://www.google.com/search?q={{Str::before($compromisso->complemento , '/') }}" target="_blank"  class="btn btn-xs btn-default float-right"><i class="fas fa-map-marker"></i> </a> 
-                    @endif
-                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#myModal" class="btn btn-xs btn-default float-right"><i class="fas fa-map-marked-alt"></i> </a>  
-
-                  </td>
-                  {{-- <td> 
-                    @isset($compromisso->os-> )
-                    {{ $compromisso->os->codos }} 
-                    @endisset 
-                </td> --}}
+                <tr>
+                  <td>{{ \Carbon\Carbon::parse($compromisso->com_inicio)->format('H:i')}}-{{ \Carbon\Carbon::parse($compromisso->com_fim)->format('H:i')}}</td>
+                  <td>{{ $compromisso->nomeCli}}</td>
+                  <td>{{ $compromisso->bairro}}</td>
+                  <td>{{ $compromisso->descricao}}</td>
+                  <td>{{ $compromisso->status }}</td>
+                  <td>{{ $compromisso->classificacao }}</td>
+                  <td>{{ $compromisso->codTec }}</td>
                 </tr>
+
                 @endforeach
               </tbody>
             </table>

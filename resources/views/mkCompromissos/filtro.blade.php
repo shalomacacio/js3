@@ -24,6 +24,17 @@
           </div>
 
           <div class="col-12 col-sm-12 col-md-4" >
+            <!-- select -->
+            <div class="form-group">
+              <select class="select2bs4"  name="tecnicos[]" multiple="multiple" data-placeholder="-- TECNICOS --" style="width: 100%;">
+                {{-- @foreach($tecnicos as $key => $value)
+                  <option value="{{ $key }}"> {{ $value }} </option>
+                @endforeach --}}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-4" >
             <div class="compensacao"> </div>
             <div class="form-group">
               <div class="input-group input-group-md mb-3">

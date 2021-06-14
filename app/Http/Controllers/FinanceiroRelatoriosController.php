@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Entities\SMS;
+use Illuminate\Support\Str;
 
 
 /**
@@ -79,14 +80,15 @@ class FinanceiroRelatoriosController extends Controller
       $result = DB::connection('pgsql')->select((
         "
         select f.codfatura, p.nome_razaosocial, p.fone01, p.fone02 , f.data_vencimento, f.valor_total, f.cd_faturamento
-            from mk_faturas as f  
-                join mk_pessoas as p on f.cd_pessoa  = p.codpessoa 
-            where f.liquidado = 'N'
-            and f.suspenso = 'N'
-            and f.tipo <> 'P'
-            and f.tipo_cobranca = 1
-            and f.valor_total > 1
-            and f.data_vencimento = ?
+          from mk_faturas as f  
+          join mk_pessoas as p on f.cd_pessoa  = p.codpessoa 
+        where f.liquidado = 'N'
+        and p.codpessoa not in (select a.cliente_cadastrado from mk_atendimento as a where a.cd_processo in (121,122))
+        and f.suspenso = 'N'
+        and f.tipo <> 'P'
+        and f.tipo_cobranca = 1
+        and f.valor_total > 1
+        and f.data_vencimento = ?
         "      
       ), [ $tipo ]); 
 
@@ -103,27 +105,28 @@ class FinanceiroRelatoriosController extends Controller
 
         $fatura = MkFatura::find($codfatura);
         $valor = number_format($fatura->valor_total, 2, ',', '.');
-        $vencimento = Carbon::parse($fatura->data_vencimento)->format('d-m-Y');
+        $vencimento = Carbon::parse($fatura->data_vencimento)->format('d/m');
         $telefone =  $fatura->cliente->fone01;
+        $firstName = Str::before($fatura->cliente->nome_razaosocial, ' ');
 
         switch ($request->tipo) {
           case '1':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .", Passando para lembrar que a sua fatura no valor de R$ ".$valor." vencerá no dia ".$vencimento. "Desconsiderar, caso já tenha efetuado o pagamento.";
+            $mensagem = "Olá, ". $firstName.". Não esqueça, sua fatura JNET vence dia".$vencimento. ".Para facilitar o pagamento segue o código de barras:".$fatura->ld_cobranca;
             break;
           case '2':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .",  Passando para lembrar que a sua fatura no valor de R$ ".$valor." vence hoje! Caso já tenha efetuado o pagamento, desconsiderar esta mensagem.";  
+            $mensagem = "Olá, ". $firstName.". Sua fatura JNET vence hoje. Para facilitar estamos enviando o código de barras para pagamento: ".$fatura->ld_cobranca;  
             break;
           case '3':
-            $mensagem = "Jnet: Olá, ". $fatura->cliente->nome_razaosocial .". Não identificamos o pagamento da sua fatura com vencimento para ".$vencimento. ". Para facilitar e evitar o bloqueio de amanhã, segue a linha digitável do boleto atualizado:".$fatura->ld_cobranca;
+            $mensagem = "Olá, ". $firstName.". Não identificamos o pagamento da sua fatura JNET com vencimento ".$vencimento. ". Acesse nosso Whatsapp: 3341-7168 e solicite boleto atualizado!";
             break;
           default:
-            $mensagem = "Jnet: Conectando você ao mundo  ";
+            $mensagem = "Jnet: Conectando você ao mundo";
             break;
         }
-        echo $mensagem."<br />";
+        // echo $mensagem."<br />";
       }
-      // $return = $sms->send($mensagem, $telefone);
-     
+      $result = $sms->send($mensagem, $telefone);
+      return dd ($result);
         
       // return redirect()->back()->with(['message'=> "Mensagen enviada"]);
     }
