@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Entities\SMS;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 
@@ -77,19 +78,25 @@ class FinanceiroRelatoriosController extends Controller
           break;
       }
 
+      $planosNao = ['01.04.01.00','01.04.01.01','01.04.01.02','01.04.02.00','01.04.02.01','01.04.02.02'];
+
       $result = DB::connection('pgsql')->select((
-        "
-        select f.codfatura, p.nome_razaosocial, p.fone01, p.fone02 , f.data_vencimento, f.valor_total, f.cd_faturamento
-          from mk_faturas as f  
-          join mk_pessoas as p on f.cd_pessoa  = p.codpessoa 
-        where f.liquidado = 'N'
-        and p.codpessoa not in (select a.cliente_cadastrado from mk_atendimento as a where a.cd_processo in (121,122))
-        and f.suspenso = 'N'
-        and f.tipo <> 'P'
-        and f.tipo_cobranca = 1
-        and f.valor_total > 1
-        and f.data_vencimento = ?
-        "      
+      "
+      select f.codfatura, f.ld_cobranca, p.nome_razaosocial, p.fone01, p.fone02 , 
+        f.data_vencimento, f.valor_total, f.cd_faturamento, f.plano_contas, pc.unidade_financeira
+        from mk_faturas as f 
+        join mk_contas_faturadas as cf on f.codfatura = cf.cd_fatura 
+        join mk_plano_contas as pc on cf.cd_conta = pc.codconta 
+        join mk_pessoas as p on f.cd_pessoa  = p.codpessoa 
+      where f.liquidado = 'N'
+      and p.codpessoa not in (select a.cliente_cadastrado from mk_atendimento as a where a.cd_processo in (121,122))
+      and f.suspenso = 'N'
+      and f.tipo <> 'P'
+      and f.tipo_cobranca = 1
+      and f.valor_total > 1
+      and pc.unidade_financeira not in ('01.04.01.00','01.04.01.01','01.04.01.02','01.04.02.00','01.04.02.01','01.04.02.02')
+      and f.data_vencimento = ?
+      "      
       ), [ $tipo ]); 
 
       $cobrancas = $result;
@@ -121,9 +128,9 @@ class FinanceiroRelatoriosController extends Controller
             $mensagem = "Jnet: Conectando você ao mundo";
             break;
         }
+        $result = $sms->send($mensagem, $telefone);
       }
-      $result = $sms->send($mensagem, $telefone);
+      
       return redirect()->back()->with(['message'=> $result->count()+" Mensagens enviadas"]);
     }
-
 }

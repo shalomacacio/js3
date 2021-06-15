@@ -27,13 +27,12 @@ class SMS extends Model
             'usuario' => $this->user,
             'senha' => $this->pass,
             'centro_custo' => 'FINANCEIRO',
-            'dataenvmlgdd' => Carbon::now(),
+            'dataenvmlgdd' => Carbon::now()->format('Y-m-d H:i:s'),
             'mensagem' => $mensagem,
             'telefone' => $telefone
         ))
         ->asJson()
         ->get();
-
         return $response;
     }  
 }

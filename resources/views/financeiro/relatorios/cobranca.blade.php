@@ -97,8 +97,9 @@
                             <tr>
                               <th>TELEFONE</th>
                               <th>CLIENTE</th>
-                              <th>VENCIMENTO</th>
                               <th>VALOR</th>
+                              <th>PLANO CONTAS</th>
+                              <th>MENSAGEM</th>
                               <td>SMS</td>
                             </tr>
                         </thead>
@@ -107,8 +108,22 @@
                             <tr>
                               <td> {{ $cob->fone01 }}</td>
                               <td> {{ $cob->nome_razaosocial }}</td>
-                              <td> {{  \Carbon\Carbon::parse($cob->data_vencimento)->format('d-m-y') }}</td>
                               <td> {{ $cob->valor_total }}</td>
+                              <td> {{ $cob->unidade_financeira }}</td>
+                              <td> 
+                                @switch($request->tipo_cobranca)
+                                  @case(1)
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Não esqueça, sua fatura JNET vence dia {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d/m')  }}. Para facilitar o pagamento segue o código de barras: {{ $cob->ld_cobranca }}
+                                  @break
+                                  @case(2)
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Sua fatura JNET vence hoje. Para facilitar estamos enviando o código de barras para pagamento:{{ $cob->ld_cobranca }}
+                                  @break
+                                  @case(3)
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Não identificamos o pagamento da sua fatura JNET com vencimento {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d-m')  }}. Acesse nosso Whatsapp: 3341-7168 e solicite boleto atualizado!
+                                  @break
+                                  @default
+                                    
+                                @endswitch
                               <td><input type="checkbox" name="faturas[]" value="{{ $cob->codfatura }}" checked /></td>
                             </tr>
                             @endforeach
@@ -118,8 +133,9 @@
                             <tr>
                               <th>TELEFONE</th>
                               <th>CLIENTE</th>
-                              <th>VENCIMENTO</th>
                               <th>VALOR</th>
+                              <th>PLANO CONTAS</th>
+                              <th>MENSAGEM</th>
                               <td>SMS</td>_
                             </tr>
                         </tfoot>
