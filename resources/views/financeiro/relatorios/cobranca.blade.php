@@ -113,13 +113,13 @@
                               <td> 
                                 @switch($request->tipo_cobranca)
                                   @case(1)
-                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Não esqueça, sua fatura JNET vence dia {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d/m')  }}. Para facilitar o pagamento segue o código de barras: {{ $cob->ld_cobranca }}
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} .Não esqueça, sua fatura JNET vence dia {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d/m')  }}. Para facilitar o pagamento segue o código de barras: {{ $cob->ld_cobranca }}
                                   @break
                                   @case(2)
-                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Sua fatura JNET vence hoje. Para facilitar estamos enviando o código de barras para pagamento:{{ $cob->ld_cobranca }}
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} .Sua fatura JNET vence hoje. Para facilitar estamos enviando o código de barras para pagamento:{{ $cob->ld_cobranca }}
                                   @break
                                   @case(3)
-                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} Não identificamos o pagamento da sua fatura JNET com vencimento {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d-m')  }}. Acesse nosso Whatsapp: 3341-7168 e solicite boleto atualizado!
+                                  Olá, {{ Str::before($cob->nome_razaosocial, ' ')}} .Não identificamos o pagamento da sua fatura JNET com vencimento {{ \Carbon\Carbon::parse($cob->data_vencimento)->format('d-m')  }}. Acesse nosso Whatsapp: 3341-7168 e solicite boleto atualizado!
                                   @break
                                   @default
                                     
