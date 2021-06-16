@@ -72,6 +72,47 @@ class FinanceiroRelatoriosController extends Controller
       return view('financeiro.relatorios.cancelamentos', compact('cancelamentos'));
     }
 
+    public function despesas( Request $request)
+    {
+      $inicio = null;
+      $fim = null;
+
+      if($request->dt_inicio && $request->dt_fim){
+        $inicio = $request->dt_inicio;
+        $fim = $request->dt_fim;
+      }
+
+      $result = DB::connection('pgsql')->select((
+        "
+        select  
+          f.codfatura, f.data_lancamento,f.data_vencimento, f.valor_total,f.data_liquidacao
+          ,f.valor_total, f.plano_contas
+          ,p.nome_razaosocial as cliente
+          ,pc.unidade_financeira, uf.descricao as plano_contas_desc, pc.descricao_conta
+          ,d.nome_cc as departamento 
+          from mk_faturas as f 
+          join mk_contas_faturadas as cf on f.codfatura = cf.cd_fatura 
+          join mk_plano_contas as pc on cf.cd_conta = pc.codconta 
+          join mk_pessoas as p on f.cd_pessoa = p.codpessoa
+          join mk_cc as d on f.cc_departamentos = d.codcc
+          join mk_unidade_financeia as uf on  pc.unidade_financeira = uf.nomenclatura
+        where tipo = 'P'
+        and f.data_lancamento between ? and ?
+        order by f.data_lancamento
+        "      
+      ),[$inicio, $fim]);
+
+        $despesas = $result;
+
+        if (request()->wantsJson()) {
+          return response()->json([
+              'result' => $despesas,
+          ]);
+        }
+
+      return view('financeiro.relatorios.despesas', compact('despesas'));
+    }
+
     public function cobranca(Request $request) {
 
       switch ($request->tipo_cobranca) {
