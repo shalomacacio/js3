@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::group(['prefix' => 'financeiro'], function () {
-    Route::get('/cancelamentos',      'FinanceiroRelatoriosController@cancelamentos')->name('cancelamentos');
+    Route::get('/cancelamentos',      'FinanceiroRelatoriosController@cancelamentos')->name('financeiro.cancelamentos');
     Route::get('/cobranca',           'FinanceiroRelatoriosController@cobranca')->name('financeiro.cobranca');
     Route::post('/cobranca/sms',       'FinanceiroRelatoriosController@cobrancaSMS')->name('financeiro.cobrancaSMS');
     Route::get('/ajaxCliente',        'FinanceiroController@ajaxCliente')->name('ajaxCliente');

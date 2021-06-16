@@ -25,8 +25,8 @@ class FinanceiroRelatoriosController extends Controller
 
     public function __construct()
     {
-        $this->inicio = Carbon::now()->format('Y-d-m 00:00:00');
-        $this->fim = Carbon::now()->format('Y-d-m 23:59:59');
+        $this->inicio = Carbon::now()->format('Y-m-d');
+        $this->fim = Carbon::now()->format('Y-m-d');
     }
 
     /**
@@ -36,29 +36,40 @@ class FinanceiroRelatoriosController extends Controller
      */
     public function cancelamentos( Request $request)
     {
-      $processos = [26,76,91];
-      $tipoOs = [2,133];
-      $cancelamentos = DB::table('mk_atendimento')
-                        ->whereIn('cd_processo', $processos )
-                        ->select('cliente_cadastrado')
-                        ->get();
+      $processos = [107,121, 122];
+      $inicio = $this->inicio;
+      $fim = $this->fim;
 
-      $ordens = DB::table('mk_os')
-                        ->whereIn('tipo_os', $tipoOs )
-                        ->get();
+      if($request->dt_inicio && $request->dt_fim){
+        $inicio = $request->dt_inicio;
+        $fim = $request->dt_fim;
+      }
 
-      $pessoas = DB::table('mk_pessoas  as cliente')
-                      ->joinSub( $cancelamentos, 'cancelamentos', function ($cancelamento) {
-                        $cancelamento->on('cliente.codpessoa', '=', 'cancelamentos.cliente_cadastrado' );
-                      })->get();
+      $result = DB::connection('pgsql')->select((
+        "
+        select a.codatendimento, a.dt_abertura as ate_abertura, a.cd_processo, p.nome_processo as processo, a.dt_finaliza as ate_fechamento
+        ,os.codos, ot.descricao as os,  os.data_abertura as os_abertura, os.data_fechamento as os_fechamento, oc.classificacao, os.encerrado, os.servico_prestado
+          from mk_atendimento as a
+          join mk_ate_processos as p on a.cd_processo = p.codprocesso
+          left join mk_atendimento_classificacao as ac on a.classificacao_encerramento = ac.codatclass
+          left join mk_ate_os as ao on a.codatendimento = ao.cd_atendimento
+          left join mk_os as os on ao.cd_os = os.codos 
+          left join mk_os_tipo as ot on os.tipo_os = ot.codostipo
+          left join mk_os_classificacao_encerramento as oc on os.classificacao_encerramento = oc.codclassifenc
+        where a.cd_processo in (107,121,122)
+        and a.dt_abertura between ? and ?
+        "      
+      ),[$inicio, $fim]);
+
+        $cancelamentos = $result;
 
         if (request()->wantsJson()) {
           return response()->json([
-              'result' => $ordens,
+              'result' => $cancelamentos,
           ]);
         }
 
-      return $pessoas;
+      return view('financeiro.relatorios.cancelamentos', compact('cancelamentos'));
     }
 
     public function cobranca(Request $request) {
@@ -109,7 +120,6 @@ class FinanceiroRelatoriosController extends Controller
 
       foreach ($faturas as $codfatura) {
         $fatura = MkFatura::find($codfatura);
-        $valor = number_format($fatura->valor_total, 2, ',', '.');
         $vencimento = Carbon::parse($fatura->data_vencimento)->format('d/m');
         $telefone =  $fatura->cliente->fone01;
         $firstName = Str::before($fatura->cliente->nome_razaosocial, ' ');
@@ -128,9 +138,11 @@ class FinanceiroRelatoriosController extends Controller
             $mensagem = "Jnet: Conectando você ao mundo";
             break;
         }
+
         $result = $sms->send($mensagem, $telefone);
       }
-      
-      return redirect()->back()->with(['message'=> $result->count()+" Mensagens enviadas"]);
+      return redirect()->back()->with(['message'=> " Mensagens enviadas"]);
     }
+
 }
+
