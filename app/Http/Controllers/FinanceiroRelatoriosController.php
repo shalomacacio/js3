@@ -37,8 +37,8 @@ class FinanceiroRelatoriosController extends Controller
     public function cancelamentos( Request $request)
     {
       $processos = [107,121, 122];
-      $inicio = $this->inicio;
-      $fim = $this->fim;
+      $inicio = null;
+      $fim = null;
 
       if($request->dt_inicio && $request->dt_fim){
         $inicio = $request->dt_inicio;
