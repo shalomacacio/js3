@@ -115,9 +115,9 @@
                             <td>NEGÓCIO</td>
                             <td>SERVICOS</td>
                             <td>PROJETO</td>
-                            <td> {{ $des->data_lancamento }} </td>
-                            <td> {{ $des->data_vencimento }} </td>
-                            <td> {{ $des->data_liquidacao }} </td>
+                            <td> {{ Carbon\Carbon::parse($des->data_lancamento)->format('d-m-Y') }} </td>
+                            <td> {{ Carbon\Carbon::parse($des->data_vencimento)->format('d-m-Y') }} </td>
+                            <td> {{ Carbon\Carbon::parse($des->data_liquidacao)->format('d-m-Y') }} </td>
                             <td> {{ $des->valor_total }} </td>
                             <td> {{ $des->descricao_conta }} </td>
                           </tr>
