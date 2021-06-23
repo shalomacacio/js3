@@ -151,10 +151,12 @@
                               <th>O.S</th>
                               <th>CONTRATO</th>
                               <th>CLIENTE</th>
+                              <th>CIDADE</th>
                               <th>SERVIÇO</th>
                               <th>TECNICO</th>
                               <th>CONSULTOR</th>
                               <th>PLANO</th>
+                              <th>PLANO TX</th>
                               <th>TAXA</th>
                               <th>STATUS</th>
                               <th>INATIVO</th>
@@ -174,10 +176,12 @@
                             <td>{{ $servico->codos}}</td>
                             <td>{{ $servico->codcontrato }}</td>
                             <td>{{ $servico->cliente }}</td>
+                            <td>{{ $servico->cidade }}</td>
                             <td>{{ $servico->servico }}</td>
                             <td>{{ $servico->tecnico }}</td>
                             <td>{{ $servico->consultor }}</td>
                             <td>{{ $servico->plano }}</td>
+                            <td>{{ $servico->plano_tx }}</td>
                             <td>{{ $servico->taxa }}</td>
                             <td>{{ $servico->classificacao }}</td>
                             <td>{{ $servico->inativo }}</td>
@@ -193,10 +197,12 @@
                               <th>O.S</th>
                               <th>CONTRATO</th>
                               <th>CLIENTE</th>
+                              <th>CIDADE</th>
                               <th>SERVIÇO</th>
                               <th>TECNICO</th>
                               <th>CONSULTOR</th>
                               <th>PLANO</th>
+                              <th>PLANO TX</th>
                               <th>TAXA</th>
                               <th>STATUS</th>
                               <th>INATIVO</th>

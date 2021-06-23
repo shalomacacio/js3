@@ -70,6 +70,8 @@ class RelatorioController extends Controller
           ->leftJoin('mk_os_classificacao_encerramento  as cla', 'os.classificacao_encerramento', 'cla.codclassifenc')
           ->leftJoin('fr_usuario as tec', 'os.operador_fech_tecnico', 'tec.usr_codigo')
           ->leftJoin('fr_usuario as cons', 'os.tecnico_responsavel', 'cons.usr_codigo')
+          ->leftJoin('mk_cidades as cid', 'os.cd_cidade', 'cid.codcidade')
+          ->leftJoin('mk_planos_acesso as p', 'cont.plano_acesso', 'p.codplano')
           // ->whereIn('os.classificacao_encerramento', $classiFiltro) // NÃO DESCOMENTAR
           ->whereBetween($dt_filtro, [$inicio, $fim])
           ->select(
@@ -77,6 +79,8 @@ class RelatorioController extends Controller
             ,'os.tecnico_responsavel', 'os.operador_fech_tecnico', 'os.indicacoes as taxa', 'os.classificacao_encerramento', 'os.servico_prestado'
             ,'cli.nome_razaosocial as cliente', 'cli.inativo'
             ,'tec.usr_nome as tecnico'
+            ,'cid.cidade'
+            ,'p.descricao as plano_tx'
             ,'cons.usr_nome as consultor'
             ,'cont.vlr_renovacao as plano', 'cont.codcontrato', 'cont.contrato_eletronico'
             ,'cla.classificacao'
