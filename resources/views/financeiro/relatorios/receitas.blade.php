@@ -101,6 +101,7 @@
                                 <th>Cidade</th>
                                 <th>Vencimento</th>
                                 <th>Vlr Orig</th>
+                                <th>Vlr Total</th>
                                 <th>Liquidado</th>
                                 <th>Vlr Liq</th>
                                 <th>Usr Liq</th>
@@ -123,6 +124,7 @@
                                 <td> {{ $receita->cidade }} </td>
                                 <td> {{ $receita->data_vencimento }} </td>
                                 <td> {{ $receita->valor_original }} </td>
+                                <td> {{ $receita->valor_total }} </td>
                                 <td> {{ $receita->liquidado }} </td>
                                 <td> {{ $receita->vlr_liquidacao }} </td> 
                                 <td> {{ $receita->usuario_liquidacao }} </td> 
@@ -148,6 +150,7 @@
                                 <th>Cidade</th>
                                 <th>Vencimento</th>
                                 <th>Vlr Orig</th>
+                                <th>Vlr Total</th>
                                 <th>Liquidado</th>
                                 <th>Vlr Liq</th>
                                 <th>Usr Liq</th>

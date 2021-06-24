@@ -456,7 +456,7 @@ class RelatorioController extends Controller
         ->whereBetween($dt_parametro , [$inicio, $fim ])
         ->where('f.tipo','R')
         ->select('f.codfatura','f.data_vencimento','f.liquidado', 'f.data_liquidacao', 'f.usuario_liquidacao', 
-        'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao'
+        'f.descricao', 'f.tipo', 'f.forma_pgto_liquidacao', 'f.suspenso', 'f.vlr_liquidacao', 'f.valor_total'
         ,'p.nome_razaosocial', 'p.codcidade', 'cid.cidade' 
         ,'pc.unidade_financeira', 'pc.codconta', 'pc.valor_original'
         ,'uf.descricao as unidade'
