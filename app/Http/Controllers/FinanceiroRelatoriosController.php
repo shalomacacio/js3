@@ -181,7 +181,7 @@ class FinanceiroRelatoriosController extends Controller
         }
 
         $result = $sms->send($mensagem, $telefone);
-        return dd($result);
+        
       }
       return redirect()->back()->with(['message'=> " Mensagens enviadas"]);
     }
