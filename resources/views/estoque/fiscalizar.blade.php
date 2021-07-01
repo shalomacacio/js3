@@ -421,7 +421,7 @@
       dataType: 'json',
       data: { codos: codigo },
       success: function(data) {
-        // console.log(data.result);
+        console.log(data);
         $("#produtos tr").remove();
         for(var i=0; i < data.result.length ; i++)
           {
